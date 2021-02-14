@@ -1,11 +1,9 @@
-//hidddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package UI_and_operation;
-
 import static UI_and_operation.account.*;
 import static UI_and_operation.connection_to_ms_sql.*;
 import static UI_and_operation.exchanging.R_B_validation;
@@ -1847,7 +1845,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel47.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel47.setText("Add to total");
 
-        three_calendar_cld.setDateFormatString("dd-MMM-yyyy");
+        three_calendar_cld.setDateFormatString("dd-MM-yyyy");
         three_calendar_cld.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);

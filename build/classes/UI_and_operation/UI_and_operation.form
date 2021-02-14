@@ -2016,7 +2016,7 @@
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="three_calendar_cld">
               <Properties>
-                <Property name="dateFormatString" type="java.lang.String" value="dd-MMM-yyyy"/>
+                <Property name="dateFormatString" type="java.lang.String" value="dd-MM-yyyy"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="24" style="0"/>
                 </Property>
