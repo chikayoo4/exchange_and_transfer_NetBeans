@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package UI_and_operation;
+
 import static UI_and_operation.account.*;
 import static UI_and_operation.connection_to_ms_sql.*;
 import static UI_and_operation.exchanging.R_B_validation;
@@ -13,6 +14,7 @@ import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.validate_double_value.*;
 import com.sun.glass.events.KeyEvent;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -96,44 +98,50 @@ public class UI_and_operation extends javax.swing.JFrame {
     //function that calutation exchanging money
     private void one_calculation() {
 
-        //find out that customer money and exchange rate ft is null or not
-        Boolean cus_mon_is_empty = one_tf_customer_money.getText().isEmpty();
-        Boolean exc_rate_is_empty = one_tf_exchange_rate.getText().isEmpty();
+        try {
+            //find out that customer money and exchange rate ft is null or not
+            Boolean cus_mon_is_empty = one_tf_customer_money.getText().isEmpty();
+            Boolean exc_rate_is_empty = one_tf_exchange_rate.getText().isEmpty();
 
-        //if customer money and exchange rate tf is not null, it will * or / between the 2 tf then set value to result tf
-        if (!cus_mon_is_empty && !exc_rate_is_empty) {
-            double customer_money = Double.parseDouble(clear_cvot(one_tf_customer_money.getText()));
-            double exchange_rate = Double.parseDouble(clear_cvot(one_tf_exchange_rate.getText()));
-            String result = "";
-            switch (selected_exchange_rate) {
+            //if customer money and exchange rate tf is not null, it will * or / between the 2 tf then set value to result tf
+            if (!cus_mon_is_empty && !exc_rate_is_empty) {
+                double customer_money = Double.parseDouble(clear_cvot(one_tf_customer_money.getText()));
+                double exchange_rate = Double.parseDouble(clear_cvot(one_tf_exchange_rate.getText()));
+                String result = "";
+                switch (selected_exchange_rate) {
 
-                //do * operator when......
-                case S_to_R:
-                case B_to_R:
-                    result = money_S_B_R_validate(type_of_money.Rial, String.format("%.2f", (Double) (customer_money * exchange_rate)));
-                    break;
+                    //do * operator when......
+                    case S_to_R:
+                    case B_to_R:
+                        result = money_S_B_R_validate(type_of_money.Rial, String.format("%.2f", (Double) (customer_money * exchange_rate)));
 
-                case S_to_B:
-                    result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money * exchange_rate)));
-                    break;
+                        break;
 
-                //do / operator when......
-                case R_to_S:
-                case B_to_S:
-                    result = money_S_B_R_validate(type_of_money.Dollar, String.format("%.2f", (Double) (customer_money / exchange_rate)));
-                    break;
+                    case S_to_B:
+                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money * exchange_rate)));
+                        break;
 
-                //do / operator when......
-                case R_to_B:
-                    result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money / exchange_rate)));
-                    break;
+                    //do / operator when......
+                    case R_to_S:
+                    case B_to_S:
+                        result = money_S_B_R_validate(type_of_money.Dollar, String.format("%.2f", (Double) (customer_money / exchange_rate)));
+                        break;
+
+                    //do / operator when......
+                    case R_to_B:
+                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money / exchange_rate)));
+                        break;
+                }
+
+                //set value to result tf
+                one_tf_customer_result.setText(add_cuot_to_money(result));
+            } //if customer money and exchange rate tf is null, it will set value to result tf to null
+            else {
+                one_tf_customer_result.setText("");
             }
 
-            //set value to result tf
-            one_tf_customer_result.setText(add_cuot_to_money(result));
-        } //if customer money and exchange rate tf is null, it will set value to result tf to null
-        else {
-            one_tf_customer_result.setText("");
+        } catch (Exception e) {
+            System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
         }
     }
 
@@ -145,251 +153,175 @@ public class UI_and_operation extends javax.swing.JFrame {
     }
 
     private void set_history() {
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        ArrayList<String> pur_type = new ArrayList<String>();
-        ArrayList<Integer> id_invoice = new ArrayList<Integer>();
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
+        if (three_calendar_cld.getDate() != null) {
+            three_calendar_cld.setBackground(Color.lightGray);
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            ArrayList<String> pur_type = new ArrayList<String>();
+            ArrayList<Integer> id_invoice = new ArrayList<Integer>();
+            try {
+                con = DriverManager.getConnection(
+                        getLocal_host(),
+                        getLocal_host_user_name(),
+                        getLocal_host_password()
+                );
 
-            Double Dollar = 0.0;
-            Double Rial = 0.0;
-            Double Bart = 0.0;
-            Boolean is_has_data = false;
-
-            //query to access
-            pst = con.prepareStatement("SELECT id_add "
-                    + "FROM add_money_history_tb;");
-            rs = pst.executeQuery();
-            if (rs.next() == true) {
-                is_has_data = true;
                 //query to access
-                pst = con.prepareStatement("SELECT add_money, type_of_money "
-                        + "FROM add_money_history_tb INNER JOIN money_type_tb "
-                        + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                        + "WHERE id_acc = ? AND id_pur = ?;");
+                pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
+                    dft1.setRowCount(0);
+                    Vector v3 = new Vector();
 
+                    //set to v2 all data only 1 row
+                    v3.add(rs.getString("dollar"));
+                    v3.add(rs.getString("bart"));
+                    v3.add(rs.getString("rial"));
+
+                    //set data to table history row
+                    dft1.addRow(v3);
+                }
+                Calendar start_cal = three_calendar_cld.getCalendar();
+                Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                start_cal.add(Calendar.DAY_OF_MONTH, 1);
+                String start_date = sdf.format(start_cal.getTime());
+                pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
+                String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+
+//        System.out.println("start_date : "+ start_date);
+//        System.out.println("pre_7_day_from_start_date : "+ pre_7_day_from_start_date);
+                //query to access
+                pst = con.prepareStatement("SELECT id_invoice, pur_type "
+                        + "FROM invoice_management_tb INNER JOIN purpose_tb "
+                        + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
+                        + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+                        + "AND invoice_man_date <= '" + start_date + "' "
+                        + "ORDER BY id_invoice_man DESC;");
                 pst.setInt(1, get_acc_id());
-                pst.setInt(2, get_id_pur_from_db(purpose_type.add_total_money.toString()));
                 rs = pst.executeQuery();
 
                 while (rs.next()) {
-//                    System.out.println("add_money : " + rs.getString("add_money"));
-//                    System.out.println("type_of_money : " + rs.getString("type_of_money"));
-                    switch (rs.getString("type_of_money")) {
-                        case "Rial":
-                            Rial = Rial + Double.parseDouble(clear_cvot(rs.getString("add_money")));
-                            break;
-                        case "Dollar":
-                            Dollar = Dollar + Double.parseDouble(clear_cvot(rs.getString("add_money")));
-                            break;
-                        case "Bart":
-                            Bart = Bart + Double.parseDouble(clear_cvot(rs.getString("add_money")));
-                            break;
-                    }
+                    pur_type.add(rs.getString("pur_type"));
+                    id_invoice.add(rs.getInt("id_invoice"));
                 }
+            } catch (SQLException ex) {
+                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex);
             }
 
-            pst = con.prepareStatement("SELECT id_invoice FROM exc_invoice_tb;");
-            rs = pst.executeQuery();
-            if (rs.next() == true) {
-                is_has_data = true;
+            ArrayList<Vector> v2 = new ArrayList<Vector>();
+            DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
+            for (int i = 0; i < id_invoice.size(); i++) {
 
-                //query to access
-                pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
-                        + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type;");
+                if (pur_type.get(i).equals("exchanging")) {
 
-                rs = pst.executeQuery();
-
-                //table in UI
-                //reset selected in table
-                while (rs.next()) {
-                    switch (rs.getString("type_of_exchanging")) {
-                        case "S_to_R":
-                            Dollar = Dollar + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Rial = Rial - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                        case "S_to_B":
-                            Dollar = Dollar + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Bart = Bart - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                        case "R_to_B":
-                            Rial = Rial + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Bart = Bart - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                        case "R_to_S":
-                            Rial = Rial + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Dollar = Dollar - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                        case "B_to_R":
-                            Bart = Bart + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Rial = Rial - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                        case "B_to_S":
-                            Bart = Bart + Double.parseDouble(clear_cvot(rs.getString("exchanging_money")));
-                            Dollar = Dollar - Double.parseDouble(clear_cvot(rs.getString("result_exchanging_money")));
-                            break;
-                    }
-                }
-
-            }
-            if (is_has_data) {
-//                ((DefaultTableModel)three_tb_total_money.getModel()).removeRow(0);
-                //to get value then set in table history
-                DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
-                dft1.setRowCount(0);
-//                        for(int i = 0; i < 2; i++){
-                Vector v3 = new Vector();
-
-                //set to v2 all data only 1 row
-                v3.add(money_S_B_R_validate(type_of_money.Dollar, String.format("%.2f", Dollar)));
-                v3.add(money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", Bart)));
-                v3.add(money_S_B_R_validate(type_of_money.Rial, String.format("%.2f", Rial)));
-
-                //set data to table history row
-                dft1.addRow(v3);
-//                        }
-            } else {
-//                ((DefaultTableModel)three_tb_total_money.getModel()).removeRow(0);
-                DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
-                dft1.setRowCount(0);
-                Vector v3 = new Vector();
-
-                //set to v2 all data only 1 row
-                v3.add("0");
-                v3.add("0");
-                v3.add("0");
-
-                //set data to table history row
-                dft1.addRow(v3);
-            }
-
-            //query to access
-            pst = con.prepareStatement("SELECT id_invoice, pur_type FROM invoice_management_tb INNER JOIN purpose_tb ON invoice_management_tb.id_pur = purpose_tb.id_pur WHERE id_acc = ? ORDER BY id_invoice_man DESC;");
-            pst.setInt(1, get_acc_id());
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                pur_type.add(rs.getString("pur_type"));
-                id_invoice.add(rs.getInt("id_invoice"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
-        }
-
-        ArrayList<Vector> v2 = new ArrayList<Vector>();
-        DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
-        for (int i = 0; i < id_invoice.size(); i++) {
-
-            if (pur_type.get(i).equals("exchanging")) {
-
-                try {
-                    con = DriverManager.getConnection(
-                            getLocal_host(),
-                            getLocal_host_user_name(),
-                            getLocal_host_password()
-                    );
-                    //query to access
-                    pst = con.prepareStatement("SELECT id_invoice, (select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc , "
-                            + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
-                            + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
-                            + "FROM exc_invoice_tb WHERE id_invoice = ?;");
+                    try {
+                        con = DriverManager.getConnection(
+                                getLocal_host(),
+                                getLocal_host_user_name(),
+                                getLocal_host_password()
+                        );
+                        //query to access
+                        pst = con.prepareStatement("SELECT id_invoice, (select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc , "
+                                + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
+                                + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
+                                + "FROM exc_invoice_tb WHERE id_invoice = ?;");
 
 //            System.out.println(id_invoice.get(i));
-                    pst.setInt(1, id_invoice.get(i));
-                    rs = pst.executeQuery();
+                        pst.setInt(1, id_invoice.get(i));
+                        rs = pst.executeQuery();
 
-                    //table in UI
-                    //reset selected in table
-                    dft.setRowCount(0);
+                        //table in UI
+                        //reset selected in table
+                        dft.setRowCount(0);
 
-                    while (rs.next()) {
+                        while (rs.next()) {
 
-                        Vector v3 = new Vector();
-                        //to get value then set in table history
+                            Vector v3 = new Vector();
+                            //to get value then set in table history
 
-                        //Date format string is passed as an argument to the Date format object
-                        SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
+                            //Date format string is passed as an argument to the Date format object
+                            SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
-                        //get date of exchanging money
-                        String date_history = objSDF.format(rs.getTimestamp("invoice_date"));
+                            //get date of exchanging money
+                            String date_history = objSDF.format(rs.getTimestamp("invoice_date"));
 
-                        //set to v2 all data only 1 row
-                        v3.add(date_history);
-                        v3.add(String.valueOf(rs.getInt("id_invoice")));
-                        v3.add(rs.getString("acc"));
-                        v3.add(rs.getString("pur"));
-                        v3.add("គេ: "
-                                + rs.getString("exchanging_money") + " | យើង: -"
-                                + rs.getString("result_exchanging_money") + " | អត្រា: "
-                                + rs.getString("exchange_rate") + " | "
-                                + rs.getString("exchange_type"));
-                        v2.add(v3);
+                            //set to v2 all data only 1 row
+                            v3.add(date_history);
+                            v3.add(String.valueOf(rs.getInt("id_invoice")));
+                            v3.add(rs.getString("acc"));
+                            v3.add(rs.getString("pur"));
+                            v3.add("គេ: "
+                                    + rs.getString("exchanging_money") + " | យើង: -"
+                                    + rs.getString("result_exchanging_money") + " | អត្រា: "
+                                    + rs.getString("exchange_rate") + " | "
+                                    + rs.getString("exchange_type"));
+                            v2.add(v3);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this, ex);
                     }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(this, ex);
                 }
-            }
-            if (pur_type.get(i).equals("add_total_money")) {
+                if (pur_type.get(i).equals("add_total_money")) {
 
-                try {
-                    con = DriverManager.getConnection(
-                            getLocal_host(),
-                            getLocal_host_user_name(),
-                            getLocal_host_password()
-                    );
-                    pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
-                            + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, add_date, add_money, type_of_money "
-                            + "FROM add_money_history_tb INNER JOIN money_type_tb "
-                            + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money"
-                            + " WHERE id_add = ? ");
-                    pst.setInt(1, id_invoice.get(i));
-                    rs = pst.executeQuery();
+                    try {
+                        con = DriverManager.getConnection(
+                                getLocal_host(),
+                                getLocal_host_user_name(),
+                                getLocal_host_password()
+                        );
+                        pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
+                                + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, add_date, add_money, type_of_money "
+                                + "FROM add_money_history_tb INNER JOIN money_type_tb "
+                                + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money"
+                                + " WHERE id_add = ? ");
+                        pst.setInt(1, id_invoice.get(i));
+                        rs = pst.executeQuery();
 
-                    //table in UI
-                    //reset selected in table
-                    dft.setRowCount(0);
+                        //table in UI
+                        //reset selected in table
+                        dft.setRowCount(0);
 
-                    while (rs.next()) {
+                        while (rs.next()) {
 
-                        Vector v3 = new Vector();
-                        //to get value then set in table history
+                            Vector v3 = new Vector();
+                            //to get value then set in table history
 
-                        //Date format string is passed as an argument to the Date format object
-                        SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
+                            //Date format string is passed as an argument to the Date format object
+                            SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
-                        //get date of exchanging money
-                        String date_history = objSDF.format(rs.getTimestamp("add_date"));
+                            //get date of exchanging money
+                            String date_history = objSDF.format(rs.getTimestamp("add_date"));
 
-                        //set to v2 all data only 1 row
-                        v3.add(date_history);
-                        v3.add(String.valueOf(rs.getInt("id_add")));
-                        v3.add(rs.getString("acc"));
-                        v3.add(rs.getString("pur"));
-                        v3.add("បន្ថែម: " + rs.getString("add_money") + " " + rs.getString("type_of_money"));
+                            //set to v2 all data only 1 row
+                            v3.add(date_history);
+                            v3.add(String.valueOf(rs.getInt("id_add")));
+                            v3.add(rs.getString("acc"));
+                            v3.add(rs.getString("pur"));
+                            v3.add("បន្ថែម: " + rs.getString("add_money") + " " + rs.getString("type_of_money"));
 //                                    System.out.println(v3);
-                        v2.add(v3);
+                            v2.add(v3);
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this, ex);
                     }
-                } catch (SQLException ex) {
-                    Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(this, ex);
                 }
+
             }
-
-        }
-        for (int i = 0; i < v2.size(); i++) {
+            for (int i = 0; i < v2.size(); i++) {
 //                System.out.println(v2.get(i));
-            dft.addRow(v2.get(i));
+                dft.addRow(v2.get(i));
 
+            }
+        } else {
+            three_calendar_cld.setBackground(Color.red);
+            JOptionPane.showMessageDialog(this, "Wrong day or month or year");
         }
-
     }
 
     private void exc_perform(Boolean is_print) {
@@ -627,6 +559,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel35 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
         three_calendar_cld = new com.toedter.calendar.JDateChooser();
+        jButton1 = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -903,26 +836,24 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(one_lb_customer_money)
                                 .addGap(18, 18, 18)
-                                .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
                             .addComponent(one_tf_customer_money))
                         .addGap(5, 5, 5)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(one_bn_S_to_B, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(one_lb_exchange_rate)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(one_tf_exchange_rate))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_lb_equal))
-                            .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(one_lb_exchange_rate)
+                                .addGap(18, 18, 18)
+                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
+                            .addComponent(one_tf_exchange_rate))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(one_lb_equal))
+                    .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(one_bn_S_to_B, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(one_bn_B_to_R, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -932,7 +863,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
                             .addComponent(one_tf_customer_result, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE))
                         .addGap(50, 50, 50)))
                 .addContainerGap())
@@ -1076,10 +1007,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(two_one_tf_bank)
-                    .addComponent(two_one_tf_cus_no, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                    .addComponent(two_one_tf_cus_no, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                     .addComponent(two_one_tf_cus_name, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(two_one_tf_cus_ph_no, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(200, 200, 200)
+                .addGap(248, 248, 248)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel10)
@@ -1092,7 +1023,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_one_tf_service_money)
-                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE))))
+                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -1845,8 +1776,16 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel47.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel47.setText("Add to total");
 
-        three_calendar_cld.setDateFormatString("dd-MM-yyyy");
+        three_calendar_cld.setDateFormatString("d-M-yyyy");
         three_calendar_cld.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton1.setText("Refresh");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1875,7 +1814,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(jLabel35)
                                 .addGap(18, 18, 18)
-                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1894,8 +1835,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(three_add_bn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addGap(41, 41, 41)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2538,8 +2480,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 985, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 985, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
@@ -2826,11 +2768,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_one_tf_customer_moneyActionPerformed
 
     private void one_tf_customer_moneyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyKeyTyped
-        if (!one_tf_customer_money.getText().isEmpty()) {
-            char c = evt.getKeyChar();
-            if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(one_tf_customer_money.getText())))) {
-                evt.consume();
-            }
+
+        char c = evt.getKeyChar();
+        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(one_tf_customer_money.getText())))) {
+            evt.consume();
         }
     }//GEN-LAST:event_one_tf_customer_moneyKeyTyped
 
@@ -3063,7 +3004,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             int lastinsertid = -1;
             Connection con;
             PreparedStatement pst;
-            PreparedStatement pst1;
+            ResultSet rs;
             try {
                 con = DriverManager.getConnection(
                         getLocal_host(),
@@ -3075,8 +3016,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                 pst = con.prepareStatement("insert into add_money_history_tb (add_date, add_money, id_type_of_money, id_acc, id_pur)"
                         + "values(?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 
+                Timestamp cur_date = current_date();
+
                 //set value to ? in query
-                pst.setTimestamp(1, current_date());
+                pst.setTimestamp(1, cur_date);
                 pst.setString(2, three_add_tf.getText());
                 pst.setInt(3, get_id_money_type_from_db(selected_money_type));
                 pst.setInt(4, get_acc_id());
@@ -3088,14 +3031,72 @@ public class UI_and_operation extends javax.swing.JFrame {
                 }
 
                 //write sql query to access
-                pst1 = con.prepareStatement("insert into invoice_management_tb (id_invoice, id_acc, id_pur)"
-                        + "values(? , ?, ?);");
+                pst = con.prepareStatement("insert into invoice_management_tb (id_invoice, id_acc, id_pur, invoice_man_date)"
+                        + "values(? , ?, ?, ?);");
 
                 //set value to ? in query
-                pst1.setInt(1, lastinsertid);
-                pst1.setInt(2, get_acc_id());
-                pst1.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
-                pst1.executeUpdate();
+                pst.setInt(1, lastinsertid);
+                pst.setInt(2, get_acc_id());
+                pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
+                pst.setTimestamp(4, cur_date);
+                pst.executeUpdate();
+
+                String add_money = "";
+                String money_type = "";
+
+                //query to access
+                pst = con.prepareStatement("SELECT add_money, type_of_money "
+                        + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                        + "where id_add = ? "
+                        + "AND id_acc = ? "
+                        + "AND id_pur = ?;");
+                pst.setInt(1, lastinsertid);
+                pst.setInt(2, get_acc_id());
+                pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    add_money = rs.getString("add_money");
+                    money_type = rs.getString("type_of_money");
+                }
+
+                String Rial = "";
+                String Dollar = "";
+                String Bart = "";
+                pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    //set to v2 all data only 1 row
+                    Rial = rs.getString("rial");
+                    Dollar = rs.getString("dollar");
+                    Bart = rs.getString("bart");
+                }
+                switch (money_type) {
+                    case "Rial":
+                        pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
+                        pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(add_money)))));
+                        pst.setInt(2, get_acc_id());
+                        pst.executeUpdate();
+                        break;
+                    case "Dollar":
+                        //write sql query to access
+                        pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
+                        pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(add_money)))));
+                        pst.setInt(2, get_acc_id());
+                        pst.executeUpdate();
+                        break;
+                    case "Bart":
+                        //write sql query to access
+                        pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
+                        pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(add_money)))));
+                        pst.setInt(2, get_acc_id());
+                        pst.executeUpdate();
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -3145,8 +3146,34 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_add_tfKeyTyped
 
     private void four_bn_edit_exchange_rateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_four_bn_edit_exchange_rateActionPerformed
+
+        four_S_to_R_one_tf.setText((!four_S_to_R_one_tf.getText().isEmpty() ? four_S_to_R_one_tf.getText() : "0"));
+        four_S_to_R_two_tf.setText((!four_S_to_R_two_tf.getText().isEmpty() ? four_S_to_R_two_tf.getText() : "0"));
+        four_S_to_R_three_tf.setText((!four_S_to_R_three_tf.getText().isEmpty() ? four_S_to_R_three_tf.getText() : "0"));
+        four_S_to_R_four_tf.setText((!four_S_to_R_four_tf.getText().isEmpty() ? four_S_to_R_four_tf.getText() : "0"));
+        four_R_to_S_one_tf.setText((!four_R_to_S_one_tf.getText().isEmpty() ? four_R_to_S_one_tf.getText() : "0"));
+        four_R_to_S_two_tf.setText((!four_R_to_S_two_tf.getText().isEmpty() ? four_R_to_S_two_tf.getText() : "0"));
+        four_R_to_S_three_tf.setText((!four_R_to_S_three_tf.getText().isEmpty() ? four_R_to_S_three_tf.getText() : "0"));
+        four_R_to_S_four_tf.setText((!four_R_to_S_four_tf.getText().isEmpty() ? four_R_to_S_four_tf.getText() : "0"));
+        four_S_to_B_one_tf.setText((!four_S_to_B_one_tf.getText().isEmpty() ? four_S_to_B_one_tf.getText() : "0"));
+        four_S_to_B_two_tf.setText((!four_S_to_B_two_tf.getText().isEmpty() ? four_S_to_B_two_tf.getText() : "0"));
+        four_S_to_B_three_tf.setText((!four_S_to_B_three_tf.getText().isEmpty() ? four_S_to_B_three_tf.getText() : "0"));
+        four_S_to_B_four_tf.setText((!four_S_to_B_four_tf.getText().isEmpty() ? four_S_to_B_four_tf.getText() : "0"));
+        four_B_to_S_one_tf.setText((!four_B_to_S_one_tf.getText().isEmpty() ? four_B_to_S_one_tf.getText() : "0"));
+        four_B_to_S_two_tf.setText((!four_B_to_S_two_tf.getText().isEmpty() ? four_B_to_S_two_tf.getText() : "0"));
+        four_B_to_S_three_tf.setText((!four_B_to_S_three_tf.getText().isEmpty() ? four_B_to_S_three_tf.getText() : "0"));
+        four_B_to_S_four_tf.setText((!four_B_to_S_four_tf.getText().isEmpty() ? four_B_to_S_four_tf.getText() : "0"));
+        four_B_to_R_one_tf.setText((!four_B_to_R_one_tf.getText().isEmpty() ? four_B_to_R_one_tf.getText() : "0"));
+        four_B_to_R_two_tf.setText((!four_B_to_R_two_tf.getText().isEmpty() ? four_B_to_R_two_tf.getText() : "0"));
+        four_B_to_R_three_tf.setText((!four_B_to_R_three_tf.getText().isEmpty() ? four_B_to_R_three_tf.getText() : "0"));
+        four_B_to_R_four_tf.setText((!four_B_to_R_four_tf.getText().isEmpty() ? four_B_to_R_four_tf.getText() : "0"));
+        four_R_to_B_one_tf.setText((!four_R_to_B_one_tf.getText().isEmpty() ? four_R_to_B_one_tf.getText() : "0"));
+        four_R_to_B_two_tf.setText((!four_R_to_B_two_tf.getText().isEmpty() ? four_R_to_B_two_tf.getText() : "0"));
+        four_R_to_B_three_tf.setText((!four_R_to_B_three_tf.getText().isEmpty() ? four_R_to_B_three_tf.getText() : "0"));
+        four_R_to_B_four_tf.setText((!four_R_to_B_four_tf.getText().isEmpty() ? four_R_to_B_four_tf.getText() : "0"));
         Connection con;
         PreparedStatement pst;
+        ResultSet rs;
         //        System.out.println(five_local_host_tf.getText());
         try {
             con = DriverManager.getConnection(
@@ -3154,19 +3181,79 @@ public class UI_and_operation extends javax.swing.JFrame {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            //write sql query to access
-            pst = con.prepareStatement("insert into exc_rate_tb (date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) "
-                    + "values( ?, ?, ?, ?, ?, ?, ?);");
 
-            //set value to ?
-            pst.setTimestamp(1, current_date());
-            pst.setString(2, S_R_validation(Double.parseDouble(four_S_to_R_one_tf.getText() + four_S_to_R_two_tf.getText() + four_S_to_R_three_tf.getText() + four_S_to_R_four_tf.getText())));
-            pst.setString(3, S_R_validation(Double.parseDouble(four_R_to_S_one_tf.getText() + four_R_to_S_two_tf.getText() + four_R_to_S_three_tf.getText() + four_R_to_S_four_tf.getText())));
-            pst.setString(4, S_B_validation(Double.parseDouble(four_S_to_B_one_tf.getText() + four_S_to_B_two_tf.getText() + "." + four_S_to_B_three_tf.getText() + four_S_to_B_four_tf.getText())));
-            pst.setString(5, S_B_validation(Double.parseDouble(four_B_to_S_one_tf.getText() + four_B_to_S_two_tf.getText() + "." + four_B_to_S_three_tf.getText() + four_B_to_S_four_tf.getText())));
-            pst.setString(6, R_B_validation(Double.parseDouble(four_B_to_R_one_tf.getText() + four_B_to_R_two_tf.getText() + four_B_to_R_three_tf.getText() + "." + four_B_to_R_four_tf.getText())));
-            pst.setString(7, R_B_validation(Double.parseDouble(four_R_to_B_one_tf.getText() + four_R_to_B_two_tf.getText() + four_R_to_B_three_tf.getText() + "." + four_R_to_B_four_tf.getText())));
-            pst.executeUpdate();
+            String S_to_R = "";
+            String R_to_S = "";
+            String S_to_B = "";
+            String B_to_S = "";
+            String B_to_R = "";
+            String R_to_B = "";
+            //write sql query to access
+            pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
+                    + "bart_to_dollar, bart_to_rial, rial_to_bart "
+                    + "FROM exc_rate_tb ORDER BY date_rate DESC;");
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                S_to_R = rs.getString("dollar_to_rial");
+                R_to_S = rs.getString("rial_to_dollar");
+                S_to_B = rs.getString("dollar_to_bart");
+                B_to_S = rs.getString("bart_to_dollar");
+                B_to_R = rs.getString("bart_to_rial");
+                R_to_B = rs.getString("rial_to_bart");
+            }
+
+            String S_to_R_tf = S_R_validation(Double.parseDouble(four_S_to_R_one_tf.getText()
+                    + four_S_to_R_two_tf.getText()
+                    + four_S_to_R_three_tf.getText()
+                    + four_S_to_R_four_tf.getText()));
+            String R_to_S_tf = S_R_validation(Double.parseDouble(four_R_to_S_one_tf.getText()
+                    + four_R_to_S_two_tf.getText()
+                    + four_R_to_S_three_tf.getText()
+                    + four_R_to_S_four_tf.getText()));
+            String S_to_B_tf = S_B_validation(Double.parseDouble(four_S_to_B_one_tf.getText() + four_S_to_B_two_tf.getText()
+                    + "."
+                    + four_S_to_B_three_tf.getText()
+                    + four_S_to_B_four_tf.getText()));
+            String B_to_S_tf = S_B_validation(Double.parseDouble(four_B_to_S_one_tf.getText()
+                    + four_B_to_S_two_tf.getText()
+                    + "."
+                    + four_B_to_S_three_tf.getText()
+                    + four_B_to_S_four_tf.getText()));
+            String B_to_R_tf = R_B_validation(Double.parseDouble(four_B_to_R_one_tf.getText()
+                    + four_B_to_R_two_tf.getText()
+                    + four_B_to_R_three_tf.getText()
+                    + "."
+                    + four_B_to_R_four_tf.getText()));
+            String R_to_B_tf = R_B_validation(Double.parseDouble(four_R_to_B_one_tf.getText()
+                    + four_R_to_B_two_tf.getText()
+                    + four_R_to_B_three_tf.getText()
+                    + "."
+                    + four_R_to_B_four_tf.getText()));
+            if (!(S_to_R.equals(S_to_R_tf)
+                    && R_to_S.equals(R_to_S_tf)
+                    && S_to_B.equals(S_to_B_tf)
+                    && B_to_S.equals(B_to_S_tf)
+                    && B_to_R.equals(B_to_R_tf)
+                    && R_to_B.equals(R_to_B_tf))) {
+                //write sql query to access
+                pst = con.prepareStatement("insert into exc_rate_tb "
+                        + "(date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) "
+                        + "values( ?, ?, ?, ?, ?, ?, ?);");
+
+                //set value to ?
+                pst.setTimestamp(1, current_date());
+                pst.setString(2, S_to_R_tf);
+                pst.setString(3, R_to_S_tf);
+                pst.setString(4, S_to_B_tf);
+                pst.setString(5, B_to_S_tf);
+                pst.setString(6, B_to_R_tf);
+                pst.setString(7, R_to_B_tf);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Exchange rate saved.");
+            } else {
+                JOptionPane.showMessageDialog(this, "You change nothing.");
+            }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -3573,7 +3660,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             if (idx != -1) {
                 choose_from_dialog = dialog_choose.values()[idx];
             }
-            System.out.println(choose_from_dialog);
+//            System.out.println(choose_from_dialog);
             switch (choose_from_dialog) {
                 case Print:
 
@@ -3627,6 +3714,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                                 Connection con;
                                 PreparedStatement pst;
+                                ResultSet rs;
                                 try {
                                     con = DriverManager.getConnection(
                                             getLocal_host(),
@@ -3634,6 +3722,100 @@ public class UI_and_operation extends javax.swing.JFrame {
                                             getLocal_host_password()
                                     );
 
+                                    String exchanging_money = "";
+                                    String result_exchanging_money = "";
+                                    String type_of_exchanging = "";
+
+                                    //query to access
+                                    pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
+                                            + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
+                                            + "where id_invoice = ? "
+                                            + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                            + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                    pst.setInt(1, id);
+                                    pst.setString(2, acc);
+                                    pst.setString(3, pur);
+                                    rs = pst.executeQuery();
+                                    while (rs.next()) {
+                                        exchanging_money = rs.getString("exchanging_money");
+                                        result_exchanging_money = rs.getString("result_exchanging_money");
+                                        type_of_exchanging = rs.getString("type_of_exchanging");
+                                    }
+
+                                    String Rial = "";
+                                    String Dollar = "";
+                                    String Bart = "";
+                                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                                    rs = pst.executeQuery();
+                                    while (rs.next()) {
+                                        //set to v2 all data only 1 row
+                                        Rial = rs.getString("rial");
+                                        Dollar = rs.getString("dollar");
+                                        Bart = rs.getString("bart");
+                                    }
+                                    switch (type_of_exchanging) {
+                                        case "S_to_R":
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, rial = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "S_to_B":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, bart = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "B_to_R":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, rial = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "R_to_S":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, dollar = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "B_to_S":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, dollar = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "R_to_B":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, bart = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                            pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                            pst.setInt(3, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        default:
+                                            System.out.println("Error");
+                                    }
                                     //update sql query to access
                                     pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
 
@@ -3663,6 +3845,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                                 Connection con;
                                 PreparedStatement pst;
+                                ResultSet rs;
                                 try {
                                     con = DriverManager.getConnection(
                                             getLocal_host(),
@@ -3670,6 +3853,62 @@ public class UI_and_operation extends javax.swing.JFrame {
                                             getLocal_host_password()
                                     );
 
+                                    String add_money = "";
+                                    String money_type = "";
+
+                                    //query to access
+                                    pst = con.prepareStatement("SELECT add_money, type_of_money "
+                                            + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                                            + "where id_add = ? "
+                                            + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                            + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                    pst.setInt(1, id);
+                                    pst.setString(2, acc);
+                                    pst.setString(3, pur);
+                                    rs = pst.executeQuery();
+                                    while (rs.next()) {
+                                        add_money = rs.getString("add_money");
+                                        money_type = rs.getString("type_of_money");
+                                    }
+
+                                    String Rial = "";
+                                    String Dollar = "";
+                                    String Bart = "";
+                                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                                    rs = pst.executeQuery();
+                                    while (rs.next()) {
+                                        //set to v2 all data only 1 row
+                                        Rial = rs.getString("rial");
+                                        Dollar = rs.getString("dollar");
+                                        Bart = rs.getString("bart");
+                                    }
+                                    switch (money_type) {
+                                        case "Rial":
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(add_money)))));
+                                            pst.setInt(2, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "Dollar":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(add_money)))));
+                                            pst.setInt(2, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        case "Bart":
+                                            //write sql query to access
+                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
+                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(add_money)))));
+                                            pst.setInt(2, get_acc_id());
+                                            pst.executeUpdate();
+                                            break;
+                                        default:
+                                            System.out.println("Error");
+                                    }
                                     //update sql query to access
                                     pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
 
@@ -3678,9 +3917,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     pst.setString(3, pur);
                                     pst.executeUpdate();
                                     set_history();
+
                                     //dialog when added to access is success
                                     //                        JOptionPane.showMessageDialog(this, "records update");
-
                                 } catch (SQLException ex) {
                                     Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
                                     JOptionPane.showMessageDialog(this, ex);
@@ -3694,6 +3933,10 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_three_tb_historyMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        set_history();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3730,7 +3973,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
     }
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -3773,6 +4016,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField four_S_to_R_three_tf;
     private javax.swing.JTextField four_S_to_R_two_tf;
     private javax.swing.JButton four_bn_edit_exchange_rate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton9;
