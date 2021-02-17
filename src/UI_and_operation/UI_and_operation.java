@@ -166,46 +166,60 @@ public class UI_and_operation extends javax.swing.JFrame {
                         getLocal_host_user_name(),
                         getLocal_host_password()
                 );
-
-                //query to access
-                pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-                rs = pst.executeQuery();
-                while (rs.next()) {
-                    DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
-                    dft1.setRowCount(0);
-                    Vector v3 = new Vector();
-
-                    //set to v2 all data only 1 row
-                    v3.add(rs.getString("dollar"));
-                    v3.add(rs.getString("bart"));
-                    v3.add(rs.getString("rial"));
-
-                    //set data to table history row
-                    dft1.addRow(v3);
-                }
-                Calendar start_cal = three_calendar_cld.getCalendar();
-                Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                start_cal.add(Calendar.DAY_OF_MONTH, 1);
-                String start_date = sdf.format(start_cal.getTime());
-                pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
-                String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
-
-//        System.out.println("start_date : "+ start_date);
-//        System.out.println("pre_7_day_from_start_date : "+ pre_7_day_from_start_date);
-                //query to access
-                pst = con.prepareStatement("SELECT id_invoice, pur_type "
-                        + "FROM invoice_management_tb INNER JOIN purpose_tb "
-                        + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
-                        + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
-                        + "AND invoice_man_date <= '" + start_date + "' "
-                        + "ORDER BY id_invoice_man DESC;");
+                pst = con.prepareStatement("SELECT id_invoice "
+                        + "FROM invoice_management_tb "
+                        + "WHERE id_acc = ?");
                 pst.setInt(1, get_acc_id());
                 rs = pst.executeQuery();
 
-                while (rs.next()) {
-                    pur_type.add(rs.getString("pur_type"));
-                    id_invoice.add(rs.getInt("id_invoice"));
+                if (rs.next()) {
+
+                    //query to access
+                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
+                        dft1.setRowCount(0);
+                        Vector v3 = new Vector();
+
+                        //set to v2 all data only 1 row
+                        v3.add(rs.getString("dollar"));
+                        v3.add(rs.getString("bart"));
+                        v3.add(rs.getString("rial"));
+
+                        //set data to table history row
+                        dft1.addRow(v3);
+                    }
+                    Calendar start_cal = three_calendar_cld.getCalendar();
+                    Calendar start_cal2 = three_calendar_cld.getCalendar();
+                    Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
+                    start_cal.add(Calendar.DAY_OF_MONTH, 1);
+                    String start_date = sdf.format(start_cal.getTime());
+                    String start_date2 = sdf2.format(start_cal2.getTime());
+                    pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
+                    String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+                    String pre_7_day_from_start_date2 = sdf2.format(pre_7_day_from_start_cal.getTime());
+
+                    date_history_lb.setText(start_date2 + "  to  " + pre_7_day_from_start_date2);
+
+                    System.out.println("start_date : " + start_date);
+                    System.out.println("pre_7_day_from_start_date : " + pre_7_day_from_start_date);
+                    //query to access
+                    pst = con.prepareStatement("SELECT id_invoice, pur_type "
+                            + "FROM invoice_management_tb INNER JOIN purpose_tb "
+                            + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
+                            + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+                            + "AND invoice_man_date <= '" + start_date + "' "
+                            + "ORDER BY id_invoice_man DESC;");
+                    pst.setInt(1, get_acc_id());
+                    rs = pst.executeQuery();
+
+                    while (rs.next()) {
+                        pur_type.add(rs.getString("pur_type"));
+                        id_invoice.add(rs.getInt("id_invoice"));
+                    }
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,42 +238,50 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 getLocal_host_user_name(),
                                 getLocal_host_password()
                         );
-                        //query to access
-                        pst = con.prepareStatement("SELECT id_invoice, (select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc , "
-                                + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
-                                + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
-                                + "FROM exc_invoice_tb WHERE id_invoice = ?;");
-
-//            System.out.println(id_invoice.get(i));
-                        pst.setInt(1, id_invoice.get(i));
+                        pst = con.prepareStatement("SELECT id_invoice "
+                                + "FROM invoice_management_tb "
+                                + "WHERE id_acc = ?");
+                        pst.setInt(1, get_acc_id());
                         rs = pst.executeQuery();
 
-                        //table in UI
-                        //reset selected in table
-                        dft.setRowCount(0);
+                        if (rs.next()) {
+                            //query to access
+                            pst = con.prepareStatement("SELECT id_invoice, (select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc , "
+                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
+                                    + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
+                                    + "FROM exc_invoice_tb WHERE id_invoice = ?;");
 
-                        while (rs.next()) {
+//            System.out.println(id_invoice.get(i));
+                            pst.setInt(1, id_invoice.get(i));
+                            rs = pst.executeQuery();
 
-                            Vector v3 = new Vector();
-                            //to get value then set in table history
+                            //table in UI
+                            //reset selected in table
+                            dft.setRowCount(0);
 
-                            //Date format string is passed as an argument to the Date format object
-                            SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
+                            while (rs.next()) {
 
-                            //get date of exchanging money
-                            String date_history = objSDF.format(rs.getTimestamp("invoice_date"));
+                                Vector v3 = new Vector();
+                                //to get value then set in table history
 
-                            //set to v2 all data only 1 row
-                            v3.add(date_history);
-                            v3.add(String.valueOf(rs.getInt("id_invoice")));
-                            v3.add(rs.getString("acc"));
-                            v3.add(rs.getString("pur"));
-                            v3.add("គេ: "
-                                    + rs.getString("exchanging_money") + " | យើង: -"
-                                    + rs.getString("result_exchanging_money") + " | អត្រា: "
-                                    + rs.getString("exchange_rate") + " | "
-                                    + rs.getString("exchange_type"));
-                            v2.add(v3);
+                                //Date format string is passed as an argument to the Date format object
+                                SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
+
+                                //get date of exchanging money
+                                String date_history = objSDF.format(rs.getTimestamp("invoice_date"));
+
+                                //set to v2 all data only 1 row
+                                v3.add(date_history);
+                                v3.add(String.valueOf(rs.getInt("id_invoice")));
+                                v3.add(rs.getString("acc"));
+                                v3.add(rs.getString("pur"));
+                                v3.add("គេ: "
+                                        + rs.getString("exchanging_money") + " | យើង: -"
+                                        + rs.getString("result_exchanging_money") + " | អត្រា: "
+                                        + rs.getString("exchange_rate") + " | "
+                                        + rs.getString("exchange_type"));
+                                v2.add(v3);
+                            }
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
@@ -274,37 +296,45 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 getLocal_host_user_name(),
                                 getLocal_host_password()
                         );
-                        pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
-                                + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, add_date, add_money, type_of_money "
-                                + "FROM add_money_history_tb INNER JOIN money_type_tb "
-                                + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money"
-                                + " WHERE id_add = ? ");
-                        pst.setInt(1, id_invoice.get(i));
+                        pst = con.prepareStatement("SELECT id_invoice "
+                                + "FROM invoice_management_tb "
+                                + "WHERE id_acc = ?");
+                        pst.setInt(1, get_acc_id());
                         rs = pst.executeQuery();
 
-                        //table in UI
-                        //reset selected in table
-                        dft.setRowCount(0);
+                        if (rs.next()) {
+                            pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
+                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, add_date, add_money, type_of_money "
+                                    + "FROM add_money_history_tb INNER JOIN money_type_tb "
+                                    + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money"
+                                    + " WHERE id_add = ? ");
+                            pst.setInt(1, id_invoice.get(i));
+                            rs = pst.executeQuery();
 
-                        while (rs.next()) {
+                            //table in UI
+                            //reset selected in table
+                            dft.setRowCount(0);
 
-                            Vector v3 = new Vector();
-                            //to get value then set in table history
+                            while (rs.next()) {
 
-                            //Date format string is passed as an argument to the Date format object
-                            SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
+                                Vector v3 = new Vector();
+                                //to get value then set in table history
 
-                            //get date of exchanging money
-                            String date_history = objSDF.format(rs.getTimestamp("add_date"));
+                                //Date format string is passed as an argument to the Date format object
+                                SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
-                            //set to v2 all data only 1 row
-                            v3.add(date_history);
-                            v3.add(String.valueOf(rs.getInt("id_add")));
-                            v3.add(rs.getString("acc"));
-                            v3.add(rs.getString("pur"));
-                            v3.add("បន្ថែម: " + rs.getString("add_money") + " " + rs.getString("type_of_money"));
+                                //get date of exchanging money
+                                String date_history = objSDF.format(rs.getTimestamp("add_date"));
+
+                                //set to v2 all data only 1 row
+                                v3.add(date_history);
+                                v3.add(String.valueOf(rs.getInt("id_add")));
+                                v3.add(rs.getString("acc"));
+                                v3.add(rs.getString("pur"));
+                                v3.add("បន្ថែម: " + rs.getString("add_money") + " " + rs.getString("type_of_money"));
 //                                    System.out.println(v3);
-                            v2.add(v3);
+                                v2.add(v3);
+                            }
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
@@ -313,10 +343,12 @@ public class UI_and_operation extends javax.swing.JFrame {
                 }
 
             }
-            for (int i = 0; i < v2.size(); i++) {
-//                System.out.println(v2.get(i));
-                dft.addRow(v2.get(i));
-
+            if (v2.size() != 0) {
+                for (int i = 0; i < v2.size(); i++) {
+                    dft.addRow(v2.get(i));
+                }
+            } else {
+                dft.setRowCount(0);
             }
         } else {
             three_calendar_cld.setBackground(Color.red);
@@ -376,6 +408,8 @@ public class UI_and_operation extends javax.swing.JFrame {
     }
 
     //-----------------------------------------------------class call--------------------------------------------------
+    exchange_rate_show exe_rate_show = new exchange_rate_show();
+
     /**
      * Creates new form UI_and_operation
      */
@@ -409,6 +443,81 @@ public class UI_and_operation extends javax.swing.JFrame {
         setWifi_host(wifi_host);
         setWifi_host_user_name(wifi_user_name);
         setWifi_host_password(wifi_password_tf);
+
+        String S_to_R = "";
+        String R_to_S = "";
+        String S_to_B = "";
+        String B_to_S = "";
+        String B_to_R = "";
+        String R_to_B = "";
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        //        System.out.println(five_local_host_tf.getText());
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            //write sql query to access
+            pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
+                    + "bart_to_dollar, bart_to_rial, rial_to_bart "
+                    + "FROM exc_rate_tb ORDER BY date_rate DESC;");
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                S_to_R = rs.getString("dollar_to_rial");
+                R_to_S = rs.getString("rial_to_dollar");
+                S_to_B = rs.getString("dollar_to_bart");
+                B_to_S = rs.getString("bart_to_dollar");
+                B_to_R = rs.getString("bart_to_rial");
+                R_to_B = rs.getString("rial_to_bart");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+
+        exc_rate exc_ra = new exc_rate();
+        exc_ra.set_each_rate(type_of_exchange.S_to_R, S_to_R);
+        exc_ra.set_each_rate(type_of_exchange.R_to_S, R_to_S);
+        exc_ra.set_each_rate(type_of_exchange.S_to_B, S_to_B);
+        exc_ra.set_each_rate(type_of_exchange.B_to_S, B_to_S);
+        exc_ra.set_each_rate(type_of_exchange.B_to_R, B_to_R);
+        exc_ra.set_each_rate(type_of_exchange.R_to_B, R_to_B);
+        four_S_to_R_one_tf.setText(exc_ra.getS_to_R_one());
+        four_S_to_R_two_tf.setText(exc_ra.getS_to_R_two());
+        four_S_to_R_three_tf.setText(exc_ra.getS_to_R_three());
+        four_S_to_R_four_tf.setText(exc_ra.getS_to_R_four());
+
+        four_R_to_S_one_tf.setText(exc_ra.getR_to_S_one());
+        four_R_to_S_two_tf.setText(exc_ra.getR_to_S_two());
+        four_R_to_S_three_tf.setText(exc_ra.getR_to_S_three());
+        four_R_to_S_four_tf.setText(exc_ra.getR_to_S_four());
+
+        four_S_to_B_one_tf.setText(exc_ra.getS_to_B_one());
+        four_S_to_B_two_tf.setText(exc_ra.getS_to_B_two());
+        four_S_to_B_three_tf.setText(exc_ra.getS_to_B_three());
+        four_S_to_B_four_tf.setText(exc_ra.getS_to_B_four());
+
+        four_B_to_S_one_tf.setText(exc_ra.getB_to_S_one());
+        four_B_to_S_two_tf.setText(exc_ra.getB_to_S_two());
+        four_B_to_S_three_tf.setText(exc_ra.getB_to_S_three());
+        four_B_to_S_four_tf.setText(exc_ra.getB_to_S_four());
+
+        four_B_to_R_one_tf.setText(exc_ra.getB_to_R_one());
+        four_B_to_R_two_tf.setText(exc_ra.getB_to_R_two());
+        four_B_to_R_three_tf.setText(exc_ra.getB_to_R_three());
+        four_B_to_R_four_tf.setText(exc_ra.getB_to_R_four());
+
+        four_R_to_B_one_tf.setText(exc_ra.getR_to_B_one());
+        four_R_to_B_two_tf.setText(exc_ra.getR_to_B_two());
+        four_R_to_B_three_tf.setText(exc_ra.getR_to_B_three());
+        four_R_to_B_four_tf.setText(exc_ra.getR_to_B_four());
+//        System.out.println(exc_ra.getS_to_R_one()+ "  " + exc_ra.getS_to_R_two() + "  " + exc_ra.getS_to_R_three() + "  " + exc_ra.getS_to_R_four());
+
+        exe_rate_show.set_rate(S_to_R, R_to_S, S_to_B, B_to_S, B_to_R, R_to_B);
+        exe_rate_show.setVisible(true);
 
         //set name of the window next to logo
         setTitle("Exchange and Transfer money");
@@ -560,6 +669,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel47 = new javax.swing.JLabel();
         three_calendar_cld = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
+        date_history_lb = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -888,7 +998,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_bn_R_to_B, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 153, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_lb_customer_money)
@@ -907,7 +1017,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(one_lb_equal)
                                 .addGap(8, 8, 8)))
-                        .addGap(0, 130, Short.MAX_VALUE))
+                        .addGap(0, 123, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(one_tf_customer_money, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -916,7 +1026,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56))
+                .addGap(145, 145, 145))
         );
 
         jTabbedPane1.addTab("ប្តូរប្រាក់", jPanel2);
@@ -1063,11 +1173,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel7)
                                     .addComponent(two_one_tf_cus_name, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                     .addComponent(two_one_bn_finish, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(47, 47, 47))
+                .addGap(216, 216, 216))
         );
 
         jTabbedPane2.addTab("ផ្ទេរប្រាក់ទៅថៃ", jPanel4);
@@ -1285,7 +1395,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(two_two_reveiver_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1301,7 +1411,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(47, 47, 47))))
+                        .addGap(221, 221, 221))))
         );
 
         jTabbedPane2.addTab("ដកប្រាក់ពីថៃ", jPanel5);
@@ -1476,7 +1586,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(two_three_bart_money_rb))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                                 .addComponent(jLabel18)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(two_three_service_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1488,7 +1598,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 .addComponent(jLabel21)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1644,7 +1754,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel28)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 343, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1787,6 +1897,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
+        date_history_lb.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1794,30 +1906,30 @@ public class UI_and_operation extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addComponent(jLabel47)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(three_rial_rb)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(three_dollar_rb)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(three_bart_rb)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(three_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel35)
+                                .addComponent(jLabel47)
                                 .addGap(18, 18, 18)
-                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(three_rial_rb)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(three_dollar_rb)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(three_bart_rb)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(three_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel35)
+                        .addGap(18, 18, 18)
+                        .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(60, 60, 60)
+                        .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -1835,14 +1947,16 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(three_add_bn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Banlance", jPanel8);
@@ -1856,6 +1970,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_R_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_R_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_R_four_tf.setText("0");
         four_S_to_R_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1872,6 +1987,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel40.setText(".");
 
         four_S_to_R_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_R_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_R_one_tf.setText("4");
         four_S_to_R_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1885,6 +2001,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_R_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_R_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_R_two_tf.setText("0");
         four_S_to_R_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1898,6 +2015,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_R_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_R_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_R_three_tf.setText("0");
         four_S_to_R_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1911,6 +2029,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_S_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_S_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_S_one_tf.setText("4");
         four_R_to_S_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1924,6 +2043,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_S_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_S_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_S_two_tf.setText("0");
         four_R_to_S_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1937,6 +2057,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_S_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_S_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_S_three_tf.setText("1");
         four_R_to_S_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1950,6 +2071,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_S_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_S_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_S_four_tf.setText("0");
         four_R_to_S_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1963,6 +2085,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_B_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_B_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_B_one_tf.setText("3");
         four_S_to_B_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1976,6 +2099,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_B_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_B_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_B_two_tf.setText("0");
         four_S_to_B_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1989,6 +2113,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_B_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_B_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_B_three_tf.setText("0");
         four_S_to_B_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2002,6 +2127,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_S_to_B_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_S_to_B_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_S_to_B_four_tf.setText("0");
         four_S_to_B_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2015,6 +2141,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_S_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_S_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_S_one_tf.setText("3");
         four_B_to_S_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2028,6 +2155,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_S_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_S_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_S_two_tf.setText("0");
         four_B_to_S_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2041,6 +2169,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_S_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_S_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_S_three_tf.setText("1");
         four_B_to_S_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2054,6 +2183,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_S_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_S_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_S_four_tf.setText("0");
         four_B_to_S_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2070,6 +2200,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel41.setText(".");
 
         four_B_to_R_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_R_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_R_one_tf.setText("1");
         four_B_to_R_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2083,6 +2214,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_R_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_R_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_R_two_tf.setText("3");
         four_B_to_R_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2096,6 +2228,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_R_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_R_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_R_three_tf.setText("0");
         four_B_to_R_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2109,6 +2242,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_B_to_R_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_B_to_R_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_B_to_R_four_tf.setText("0");
         four_B_to_R_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2125,6 +2259,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel42.setText(".");
 
         four_R_to_B_four_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_B_four_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_B_four_tf.setText("0");
         four_R_to_B_four_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2138,6 +2273,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_B_three_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_B_three_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_B_three_tf.setText("1");
         four_R_to_B_three_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2151,6 +2287,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_B_two_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_B_two_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_B_two_tf.setText("3");
         four_R_to_B_two_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2164,6 +2301,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         four_R_to_B_one_tf.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        four_R_to_B_one_tf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         four_R_to_B_one_tf.setText("1");
         four_R_to_B_one_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2291,7 +2429,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(four_bn_edit_exchange_rate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(277, 277, 277)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2480,7 +2618,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 985, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 985, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -3250,6 +3388,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 pst.setString(6, B_to_R_tf);
                 pst.setString(7, R_to_B_tf);
                 pst.executeUpdate();
+                exe_rate_show.set_rate(S_to_R_tf, R_to_S_tf, S_to_B_tf, B_to_S_tf, B_to_R_tf, R_to_B_tf);
                 JOptionPane.showMessageDialog(this, "Exchange rate saved.");
             } else {
                 JOptionPane.showMessageDialog(this, "You change nothing.");
@@ -3611,10 +3750,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void four_R_to_B_two_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_four_R_to_B_two_tfKeyTyped
 
         char c = evt.getKeyChar();
-        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(four_R_to_B_one_tf.getText())))) {
+        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(four_R_to_B_two_tf.getText())))) {
             evt.consume();
         } else {
-            if (!four_R_to_B_one_tf.getText().isEmpty()) {
+            if (!four_R_to_B_two_tf.getText().isEmpty()) {
                 evt.consume();
             }
         }
@@ -3979,6 +4118,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.JLabel date_history_lb;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton five_create_acc_tf;
