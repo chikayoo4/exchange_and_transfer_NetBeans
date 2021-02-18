@@ -47,10 +47,10 @@ public class reciept {
                 JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
                 //view report
-                JasperViewer.viewReport(jprint);
+//                JasperViewer.viewReport(jprint);
 
                 //print report 
-//                JasperPrintManager.printReport(jprint, false);
+                JasperPrintManager.printReport(jprint, false);
 
             } catch (SQLException | JRException ex) {
 

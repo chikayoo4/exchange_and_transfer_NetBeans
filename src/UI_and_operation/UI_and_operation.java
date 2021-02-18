@@ -389,19 +389,20 @@ public class UI_and_operation extends javax.swing.JFrame {
                     current_date(),
                     selected_exchange_rate
             );
-            if (is_print) {String path = "";
-                            try {
-                                File file = new File("x.txt");
-                                if (!file.exists()) {
-                                    file.createNewFile();
-                                }
-                                path = file.getAbsolutePath();
-                                path = path.substring(0, path.length() - 6);
+            if (is_print) {
+                String path = "";
+                try {
+                    File file = new File("x.txt");
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    path = file.getAbsolutePath();
+                    path = path.substring(0, path.length() - 6);
 //                                System.out.println("path : " + path);
-                            } catch (IOException e) {
-                                System.out.println("error");
-                            }
-                            
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+
                 print_reciept(path + "\\reciept_for_print\\exchanging.jrxml",
                         exchanging_obj.insert_to_db());
             } else {
@@ -428,6 +429,7 @@ public class UI_and_operation extends javax.swing.JFrame {
      * Creates new form UI_and_operation
      */
     public UI_and_operation() {
+
         this.setUndecorated(false);
         this.setAlwaysOnTop(true);
         this.setResizable(true);
@@ -474,6 +476,26 @@ public class UI_and_operation extends javax.swing.JFrame {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
+            
+            
+        String path = "";
+        try {
+            File file = new File("x.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            path = file.getAbsolutePath();
+            path = path.substring(0, path.length() - 6);
+//                                System.out.println("path : " + path);
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+        
+                        pst = con.prepareStatement("UPDATE project_path SET path_name = '"+ path +"';");
+                        pst.executeUpdate();
+            
+            
+            
             //write sql query to access
             pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
                     + "bart_to_dollar, bart_to_rial, rial_to_bart "
@@ -533,9 +555,10 @@ public class UI_and_operation extends javax.swing.JFrame {
         exe_rate_show.set_rate(S_to_R, R_to_S, S_to_B, B_to_S, B_to_R, R_to_B);
         exe_rate_show.setVisible(true);
 
+        
         //set name of the window next to logo
         setTitle("Exchange and Transfer money");
-
+        setIconImage(Toolkit.getDefaultToolkit().getImage("logo_and_icon\\icon\\main_logo.png"));
         //design head table  total money in balance
         three_tb_total_money.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 30));
         three_tb_total_money.setRowHeight(40);
