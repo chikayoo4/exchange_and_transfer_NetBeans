@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="226" pageHeight="566" columnWidth="207" leftMargin="0" rightMargin="19" topMargin="8" bottomMargin="8" uuid="e8ba0723-52e6-4219-b857-e87047bd1f13">
+	<property name="ireport.zoom" value="4.507888805409509"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1059"/>
+	<parameter name="invoice_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     exc_invoice_tb."id_invoice" AS exc_invoice_tb_id_invoice,
+     exc_invoice_tb."invoice_date" AS exc_invoice_tb_invoice_date,
+     exc_invoice_tb."exchanging_money" AS exc_invoice_tb_exchanging_money,
+     exc_invoice_tb."result_exchanging_money" AS exc_invoice_tb_result_exchanging_money,
+     exc_invoice_tb."exchange_rate" AS exc_invoice_tb_exchange_rate,
+     exc_invoice_tb."id_type" AS exc_invoice_tb_id_type,
+     exc_invoice_tb."id_acc" AS exc_invoice_tb_id_acc,
+     exc_invoice_tb."id_pur" AS exc_invoice_tb_id_pur,
+     account_tb."id_acc" AS account_tb_id_acc,
+     account_tb."user_name" AS account_tb_user_name,
+     account_tb."password" AS account_tb_password
+FROM
+     "dbo"."account_tb" account_tb FULL OUTER JOIN "dbo"."exc_invoice_tb" exc_invoice_tb ON account_tb."id_acc" = exc_invoice_tb."id_acc"
+WHERE exc_invoice_tb."id_invoice" = $P{invoice_id}]]>
+	</queryString>
+	<field name="exc_invoice_tb_id_invoice" class="java.lang.Integer"/>
+	<field name="exc_invoice_tb_invoice_date" class="java.sql.Timestamp"/>
+	<field name="exc_invoice_tb_exchanging_money" class="java.lang.String"/>
+	<field name="exc_invoice_tb_result_exchanging_money" class="java.lang.String"/>
+	<field name="exc_invoice_tb_exchange_rate" class="java.lang.String"/>
+	<field name="exc_invoice_tb_id_type" class="java.lang.Integer"/>
+	<field name="exc_invoice_tb_id_acc" class="java.lang.Integer"/>
+	<field name="exc_invoice_tb_id_pur" class="java.lang.Integer"/>
+	<field name="account_tb_id_acc" class="java.lang.Integer"/>
+	<field name="account_tb_user_name" class="java.lang.String"/>
+	<field name="account_tb_password" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="131" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="0" width="167" height="60" uuid="6b6f2ce1-7ca6-4922-8027-9bd505dbe94b"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\logo.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="38" y="62" width="131" height="13" uuid="97304395-c5e7-4d41-a149-e328629e2130"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[061 36 0000  /  069 23 23 69]]></text>
+			</staticText>
+			<image>
+				<reportElement x="5" y="81" width="196" height="20" uuid="1afa9228-8978-4e6b-8b08-a05b0975ab36"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\address.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="57" y="99" width="98" height="32" uuid="c2a6d912-bc20-4f60-9708-7399062ac69c"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\exchanging\\subtittle.JPG"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="218" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="207" height="1" uuid="0ee97b38-7af4-42ce-84e0-f1f303144634"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="207" height="76" backcolor="#AFAFAF" uuid="07f0c066-c7e3-495f-becd-6884cb846512"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<image>
+				<reportElement x="5" y="3" width="33" height="24" uuid="71bc8ae8-4e8b-4a12-8e05-f5f532d194b5"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\exchanging\\operation.JPG"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="20" y="22" width="187" height="34" uuid="c550ab81-b2fd-4b00-935e-3a4bff0432d2"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_exchanging_money} +
+(($F{exc_invoice_tb_id_type} ==  2 || $F{exc_invoice_tb_id_type} ==  3) ? " ដ្លលារ" : 
+($F{exc_invoice_tb_id_type} ==  1 || $F{exc_invoice_tb_id_type} ==  6) ? " រៀល": " បាត") + 
+(($F{exc_invoice_tb_id_type} == 2 || $F{exc_invoice_tb_id_type} == 3 || $F{exc_invoice_tb_id_type} == 5) ? "  x  " : "  /  ") +
+$F{exc_invoice_tb_exchange_rate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="46" width="187" height="38" uuid="6bc7ff84-4751-43d0-b810-98d5dcba204c"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["= " + $F{exc_invoice_tb_result_exchanging_money} +
+(($F{exc_invoice_tb_id_type} ==  1 || $F{exc_invoice_tb_id_type} ==  4) ? " ដ្លលារ" : 
+($F{exc_invoice_tb_id_type} ==  2 || $F{exc_invoice_tb_id_type} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="76" width="207" height="1" uuid="fdb8123d-c99a-496f-a3f8-3d47f5fc1991"/>
+			</line>
+			<image>
+				<reportElement x="0" y="84" width="67" height="19" uuid="33883f32-e46a-409f-ab29-fd36ef020392"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\exchanging\\cus_m.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="0" y="106" width="77" height="16" uuid="a267615d-fca0-4013-901e-f86a5f4c2743"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\exchanging\\result.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="0" y="126" width="57" height="20" uuid="ab16d0b3-7bf1-46a9-8444-51033145612f"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\exchanging\\rate.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="75" y="81" width="12" height="20" uuid="8bcf7df8-0ccd-4dfe-94b8-6b36ae81c66d"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="102" width="12" height="20" uuid="bfc8d857-9bde-4106-87e0-0aad1684ba05"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="75" y="123" width="12" height="20" uuid="b26b2bba-e09f-4368-b0ca-addaaf12f7e4"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="89" y="81" width="118" height="29" uuid="30141dc1-8d9c-468f-afec-622a1e4e917b"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_exchanging_money} +
+(($F{exc_invoice_tb_id_type} ==  2 || $F{exc_invoice_tb_id_type} ==  3) ? " ដ្លលារ" : 
+($F{exc_invoice_tb_id_type} ==  1 || $F{exc_invoice_tb_id_type} ==  6) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="102" width="118" height="28" uuid="30506dc2-8029-4aeb-bffc-25e1016af58c"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_result_exchanging_money} +
+(($F{exc_invoice_tb_id_type} ==  1 || $F{exc_invoice_tb_id_type} ==  4) ? " ដ្លលារ" : 
+($F{exc_invoice_tb_id_type} ==  2 || $F{exc_invoice_tb_id_type} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="126" width="118" height="20" uuid="d025a3cd-e520-4dbd-bbe7-25d15f87ff39"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_exchange_rate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="151" width="207" height="1" uuid="2d00fa22-1214-44f8-b0cd-59ad015b41b8"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="152" width="207" height="66" backcolor="#AFAFAF" uuid="76e765c4-f63d-4b66-86a0-201f14d7f279"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="159" width="66" height="50" uuid="472f49b3-d9cb-43fa-8ee8-85fdb80c8dd6"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\invoice.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="54" y="193" width="12" height="20" uuid="af75f1b8-b9f5-4c1f-92c3-4a1bac67f1e0"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="174" width="12" height="20" uuid="9a94604e-d32e-4f3f-93a6-8e8edfb148ab"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="155" width="12" height="20" uuid="726219a3-41c4-4a51-a7af-915dad523bfc"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="63" y="157" width="141" height="20" uuid="6c50d20c-40c6-4996-8915-cd8a079f0ecd"/>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_id_invoice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="176" width="145" height="20" uuid="be32774b-4533-44fa-b6cc-acf2271b5986"/>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_invoice_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="194" width="144" height="20" uuid="8d00e95f-0604-4915-be1a-26a620728001"/>
+				<textFieldExpression><![CDATA[$F{account_tb_user_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="207" height="1" uuid="a4328260-5c65-4d73-9fd5-9ba1de28a654"/>
+			</line>
+			<image>
+				<reportElement x="30" y="2" width="146" height="29" uuid="286d5193-9350-4d2d-b425-7923de5370b0"/>
+				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\src\\UI_and_operation\\reciept\\logo_and_icon\\footer.JPG"]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>

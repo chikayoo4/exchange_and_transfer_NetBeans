@@ -5,6 +5,8 @@
  */
 package UI_and_operation;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Chhann_chikay
@@ -16,6 +18,7 @@ public class exchange_rate_show extends javax.swing.JFrame {
      */
     public exchange_rate_show() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**

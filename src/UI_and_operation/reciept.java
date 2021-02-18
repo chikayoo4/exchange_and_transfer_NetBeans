@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -46,10 +47,10 @@ public class reciept {
                 JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
                 //view report
-    //            JasperViewer.viewReport(jprint);
+                JasperViewer.viewReport(jprint);
 
                 //print report 
-                JasperPrintManager.printReport(jprint, false);
+//                JasperPrintManager.printReport(jprint, false);
 
             } catch (SQLException | JRException ex) {
 

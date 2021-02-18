@@ -81,7 +81,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" pref="985" max="32767" attributes="0"/>
+              <Component id="jTabbedPane1" pref="904" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -115,7 +115,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="one_bn_R_to_S" pref="451" max="32767" attributes="0"/>
+                          <Component id="one_bn_R_to_S" max="32767" attributes="0"/>
                           <Component id="one_bn_S_to_R" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_lb_customer_money" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="one_money_type_lb" pref="171" max="32767" attributes="0"/>
+                                      <Component id="one_money_type_lb" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="one_tf_customer_money" max="32767" attributes="0"/>
                               </Group>
@@ -139,7 +139,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_lb_exchange_rate" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="one_rate_type_lb" pref="167" max="32767" attributes="0"/>
+                                      <Component id="one_rate_type_lb" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="one_tf_exchange_rate" max="32767" attributes="0"/>
                               </Group>
@@ -158,9 +158,9 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_lb_customer_result" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="one_money_type_result_lb" pref="185" max="32767" attributes="0"/>
+                                      <Component id="one_money_type_result_lb" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="one_tf_customer_result" pref="415" max="32767" attributes="0"/>
+                                  <Component id="one_tf_customer_result" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
@@ -217,7 +217,7 @@
                                       <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="123" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -492,10 +492,10 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jTabbedPane2" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jTabbedPane2" pref="914" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -538,7 +538,7 @@
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="two_one_tf_bank" max="32767" attributes="0"/>
-                                  <Component id="two_one_tf_cus_no" alignment="0" pref="468" max="32767" attributes="0"/>
+                                  <Component id="two_one_tf_cus_no" alignment="0" pref="471" max="32767" attributes="0"/>
                                   <Component id="two_one_tf_cus_name" alignment="0" max="32767" attributes="0"/>
                                   <Component id="two_one_tf_cus_ph_no" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -557,7 +557,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="two_one_tf_service_money" max="32767" attributes="0"/>
-                                          <Component id="two_one_tf_total_money" pref="262" max="32767" attributes="0"/>
+                                          <Component id="two_one_tf_total_money" pref="265" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -616,7 +616,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="164" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jButton9" pref="75" max="32767" attributes="0"/>
                                   <Component id="two_one_bn_finish" max="32767" attributes="0"/>
@@ -1185,7 +1185,7 @@
                                           <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="310" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="313" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
@@ -1195,9 +1195,9 @@
                                       <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="two_three_sender_money_tf" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="two_three_service_money_tf" alignment="0" pref="640" max="32767" attributes="0"/>
-                                          <Component id="two_three_total_money_tf" alignment="0" pref="640" max="32767" attributes="0"/>
-                                          <Component id="two_three_balance_money_tf" alignment="0" pref="640" max="32767" attributes="0"/>
+                                          <Component id="two_three_service_money_tf" alignment="0" pref="643" max="32767" attributes="0"/>
+                                          <Component id="two_three_total_money_tf" alignment="0" pref="643" max="32767" attributes="0"/>
+                                          <Component id="two_three_balance_money_tf" alignment="0" pref="643" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
@@ -1213,15 +1213,16 @@
                                                   <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="0" pref="267" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="270" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace pref="347" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="two_three_bn_finish" min="-2" pref="165" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButton13" min="-2" pref="165" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1260,7 +1261,7 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="two_three_sender_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                                              <EmptySpace pref="38" max="32767" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                               <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="two_three_service_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
@@ -1274,12 +1275,12 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="two_three_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                                      <EmptySpace pref="234" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="jButton13" max="32767" attributes="0"/>
                                           <Component id="two_three_bn_finish" min="-2" pref="75" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="249" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1497,15 +1498,15 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel22" alignment="0" min="-2" pref="317" max="-2" attributes="0"/>
                                   <Component id="jLabel26" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="two_four_province_name_tf" alignment="0" pref="541" max="32767" attributes="0"/>
+                                  <Component id="two_four_province_name_tf" alignment="0" pref="544" max="32767" attributes="0"/>
                                   <Component id="two_four_receiver_phone_no_tf" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="filler3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="187" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="two_four_balance_money_tf" pref="583" max="32767" attributes="0"/>
-                                  <Component id="two_four_total_money_tf" pref="583" max="32767" attributes="0"/>
+                                  <Component id="two_four_balance_money_tf" pref="586" max="32767" attributes="0"/>
+                                  <Component id="two_four_total_money_tf" pref="586" max="32767" attributes="0"/>
                                   <Component id="two_four_sender_money_tf" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1521,16 +1522,17 @@
                                               <Component id="two_four_bart_money_rb" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="144" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="two_four_bn_finish" min="-2" pref="165" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButton15" min="-2" pref="165" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1568,12 +1570,12 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="two_four_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace pref="343" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton15" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                                   <Component id="two_four_bn_finish" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1756,36 +1758,40 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="three_add_tf" min="-2" pref="283" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel47" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="three_add_tf" min="-2" pref="283" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel47" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="three_rial_rb" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="three_dollar_rb" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="three_bart_rb" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="three_add_bn" min="-2" pref="79" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="three_rial_rb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="three_dollar_rb" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="three_bart_rb" min="-2" max="-2" attributes="0"/>
+                                      <Component id="three_calendar_cld" min="-2" pref="236" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                                      <Component id="date_history_lb" pref="718" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="three_add_bn" min="-2" pref="79" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="three_calendar_cld" min="-2" pref="236" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
-                              <Component id="date_history_lb" pref="718" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1801,14 +1807,14 @@
                           <Component id="three_dollar_rb" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="three_bart_rb" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="three_add_tf" alignment="1" min="-2" pref="39" max="-2" attributes="0"/>
                           <Component id="three_add_bn" alignment="1" min="-2" pref="41" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="108" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="date_history_lb" max="32767" attributes="0"/>
                           <Component id="jButton1" max="32767" attributes="0"/>
@@ -1816,7 +1822,7 @@
                           <Component id="jLabel35" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" pref="629" max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" pref="609" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -2252,7 +2258,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                       <Component id="four_bn_edit_exchange_rate" min="-2" pref="57" max="-2" attributes="0"/>
-                      <EmptySpace pref="139" max="32767" attributes="0"/>
+                      <EmptySpace pref="196" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2730,7 +2736,7 @@
                       <Component id="five_wifi_host_user_name_tf" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="five_wifi_host_password_tf" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="354" max="32767" attributes="0"/>
+                      <EmptySpace pref="411" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
