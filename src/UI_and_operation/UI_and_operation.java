@@ -2765,114 +2765,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_five_user_name_tfActionPerformed
 
-    private void two_four_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_dollar_money_rbActionPerformed
-
-    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton15ActionPerformed
-
-    private void two_four_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_total_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_total_money_tfActionPerformed
-
-    private void two_four_sender_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_sender_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_sender_money_tfActionPerformed
-
-    private void two_four_province_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_province_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_province_name_tfActionPerformed
-
-    private void two_four_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfActionPerformed
-
-    private void two_three_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_dollar_money_rbActionPerformed
-
-    private void two_three_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bn_finishActionPerformed
-
-    }//GEN-LAST:event_two_three_bn_finishActionPerformed
-
-    private void two_three_balance_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_balance_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_balance_money_tfActionPerformed
-
-    private void two_three_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_total_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_total_money_tfActionPerformed
-
-    private void two_three_province_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_province_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_province_name_tfActionPerformed
-
-    private void two_three_service_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_service_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_service_money_tfActionPerformed
-
-    private void two_three_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_receiver_phone_no_tfActionPerformed
-
-    private void two_three_sender_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_sender_phone_no_tfActionPerformed
-
-    private void two_two_AM_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_AM_rbActionPerformed
-
-    }//GEN-LAST:event_two_two_AM_rbActionPerformed
-
-    private void two_two_service_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_service_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_service_money_tfActionPerformed
-
-    private void two_two_reveiver_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_reveiver_money_tfActionPerformed
-
-    private void two_two_minute_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_minute_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_minute_tfActionPerformed
-
-    private void two_two_hour_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_hour_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_hour_tfActionPerformed
-
-    private void two_two_day_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_day_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_day_tfActionPerformed
-
-    private void two_two_year_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_year_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_two_year_tfActionPerformed
-
-    private void two_two_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_bn_finishActionPerformed
-
-    }//GEN-LAST:event_two_two_bn_finishActionPerformed
-
-    private void two_one_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_bn_finishActionPerformed
-
-    }//GEN-LAST:event_two_one_bn_finishActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void two_one_tf_bankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_bankActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_tf_bankActionPerformed
-
-    private void two_one_tf_cus_moneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_tf_cus_moneyActionPerformed
-
-    private void two_one_tf_cus_noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_tf_cus_noActionPerformed
-
     private void one_bn_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_printActionPerformed
         exc_perform(true);
         set_history();
@@ -2994,10 +2886,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_B_to_S.setEnabled(true);
         one_bn_R_to_B.setEnabled(true);
     }//GEN-LAST:event_one_bn_S_to_RActionPerformed
-
-    private void two_four_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_bn_finishActionPerformed
-
-    }//GEN-LAST:event_two_four_bn_finishActionPerformed
 
 
     private void five_local_host_user_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfActionPerformed
@@ -4248,6 +4136,118 @@ public class UI_and_operation extends javax.swing.JFrame {
             five_wifi_host_password_tf.setEditable(false);
         }
     }//GEN-LAST:event_five_dev_permission_bnActionPerformed
+
+    private void two_four_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_four_dollar_money_rbActionPerformed
+
+    private void two_four_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_bn_finishActionPerformed
+
+    }//GEN-LAST:event_two_four_bn_finishActionPerformed
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void two_four_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_total_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_four_total_money_tfActionPerformed
+
+    private void two_four_sender_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_sender_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_four_sender_money_tfActionPerformed
+
+    private void two_four_province_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_province_name_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_four_province_name_tfActionPerformed
+
+    private void two_four_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_four_receiver_phone_no_tfActionPerformed
+
+    private void two_three_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_dollar_money_rbActionPerformed
+
+    private void two_three_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bn_finishActionPerformed
+
+    }//GEN-LAST:event_two_three_bn_finishActionPerformed
+
+    private void two_three_balance_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_balance_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_balance_money_tfActionPerformed
+
+    private void two_three_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_total_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_total_money_tfActionPerformed
+
+    private void two_three_province_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_province_name_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_province_name_tfActionPerformed
+
+    private void two_three_service_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_service_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_service_money_tfActionPerformed
+
+    private void two_three_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_receiver_phone_no_tfActionPerformed
+
+    private void two_three_sender_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_sender_phone_no_tfActionPerformed
+
+    private void two_two_AM_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_AM_rbActionPerformed
+
+    }//GEN-LAST:event_two_two_AM_rbActionPerformed
+
+    private void two_two_service_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_service_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_service_money_tfActionPerformed
+
+    private void two_two_reveiver_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_reveiver_money_tfActionPerformed
+
+    private void two_two_minute_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_minute_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_minute_tfActionPerformed
+
+    private void two_two_hour_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_hour_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_hour_tfActionPerformed
+
+    private void two_two_day_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_day_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_day_tfActionPerformed
+
+    private void two_two_year_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_year_tfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_year_tfActionPerformed
+
+    private void two_two_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_bn_finishActionPerformed
+
+    }//GEN-LAST:event_two_two_bn_finishActionPerformed
+
+    private void two_one_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_bn_finishActionPerformed
+
+    }//GEN-LAST:event_two_one_bn_finishActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void two_one_tf_bankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_bankActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_one_tf_bankActionPerformed
+
+    private void two_one_tf_cus_moneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_one_tf_cus_moneyActionPerformed
+
+    private void two_one_tf_cus_noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_one_tf_cus_noActionPerformed
 
     /**
      * @param args the command line arguments
