@@ -64,6 +64,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         Print, Delete, Close
     };
 
+    String set_admin_password = "";
+
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
     type_of_exchange selected_exchange_rate = type_of_exchange.not_select;
     type_of_money selected_money_type;
@@ -562,8 +564,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_tb_total_money.setRowHeight(40);
 
         //design head table  history in balance
-        three_tb_history.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 30));
-        three_tb_history.setRowHeight(60);
+        three_tb_history.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 20));
+        three_tb_history.setRowHeight(40);
         set_history();
     }
 
@@ -1851,17 +1853,17 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_tb_total_money.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(three_tb_total_money);
 
-        three_tb_history.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        three_tb_history.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 18)); // NOI18N
         three_tb_history.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "detail"
+                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "លុយ R", "លុយ S", "លុយ B", "detail"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -3159,110 +3161,117 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_rial_rbActionPerformed
 
     private void three_add_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_add_bnActionPerformed
+
         if ((three_rial_rb.isSelected() || three_dollar_rb.isSelected() || three_bart_rb.isSelected()) && !three_add_tf.getText().isEmpty()) {
+            String admin_password = JOptionPane.showInputDialog(this, "Enter password");
+//            System.out.println("admin_password : " + admin_password);
+//            System.out.println("set_admin_password.equals(\"\") :" + set_admin_password.equals(""));
+            if (set_admin_password.equals(admin_password)) {
+                int lastinsertid = -1;
+                Connection con;
+                PreparedStatement pst;
+                ResultSet rs;
+                try {
+                    con = DriverManager.getConnection(
+                            getLocal_host(),
+                            getLocal_host_user_name(),
+                            getLocal_host_password()
+                    );
 
-            int lastinsertid = -1;
-            Connection con;
-            PreparedStatement pst;
-            ResultSet rs;
-            try {
-                con = DriverManager.getConnection(
-                        getLocal_host(),
-                        getLocal_host_user_name(),
-                        getLocal_host_password()
-                );
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into add_money_history_tb (add_date, add_money, id_type_of_money, id_acc, id_pur)"
+                            + "values(?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 
-                //write sql query to access
-                pst = con.prepareStatement("insert into add_money_history_tb (add_date, add_money, id_type_of_money, id_acc, id_pur)"
-                        + "values(?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+                    Timestamp cur_date = current_date();
 
-                Timestamp cur_date = current_date();
+                    //set value to ? in query
+                    pst.setTimestamp(1, cur_date);
+                    pst.setString(2, three_add_tf.getText());
+                    pst.setInt(3, get_id_money_type_from_db(selected_money_type));
+                    pst.setInt(4, get_acc_id());
+                    pst.setInt(5, get_id_pur_from_db(purpose_type.add_total_money.toString()));
+                    pst.executeUpdate();
+                    ResultSet generatekey = pst.getGeneratedKeys();
+                    if (generatekey.next()) {
+                        lastinsertid = generatekey.getInt(1);
+                    }
 
-                //set value to ? in query
-                pst.setTimestamp(1, cur_date);
-                pst.setString(2, three_add_tf.getText());
-                pst.setInt(3, get_id_money_type_from_db(selected_money_type));
-                pst.setInt(4, get_acc_id());
-                pst.setInt(5, get_id_pur_from_db(purpose_type.add_total_money.toString()));
-                pst.executeUpdate();
-                ResultSet generatekey = pst.getGeneratedKeys();
-                if (generatekey.next()) {
-                    lastinsertid = generatekey.getInt(1);
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into invoice_management_tb (id_invoice, id_acc, id_pur, invoice_man_date)"
+                            + "values(? , ?, ?, ?);");
+
+                    //set value to ? in query
+                    pst.setInt(1, lastinsertid);
+                    pst.setInt(2, get_acc_id());
+                    pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
+                    pst.setTimestamp(4, cur_date);
+                    pst.executeUpdate();
+
+                    String add_money = "";
+                    String money_type = "";
+
+                    //query to access
+                    pst = con.prepareStatement("SELECT add_money, type_of_money "
+                            + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                            + "where id_add = ? "
+                            + "AND id_acc = ? "
+                            + "AND id_pur = ?;");
+                    pst.setInt(1, lastinsertid);
+                    pst.setInt(2, get_acc_id());
+                    pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        add_money = rs.getString("add_money");
+                        money_type = rs.getString("type_of_money");
+                    }
+
+                    String Rial = "";
+                    String Dollar = "";
+                    String Bart = "";
+                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        //set to v2 all data only 1 row
+                        Rial = rs.getString("rial");
+                        Dollar = rs.getString("dollar");
+                        Bart = rs.getString("bart");
+                    }
+                    switch (money_type) {
+                        case "Rial":
+                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
+                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(add_money)))));
+                            pst.setInt(2, get_acc_id());
+                            pst.executeUpdate();
+                            break;
+                        case "Dollar":
+                            //write sql query to access
+                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
+                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(add_money)))));
+                            pst.setInt(2, get_acc_id());
+                            pst.executeUpdate();
+                            break;
+                        case "Bart":
+                            //write sql query to access
+                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
+                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(add_money)))));
+                            pst.setInt(2, get_acc_id());
+                            pst.executeUpdate();
+                            break;
+                        default:
+                            System.out.println("Error");
+                    }
+                } catch (SQLException ex) {
+                    System.err.println(ex);
                 }
-
-                //write sql query to access
-                pst = con.prepareStatement("insert into invoice_management_tb (id_invoice, id_acc, id_pur, invoice_man_date)"
-                        + "values(? , ?, ?, ?);");
-
-                //set value to ? in query
-                pst.setInt(1, lastinsertid);
-                pst.setInt(2, get_acc_id());
-                pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
-                pst.setTimestamp(4, cur_date);
-                pst.executeUpdate();
-
-                String add_money = "";
-                String money_type = "";
-
-                //query to access
-                pst = con.prepareStatement("SELECT add_money, type_of_money "
-                        + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                        + "where id_add = ? "
-                        + "AND id_acc = ? "
-                        + "AND id_pur = ?;");
-                pst.setInt(1, lastinsertid);
-                pst.setInt(2, get_acc_id());
-                pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money.toString()));
-                rs = pst.executeQuery();
-                while (rs.next()) {
-                    add_money = rs.getString("add_money");
-                    money_type = rs.getString("type_of_money");
-                }
-
-                String Rial = "";
-                String Dollar = "";
-                String Bart = "";
-                pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-                rs = pst.executeQuery();
-                while (rs.next()) {
-                    //set to v2 all data only 1 row
-                    Rial = rs.getString("rial");
-                    Dollar = rs.getString("dollar");
-                    Bart = rs.getString("bart");
-                }
-                switch (money_type) {
-                    case "Rial":
-                        pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
-                        pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                                String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(add_money)))));
-                        pst.setInt(2, get_acc_id());
-                        pst.executeUpdate();
-                        break;
-                    case "Dollar":
-                        //write sql query to access
-                        pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
-                        pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
-                                String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(add_money)))));
-                        pst.setInt(2, get_acc_id());
-                        pst.executeUpdate();
-                        break;
-                    case "Bart":
-                        //write sql query to access
-                        pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
-                        pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
-                                String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(add_money)))));
-                        pst.setInt(2, get_acc_id());
-                        pst.executeUpdate();
-                        break;
-                    default:
-                        System.out.println("Error");
-                }
-            } catch (SQLException ex) {
-                System.err.println(ex);
+                three_add_tf.setText("");
+                buttonGroup4.clearSelection();
+                set_history();
+            } else {
+                JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
             }
-            three_add_tf.setText("");
-            buttonGroup4.clearSelection();
-            set_history();
         }
     }//GEN-LAST:event_three_add_bnActionPerformed
 
@@ -3871,237 +3880,243 @@ public class UI_and_operation extends javax.swing.JFrame {
                 case Delete:
 
                     if (!three_tb_history.getSelectionModel().isSelectionEmpty()) {
+                        String admin_password = JOptionPane.showInputDialog(this, "Enter password");
+//            System.out.println("admin_password : " + admin_password);
+//            System.out.println("set_admin_password.equals(\"\") :" + set_admin_password.equals(""));
+                        if (set_admin_password.equals(admin_password)) {
+                            //table in UI
+                            DefaultTableModel model = (DefaultTableModel) three_tb_history.getModel();
+                            //select index of the table row
+                            int selectedIndex = three_tb_history.getSelectedRow();
 
-                        //table in UI
-                        DefaultTableModel model = (DefaultTableModel) three_tb_history.getModel();
-                        //select index of the table row
-                        int selectedIndex = three_tb_history.getSelectedRow();
+                            //get id from to store inside variable id here
+                            int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
+                            String acc = model.getValueAt(selectedIndex, 2).toString();
+                            String pur = model.getValueAt(selectedIndex, 3).toString();
+                            int dialogresult = JOptionPane.showConfirmDialog(this, "Do you want to delete the record", "Warning", JOptionPane.YES_NO_OPTION);
 
-                        //get id from to store inside variable id here
-                        int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
-                        String acc = model.getValueAt(selectedIndex, 2).toString();
-                        String pur = model.getValueAt(selectedIndex, 3).toString();
-                        int dialogresult = JOptionPane.showConfirmDialog(this, "Do you want to delete the record", "Warning", JOptionPane.YES_NO_OPTION);
+                            if (dialogresult == JOptionPane.YES_NO_OPTION) {
+                                if (pur.equals("exchanging")) {
 
-                        if (dialogresult == JOptionPane.YES_NO_OPTION) {
-                            if (pur.equals("exchanging")) {
+                                    Connection con;
+                                    PreparedStatement pst;
+                                    ResultSet rs;
+                                    try {
+                                        con = DriverManager.getConnection(
+                                                getLocal_host(),
+                                                getLocal_host_user_name(),
+                                                getLocal_host_password()
+                                        );
 
-                                Connection con;
-                                PreparedStatement pst;
-                                ResultSet rs;
-                                try {
-                                    con = DriverManager.getConnection(
-                                            getLocal_host(),
-                                            getLocal_host_user_name(),
-                                            getLocal_host_password()
-                                    );
+                                        String exchanging_money = "";
+                                        String result_exchanging_money = "";
+                                        String type_of_exchanging = "";
 
-                                    String exchanging_money = "";
-                                    String result_exchanging_money = "";
-                                    String type_of_exchanging = "";
+                                        //query to access
+                                        pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
+                                                + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
+                                                + "where id_invoice = ? "
+                                                + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        rs = pst.executeQuery();
+                                        while (rs.next()) {
+                                            exchanging_money = rs.getString("exchanging_money");
+                                            result_exchanging_money = rs.getString("result_exchanging_money");
+                                            type_of_exchanging = rs.getString("type_of_exchanging");
+                                        }
 
-                                    //query to access
-                                    pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
-                                            + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
-                                            + "where id_invoice = ? "
-                                            + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                            + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-                                    pst.setInt(1, id);
-                                    pst.setString(2, acc);
-                                    pst.setString(3, pur);
-                                    rs = pst.executeQuery();
-                                    while (rs.next()) {
-                                        exchanging_money = rs.getString("exchanging_money");
-                                        result_exchanging_money = rs.getString("result_exchanging_money");
-                                        type_of_exchanging = rs.getString("type_of_exchanging");
+                                        String Rial = "";
+                                        String Dollar = "";
+                                        String Bart = "";
+                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                                        rs = pst.executeQuery();
+                                        while (rs.next()) {
+                                            //set to v2 all data only 1 row
+                                            Rial = rs.getString("rial");
+                                            Dollar = rs.getString("dollar");
+                                            Bart = rs.getString("bart");
+                                        }
+                                        switch (type_of_exchanging) {
+                                            case "S_to_R":
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, rial = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "S_to_B":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, bart = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "B_to_R":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, rial = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "R_to_S":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, dollar = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "B_to_S":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, dollar = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "R_to_B":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, bart = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
+                                                pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
+                                                pst.setInt(3, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            default:
+                                                System.out.println("Error");
+                                        }
+                                        //update sql query to access
+                                        pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        pst.executeUpdate();
+                                        set_history();
+                                        //dialog when added to access is success
+                                        //                        JOptionPane.showMessageDialog(this, "records update");
+
+                                        //update sql query to access
+                                        pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc =(select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        pst.executeUpdate();
+                                        set_history();
+
+                                    } catch (SQLException ex) {
+                                        Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                                        JOptionPane.showMessageDialog(this, ex);
+
                                     }
+                                } else if (pur.equals("add_total_money")) {
 
-                                    String Rial = "";
-                                    String Dollar = "";
-                                    String Bart = "";
-                                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-                                    rs = pst.executeQuery();
-                                    while (rs.next()) {
-                                        //set to v2 all data only 1 row
-                                        Rial = rs.getString("rial");
-                                        Dollar = rs.getString("dollar");
-                                        Bart = rs.getString("bart");
+                                    Connection con;
+                                    PreparedStatement pst;
+                                    ResultSet rs;
+                                    try {
+                                        con = DriverManager.getConnection(
+                                                getLocal_host(),
+                                                getLocal_host_user_name(),
+                                                getLocal_host_password()
+                                        );
+
+                                        String add_money = "";
+                                        String money_type = "";
+
+                                        //query to access
+                                        pst = con.prepareStatement("SELECT add_money, type_of_money "
+                                                + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                                                + "where id_add = ? "
+                                                + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        rs = pst.executeQuery();
+                                        while (rs.next()) {
+                                            add_money = rs.getString("add_money");
+                                            money_type = rs.getString("type_of_money");
+                                        }
+
+                                        String Rial = "";
+                                        String Dollar = "";
+                                        String Bart = "";
+                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+                                        rs = pst.executeQuery();
+                                        while (rs.next()) {
+                                            //set to v2 all data only 1 row
+                                            Rial = rs.getString("rial");
+                                            Dollar = rs.getString("dollar");
+                                            Bart = rs.getString("bart");
+                                        }
+                                        switch (money_type) {
+                                            case "Rial":
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(add_money)))));
+                                                pst.setInt(2, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "Dollar":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(add_money)))));
+                                                pst.setInt(2, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            case "Bart":
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
+                                                pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
+                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(add_money)))));
+                                                pst.setInt(2, get_acc_id());
+                                                pst.executeUpdate();
+                                                break;
+                                            default:
+                                                System.out.println("Error");
+                                        }
+                                        //update sql query to access
+                                        pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        pst.executeUpdate();
+                                        set_history();
+
+                                        //dialog when added to access is success
+                                        //                        JOptionPane.showMessageDialog(this, "records update");
+                                    } catch (SQLException ex) {
+                                        Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                                        JOptionPane.showMessageDialog(this, ex);
+
                                     }
-                                    switch (type_of_exchanging) {
-                                        case "S_to_R":
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, rial = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "S_to_B":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ?, bart = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "B_to_R":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, rial = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Rial,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "R_to_S":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, dollar = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "B_to_S":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ?, dollar = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "R_to_B":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ?, bart = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(exchanging_money)))));
-                                            pst.setString(2, money_S_B_R_validate(type_of_money.Bart,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(result_exchanging_money)))));
-                                            pst.setInt(3, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        default:
-                                            System.out.println("Error");
-                                    }
-                                    //update sql query to access
-                                    pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
-
-                                    pst.setInt(1, id);
-                                    pst.setString(2, acc);
-                                    pst.setString(3, pur);
-                                    pst.executeUpdate();
-                                    set_history();
-                                    //dialog when added to access is success
-                                    //                        JOptionPane.showMessageDialog(this, "records update");
-
-                                    //update sql query to access
-                                    pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc =(select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
-
-                                    pst.setInt(1, id);
-                                    pst.setString(2, acc);
-                                    pst.setString(3, pur);
-                                    pst.executeUpdate();
-                                    set_history();
-
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                                    JOptionPane.showMessageDialog(this, ex);
-
-                                }
-                            } else if (pur.equals("add_total_money")) {
-
-                                Connection con;
-                                PreparedStatement pst;
-                                ResultSet rs;
-                                try {
-                                    con = DriverManager.getConnection(
-                                            getLocal_host(),
-                                            getLocal_host_user_name(),
-                                            getLocal_host_password()
-                                    );
-
-                                    String add_money = "";
-                                    String money_type = "";
-
-                                    //query to access
-                                    pst = con.prepareStatement("SELECT add_money, type_of_money "
-                                            + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                                            + "where id_add = ? "
-                                            + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                            + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-                                    pst.setInt(1, id);
-                                    pst.setString(2, acc);
-                                    pst.setString(3, pur);
-                                    rs = pst.executeQuery();
-                                    while (rs.next()) {
-                                        add_money = rs.getString("add_money");
-                                        money_type = rs.getString("type_of_money");
-                                    }
-
-                                    String Rial = "";
-                                    String Dollar = "";
-                                    String Bart = "";
-                                    pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-                                    rs = pst.executeQuery();
-                                    while (rs.next()) {
-                                        //set to v2 all data only 1 row
-                                        Rial = rs.getString("rial");
-                                        Dollar = rs.getString("dollar");
-                                        Bart = rs.getString("bart");
-                                    }
-                                    switch (money_type) {
-                                        case "Rial":
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(add_money)))));
-                                            pst.setInt(2, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "Dollar":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(add_money)))));
-                                            pst.setInt(2, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        case "Bart":
-                                            //write sql query to access
-                                            pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
-                                            pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
-                                                    String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(add_money)))));
-                                            pst.setInt(2, get_acc_id());
-                                            pst.executeUpdate();
-                                            break;
-                                        default:
-                                            System.out.println("Error");
-                                    }
-                                    //update sql query to access
-                                    pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
-
-                                    pst.setInt(1, id);
-                                    pst.setString(2, acc);
-                                    pst.setString(3, pur);
-                                    pst.executeUpdate();
-                                    set_history();
-
-                                    //dialog when added to access is success
-                                    //                        JOptionPane.showMessageDialog(this, "records update");
-                                } catch (SQLException ex) {
-                                    Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                                    JOptionPane.showMessageDialog(this, ex);
-
                                 }
                             }
+                            set_history();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
                         }
-                        set_history();
                     }
                     break;
             }

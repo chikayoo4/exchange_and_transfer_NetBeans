@@ -1,0 +1,167 @@
+new database : exchange_transfer_sm
+
+CREATE TABLE account_tb (
+    id_acc int IDENTITY(1,1) PRIMARY KEY,
+    user_name VARCHAR(40) NOT NULL,
+    password VARCHAR(40) NOT NULL
+);
+CREATE TABLE purpose_tb (
+    id_pur int IDENTITY(1,1) PRIMARY KEY,
+    pur_type VARCHAR(40) NOT NULL
+);
+CREATE TABLE exc_type_tb (
+    id_type int IDENTITY(1,1) PRIMARY KEY,
+    type_of_exchanging VARCHAR(20) NOT NULL
+);
+CREATE TABLE exc_rate_tb (
+    id_rate int IDENTITY(1,1) PRIMARY KEY,
+    date_rate DATETIME NOT NULL,
+    dollar_to_rial VARCHAR(40) NOT NULL,
+    rial_to_dollar VARCHAR(40) NOT NULL,
+    dollar_to_bart VARCHAR(40) NOT NULL,
+    bart_to_dollar VARCHAR(40) NOT NULL,
+    bart_to_rial VARCHAR(40) NOT NULL,
+    rial_to_bart VARCHAR(40) NOT NULL
+);
+CREATE TABLE exc_invoice_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    invoice_date DATETIME NOT NULL,
+    exchanging_money VARCHAR(40) NOT NULL,
+    result_exchanging_money VARCHAR(40) NOT NULL,
+    exchange_rate VARCHAR(40) NOT NULL,
+    id_type INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_id_type FOREIGN KEY (id_type) REFERENCES exc_type_tb (id_type),
+    id_acc INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE to_thai_bank_tb (
+    id_bank int IDENTITY(1,1) PRIMARY KEY,
+    bank_name VARCHAR(50) NOT NULL
+);
+CREATE TABLE to_thai_sender_tb (
+    id_sender int IDENTITY(1,1) PRIMARY KEY,
+    sender_name VARCHAR(50) NOT NULL,
+    sender_num_acc VARCHAR(50) NOT NULL,
+    id_bank INTEGER NOT NULL,
+    CONSTRAINT FK_to_thai_id_bank FOREIGN KEY (id_bank) REFERENCES to_thai_bank_tb (id_bank)
+);
+CREATE TABLE to_thai_invoice_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    sender_money VARCHAR(40) NOT NULL,
+    servise_money VARCHAR(40) NOT NULL,
+    total_money VARCHAR(40) NOT NULL,
+    invoice_date DATETIME NOT NULL,
+    id_sender INTEGER NOT NULL,
+	CONSTRAINT FK_to_thai_id_sender FOREIGN KEY (id_sender) REFERENCES to_thai_sender_tb (id_sender),
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_to_thai_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_to_thai_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE to_thai_sender_ph_no_tb (
+    id_sender_ph_no int IDENTITY(1,1) PRIMARY KEY,
+    sender_ph_no VARCHAR(20) NOT NULL,
+    id_sender INTEGER NOT NULL,
+	CONSTRAINT FK_to_thai_sender_ph_no FOREIGN KEY (id_sender) REFERENCES to_thai_sender_tb (id_sender)
+);
+CREATE TABLE from_thai_invoice_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    receiver_ph_no VARCHAR(20) NOT NULL,
+    receiver_money VARCHAR(40) NOT NULL,
+    servise_money VARCHAR(40) NOT NULL,
+    total_money VARCHAR(40) NOT NULL,
+    invoice_date DATETIME NOT NULL,
+    year_receiving INT NOT NULL,
+    month_receiving INT NOT NULL,
+    day_receiving INT NOT NULL,
+    hour_receiving INT NOT NULL,
+    minute_receiving INT NOT NULL,
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_from_thai_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_from_thai_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE money_type_tb (
+    id_type_of_money int IDENTITY(1,1) PRIMARY KEY,
+   type_of_money VARCHAR(10) NOT NULL
+);
+CREATE TABLE province_name_tb (
+    id_province int IDENTITY(1,1) PRIMARY KEY,
+   transfer_province VARCHAR(50) NOT NULL
+);
+CREATE TABLE to_province_invoice_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    invoice_date DATETIME NOT NULL,
+    service_money VARCHAR(40) NOT NULL,
+    balance_money VARCHAR(40) NOT NULL,
+    transfering_money VARCHAR(40) NOT NULL,
+    total_money VARCHAR(40) NOT NULL,
+    sender_phone_no VARCHAR(20) NOT NULL,
+    receiver_phone_no VARCHAR(20) NOT NULL,
+    id_type_of_money INTEGER NOT NULL,
+	CONSTRAINT FK_to_province_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
+    id_province INTEGER NOT NULL,
+	CONSTRAINT FK_to_province_id_province FOREIGN KEY (id_province) REFERENCES province_name_tb (id_province),
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_to_province_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_to_province_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE invoice_management_tb (
+    id_invoice_man int IDENTITY(1,1) PRIMARY KEY,
+    id_invoice INTEGER NOT NULL,
+    invoice_man_date DATETIME NOT NULL,
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_invoice_man_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_invoice_man_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE add_money_history_tb (
+    id_add int IDENTITY(1,1) PRIMARY KEY,
+    add_date DATETIME NOT NULL,
+    add_money VARCHAR(40) NOT NULL,
+    id_type_of_money INTEGER NOT NULL,
+	CONSTRAINT FK_add_money_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_add_money_man_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_add_money_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE total_money_tb (
+    id_total int IDENTITY(1,1) PRIMARY KEY,
+    rial VARCHAR(40) NOT NULL,
+    dollar VARCHAR(40) NOT NULL,
+    bart VARCHAR(40) NOT NULL,
+    id_invoice INTEGER NOT NULL,
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_total_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_total_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+
+CREATE TABLE project_path (
+    id_proj int IDENTITY(1,1) PRIMARY KEY,
+    path_name VARCHAR(500) NOT NULL
+);
+
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('R_to_S');
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('S_to_R');
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('S_to_B');
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('B_to_S');
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('B_to_R');
+INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('R_to_B');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('exchanging');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('to_thai');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('from_thai');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('to_province');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('from_province');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('add_total_money');
+INSERT INTO money_type_tb ( type_of_money ) VALUES ('Rial');
+INSERT INTO money_type_tb ( type_of_money ) VALUES ('Dollar');
+INSERT INTO money_type_tb ( type_of_money ) VALUES ('Bart');
+INSERT INTO account_tb ( user_name, password ) VALUES ('chi', '1234');
+INSERT INTO total_money_tb (rial, dollar, bart, id_acc ) VALUES (0, 0, 0, 1);
+INSERT INTO exc_rate_tb (date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) VALUES ('2021-01-01', 4005, 4010, 30.00, 30.10, 130.0, 131.0);
+INSERT INTO project_path (path_name) VALUES ('C:');
