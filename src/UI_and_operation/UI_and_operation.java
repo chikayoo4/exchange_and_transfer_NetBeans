@@ -4153,39 +4153,58 @@ public class UI_and_operation extends javax.swing.JFrame {
                                             money_type = rs.getString("type_of_money");
                                         }
 
-                                        String Rial = "";
-                                        String Dollar = "";
-                                        String Bart = "";
-                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-                                        rs = pst.executeQuery();
-                                        while (rs.next()) {
-                                            //set to v2 all data only 1 row
-                                            Rial = rs.getString("rial");
-                                            Dollar = rs.getString("dollar");
-                                            Bart = rs.getString("bart");
-                                        }
+//                                        String Rial = "";
+//                                        String Dollar = "";
+//                                        String Bart = "";
+//                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
+//                                        rs = pst.executeQuery();
+//                                        while (rs.next()) {
+//                                            //set to v2 all data only 1 row
+//                                            Rial = rs.getString("rial");
+//                                            Dollar = rs.getString("dollar");
+//                                            Bart = rs.getString("bart");
+//                                        }
                                         switch (money_type) {
                                             case "Rial":
-                                                pst = con.prepareStatement("UPDATE total_money_tb SET rial = ? WHERE id_acc = ?;");
-                                                pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                                                        String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(add_money)))));
-                                                pst.setInt(2, get_acc_id());
+                                                //write sql query to access
+                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                        + "SET rial = rial - "+ clear_cvot(add_money) +" "
+                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                        + "FROM invoice_management_tb "
+                                                        + "WHERE id_invoice = ? "
+                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                pst.setInt(1, id);
+                                                pst.setString(2, acc);
+                                                pst.setString(3, pur);
                                                 pst.executeUpdate();
                                                 break;
                                             case "Dollar":
                                                 //write sql query to access
-                                                pst = con.prepareStatement("UPDATE total_money_tb SET dollar = ? WHERE id_acc = ?;");
-                                                pst.setString(1, money_S_B_R_validate(type_of_money.Dollar,
-                                                        String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(add_money)))));
-                                                pst.setInt(2, get_acc_id());
+                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                        + "SET dollar = dollar - "+ clear_cvot(add_money) +" "
+                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                        + "FROM invoice_management_tb "
+                                                        + "WHERE id_invoice = ? "
+                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                pst.setInt(1, id);
+                                                pst.setString(2, acc);
+                                                pst.setString(3, pur);
                                                 pst.executeUpdate();
                                                 break;
                                             case "Bart":
                                                 //write sql query to access
-                                                pst = con.prepareStatement("UPDATE total_money_tb SET bart = ? WHERE id_acc = ?;");
-                                                pst.setString(1, money_S_B_R_validate(type_of_money.Bart,
-                                                        String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(add_money)))));
-                                                pst.setInt(2, get_acc_id());
+                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                        + "SET bart = bart - "+ clear_cvot(add_money) +" "
+                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                        + "FROM invoice_management_tb "
+                                                        + "WHERE id_invoice = ? "
+                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                pst.setInt(1, id);
+                                                pst.setString(2, acc);
+                                                pst.setString(3, pur);
                                                 pst.executeUpdate();
                                                 break;
                                             default:
@@ -4200,6 +4219,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         pst.executeUpdate();
                                         set_history();
 
+                                        //update sql query to access
+                                        pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+
+                                        pst.setInt(1, id);
+                                        pst.setString(2, acc);
+                                        pst.setString(3, pur);
+                                        pst.executeUpdate();
+                                        set_history();
                                         //dialog when added to access is success
                                         //                        JOptionPane.showMessageDialog(this, "records update");
                                     } catch (SQLException ex) {
