@@ -123,7 +123,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_lb_customer_money" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="one_money_type_lb" max="32767" attributes="0"/>
+                                      <Component id="one_money_type_lb" pref="177" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="one_tf_customer_money" max="32767" attributes="0"/>
                               </Group>
@@ -139,7 +139,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_lb_exchange_rate" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="one_rate_type_lb" max="32767" attributes="0"/>
+                                      <Component id="one_rate_type_lb" pref="174" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="one_tf_exchange_rate" max="32767" attributes="0"/>
                               </Group>
@@ -156,9 +156,9 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="one_lb_customer_result" min="-2" max="-2" attributes="0"/>
+                                      <Component id="one_lb_customer_result" min="-2" pref="218" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="one_money_type_result_lb" max="32767" attributes="0"/>
+                                      <Component id="one_money_type_result_lb" pref="178" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="one_tf_customer_result" max="32767" attributes="0"/>
                               </Group>
@@ -380,6 +380,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="40" style="0"/>
                 </Property>
+                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="requestFocusEnabled" type="boolean" value="false"/>
               </Properties>
               <Events>

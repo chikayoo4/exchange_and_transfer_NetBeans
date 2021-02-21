@@ -11,8 +11,7 @@ import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.*;
 import static UI_and_operation.purpose.get_id_pur_from_db;
-import static UI_and_operation.validate_double_value.clear_cvot;
-import static UI_and_operation.validate_double_value.money_S_B_R_validate;
+import static UI_and_operation.validate_double_value.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,8 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Vector;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -65,7 +62,6 @@ public class exchanging {
 
     public int insert_to_db() {
         int lastinsert_id_invoice = -1;
-        int lastinsert_id_invoice_man = -1;
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -83,7 +79,7 @@ public class exchanging {
             rs = pst.executeQuery();
             if (rs.next()) {
 //                System.out.println("has value in invoice_management_tb");
-                pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb ");
+                pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     //set to v2 all data only 1 row
@@ -111,93 +107,84 @@ public class exchanging {
                 lastinsert_id_invoice = generatekey.getInt(1);
             }
 
-            //write sql query to access
-            pst = con.prepareStatement("insert into invoice_management_tb (id_invoice, id_acc, id_pur, invoice_man_date)"
-                    + "values(? , ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-
-            //set value to ? in query
-            pst.setInt(1, lastinsert_id_invoice);
-            pst.setInt(2, get_acc_id());
-            pst.setInt(3, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
-            pst.setTimestamp(4, getDate());
-            pst.executeUpdate();
-            ResultSet generatekey1 = pst.getGeneratedKeys();
-            if (generatekey1.next()) {
-                lastinsert_id_invoice_man = generatekey1.getInt(1);
-            }
-
             //set value to ? in query
             switch (selected_exchange_rate) {
                 case S_to_R:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                            String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                            String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart, String.valueOf(Double.parseDouble(clear_cvot(Bart)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(customer_result))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(customer_money))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 case S_to_B:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial, String.valueOf(Double.parseDouble(clear_cvot(Rial)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                            String.valueOf(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart,
-                            String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(customer_money))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(customer_result))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 case B_to_R:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                            String.valueOf(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar, String.valueOf(Double.parseDouble(clear_cvot(Dollar)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart,
-                            String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1,  rial_validation(Double.parseDouble(clear_cvot(Rial)) - Double.parseDouble(clear_cvot(customer_result))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(customer_money))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 case R_to_S:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                            String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                            String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart, String.valueOf(Double.parseDouble(clear_cvot(Bart)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(customer_money))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(customer_result))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 case B_to_S:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial, String.valueOf(Double.parseDouble(clear_cvot(Rial)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar,
-                            String.valueOf(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart,
-                            String.valueOf(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar)) - Double.parseDouble(clear_cvot(customer_result))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(customer_money))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 case R_to_B:
                     //write sql query to access
-                    pst = con.prepareStatement("INSERT INTO total_money_tb (rial, dollar, bart, id_invoice_man) "
-                            + "VALUES (?, ?, ?, ?);");
-                    pst.setString(1, money_S_B_R_validate(type_of_money.Rial,
-                            String.valueOf(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(customer_money)))));
-                    pst.setString(2, money_S_B_R_validate(type_of_money.Dollar, String.valueOf(Double.parseDouble(clear_cvot(Dollar)))));
-                    pst.setString(3, money_S_B_R_validate(type_of_money.Bart,
-                            String.valueOf(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(customer_result)))));
-                    pst.setInt(4, lastinsert_id_invoice_man);
+                    pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(customer_money))));
+                    pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar))));
+                    pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart)) - Double.parseDouble(clear_cvot(customer_result))));
+            pst.setInt(4, lastinsert_id_invoice);
+            pst.setInt(5, get_acc_id());
+            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.exchanging));
+            pst.setTimestamp(7, getDate());
                     pst.executeUpdate();
                     break;
                 default:
