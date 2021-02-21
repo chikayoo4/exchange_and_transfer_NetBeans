@@ -134,11 +134,8 @@ CREATE TABLE total_money_tb (
     rial VARCHAR(40) NOT NULL,
     dollar VARCHAR(40) NOT NULL,
     bart VARCHAR(40) NOT NULL,
-    id_invoice INTEGER NOT NULL,
-    id_acc INTEGER NOT NULL,
-	CONSTRAINT FK_total_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
-    id_pur INTEGER NOT NULL,
-	CONSTRAINT FK_total_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+    id_invoice_man INTEGER NOT NULL,
+	CONSTRAINT FK_total_money_id_invoice_man FOREIGN KEY (id_invoice_man) REFERENCES invoice_management_tb (id_invoice_man)
 );
 
 CREATE TABLE project_path (
