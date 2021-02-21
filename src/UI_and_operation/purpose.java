@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import UI_and_operation.UI_and_operation.purpose_type;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
@@ -20,7 +21,7 @@ import java.sql.SQLException;
  */
 public class purpose {
    
-    public static int get_id_pur_from_db(String type_of_purpose){
+    public static int get_id_pur_from_db(purpose_type type_of_purpose){
         int id = -1;
     Connection con;
     PreparedStatement pst;
@@ -32,7 +33,7 @@ public class purpose {
                   getLocal_host_password()
             );
                 //query to access
-                pst = con.prepareStatement("SELECT id_pur FROM purpose_tb WHERE pur_type = '"+ type_of_purpose +"';");
+                pst = con.prepareStatement("SELECT id_pur FROM purpose_tb WHERE pur_type = '"+ type_of_purpose.toString() +"';");
                 rs = pst.executeQuery();
 
                 while (rs.next()){
