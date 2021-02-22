@@ -116,6 +116,7 @@ CREATE TABLE invoice_management_tb (
     rial VARCHAR(40) NOT NULL,
     dollar VARCHAR(40) NOT NULL,
     bart VARCHAR(40) NOT NULL,
+    bank_bart VARCHAR(40) NOT NULL,
     id_acc INTEGER NOT NULL,
 	CONSTRAINT FK_invoice_man_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
     id_pur INTEGER NOT NULL,
