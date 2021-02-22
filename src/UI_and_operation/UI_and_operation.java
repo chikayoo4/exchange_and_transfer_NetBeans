@@ -178,7 +178,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 if (rs.next()) {
                     //query to access
-                    pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
+                    pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart, bank_bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
                     rs = pst.executeQuery();
                     while (rs.next()) {
                         DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
@@ -186,9 +186,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                         Vector v3 = new Vector();
 
                         //set to v2 all data only 1 row
-                        v3.add(rs.getString("dollar"));
-                        v3.add(rs.getString("bart"));
-                        v3.add(rs.getString("rial"));
+                        v3.add(money_S_B_R_validate(type_of_money.Dollar, rs.getString("dollar")));
+                        v3.add(money_S_B_R_validate(type_of_money.Bart, rs.getString("bart")));
+                        v3.add(money_S_B_R_validate(type_of_money.Rial, rs.getString("rial")));
+                        v3.add(money_S_B_R_validate(type_of_money.Bart, rs.getString("bank_bart")));
 
                         //set data to table history row
                         dft1.addRow(v3);
@@ -234,6 +235,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         v3.add("0");
                         v3.add("0");
                         v3.add("0");
+                        v3.add("0");
 
                         //set data to table history row
                         dft1.addRow(v3);
@@ -266,8 +268,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                             String Rial = "0";
                             String Dollar = "0";
                             String Bart = "0";
+                            String Bank_Bart = "0";
                             //query to access
-                            pst = con.prepareStatement("SELECT rial, dollar, bart "
+                            pst = con.prepareStatement("SELECT rial, dollar, bart, bank_bart "
                                     + "FROM invoice_management_tb "
                                     + "WHERE id_acc = ? "
                                     + "AND id_pur = ? "
@@ -280,6 +283,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 Rial = rs.getString("rial");
                                 Dollar = rs.getString("dollar");
                                 Bart = rs.getString("bart");
+                                Bank_Bart = rs.getString("bank_bart");
                             }
 
                             //query to access
@@ -314,9 +318,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 v3.add(String.valueOf(rs.getInt("id_invoice")));
                                 v3.add(rs.getString("acc"));
                                 v3.add(rs.getString("pur"));
-                                v3.add(Rial);
-                                v3.add(Dollar);
-                                v3.add(Bart);
+                                v3.add(money_S_B_R_validate(type_of_money.Rial, Rial));
+                                v3.add(money_S_B_R_validate(type_of_money.Dollar, Dollar));
+                                v3.add(money_S_B_R_validate(type_of_money.Bart, Bart));
+                                v3.add(money_S_B_R_validate(type_of_money.Bart, Bank_Bart));
                                 v3.add("គេ: "
                                         + rs.getString("exchanging_money") + " " + cus_money_type + "  |  យើង: -"
                                         + rs.getString("result_exchanging_money") + " " +  owner_money_type + "  |  អត្រា: "
@@ -349,8 +354,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                             String Rial = "0";
                             String Dollar = "0";
                             String Bart = "0";
+                            String Bank_Bart = "0";
                             //query to access
-                            pst = con.prepareStatement("SELECT rial, dollar, bart "
+                            pst = con.prepareStatement("SELECT rial, dollar, bart, bank_bart "
                                     + "FROM invoice_management_tb "
                                     + "WHERE id_acc = ? "
                                     + "AND id_pur = ? "
@@ -363,6 +369,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 Rial = rs.getString("rial");
                                 Dollar = rs.getString("dollar");
                                 Bart = rs.getString("bart");
+                                Bank_Bart = rs.getString("bank_bart");
                             }
 
                             pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
@@ -393,9 +400,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 v3.add(String.valueOf(rs.getInt("id_add")));
                                 v3.add(rs.getString("acc"));
                                 v3.add(rs.getString("pur"));
-                                v3.add(Rial);
-                                v3.add(Dollar);
-                                v3.add(Bart);
+                                v3.add(money_S_B_R_validate(type_of_money.Rial, Rial));
+                                v3.add(money_S_B_R_validate(type_of_money.Dollar, Dollar));
+                                v3.add(money_S_B_R_validate(type_of_money.Bart, Bart));
+                                v3.add(money_S_B_R_validate(type_of_money.Bart, Bank_Bart));
                                 v3.add("បន្ថែម: " + rs.getString("add_money") + " " + rs.getString("type_of_money"));
 //                                    System.out.println(v3);
                                 v2.add(v3);
@@ -1897,11 +1905,11 @@ public class UI_and_operation extends javax.swing.JFrame {
 
             },
             new String [] {
-                "$", "B", "៛"
+                "$", "B", "៛", "លុយ B ក្នុងកុង"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1919,15 +1927,22 @@ public class UI_and_operation extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "លុយ R", "លុយ S", "លុយ B", "detail"
+                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "លុយ R", "លុយ S", "លុយ B", "លុយ B ក្នុងកុង", "detail"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         three_tb_history.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -3277,52 +3292,57 @@ public class UI_and_operation extends javax.swing.JFrame {
                     String Rial = "0";
                     String Dollar = "0";
                     String Bart = "0";
-                    pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
+                            String Bank_Bart = "0";
+                    pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart, bank_bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
                     rs = pst.executeQuery();
                     while (rs.next()) {
                         //set to v2 all data only 1 row
                         Rial = rs.getString("rial");
                         Dollar = rs.getString("dollar");
                         Bart = rs.getString("bart");
+                        Bank_Bart = rs.getString("bank_bart");
                     }
                     switch (money_type) {
                         case "Rial":
                             //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
                             pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(Rial)) + Double.parseDouble(clear_cvot(add_money))));
                             pst.setString(2, Dollar);
                             pst.setString(3, Bart);
-                            pst.setInt(4, lastinsert_id_add);
-                            pst.setInt(5, get_acc_id());
-                            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(7, cur_date);
+                            pst.setString(4, Bank_Bart);
+                            pst.setInt(5, lastinsert_id_add);
+                            pst.setInt(6, get_acc_id());
+                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
+                            pst.setTimestamp(8, cur_date);
                             pst.executeUpdate();
                             break;
                         case "Dollar":
                             //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
                             pst.setString(1, Rial);
                             pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(Dollar)) + Double.parseDouble(clear_cvot(add_money))));
                             pst.setString(3, Bart);
-                            pst.setInt(4, lastinsert_id_add);
-                            pst.setInt(5, get_acc_id());
-                            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(7, cur_date);
+                            pst.setString(4, Bank_Bart);
+                            pst.setInt(5, lastinsert_id_add);
+                            pst.setInt(6, get_acc_id());
+                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
+                            pst.setTimestamp(8, cur_date);
                             pst.executeUpdate();
                             break;
                         case "Bart":
                             //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
+                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
                             pst.setString(1, Rial);
                             pst.setString(2, Dollar);
                             pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(Bart)) + Double.parseDouble(clear_cvot(add_money))));
-                            pst.setInt(4, lastinsert_id_add);
-                            pst.setInt(5, get_acc_id());
-                            pst.setInt(6, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(7, cur_date);
+                            pst.setString(4, Bank_Bart);
+                            pst.setInt(5, lastinsert_id_add);
+                            pst.setInt(6, get_acc_id());
+                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
+                            pst.setTimestamp(8, cur_date);
                             pst.executeUpdate();
                             break;
                         default:
