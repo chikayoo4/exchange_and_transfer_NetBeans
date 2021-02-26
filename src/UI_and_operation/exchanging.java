@@ -5,13 +5,17 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.current_date;
 import UI_and_operation.UI_and_operation.purpose_type;
 import UI_and_operation.UI_and_operation.type_of_exchange;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.*;
 import static UI_and_operation.purpose.get_id_pur_from_db;
+import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.validate_double_value.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -285,4 +289,130 @@ public class exchanging {
         return str;
     }
 
+    //function that calutation exchanging money
+    //reson why don't i use variable type_of_exchange selected_exchange_rate abow because the function static but variable alow is non-static. 
+    //So i have no choice i must for type_of_exchange selected_exchange_rate variable we use one_calculate() function
+    public static void one_calculation(type_of_exchange selected_exchange_rate, javax.swing.JTextField one_tf_customer_money, javax.swing.JTextField one_tf_exchange_rate, javax.swing.JTextField one_tf_customer_result) {
+
+        try {
+            //find out that customer money and exchange rate ft is null or not
+            Boolean cus_mon_is_empty = one_tf_customer_money.getText().isEmpty();
+            Boolean exc_rate_is_empty = one_tf_exchange_rate.getText().isEmpty();
+
+            //if customer money and exchange rate tf is not null, it will * or / between the 2 tf then set value to result tf
+            if (!cus_mon_is_empty && !exc_rate_is_empty) {
+                double customer_money = Double.parseDouble(clear_cvot(one_tf_customer_money.getText()));
+                double exchange_rate = Double.parseDouble(clear_cvot(one_tf_exchange_rate.getText()));
+                String result = "";
+                switch (selected_exchange_rate) {
+
+                    //do * operator when......
+                    case S_to_R:
+                    case B_to_R:
+                        result = money_S_B_R_validate(type_of_money.Rial, String.format("%.2f", (Double) (customer_money * exchange_rate)));
+
+                        break;
+
+                    case S_to_B:
+                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money * exchange_rate)));
+                        break;
+
+                    //do / operator when......
+                    case R_to_S:
+                    case B_to_S:
+                        result = money_S_B_R_validate(type_of_money.Dollar, String.format("%.2f", (Double) (customer_money / exchange_rate)));
+                        break;
+
+                    //do / operator when......
+                    case R_to_B:
+                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money / exchange_rate)));
+                        break;
+                }
+
+                //set value to result tf
+                one_tf_customer_result.setText(add_cuot_to_money(result));
+            } //if customer money and exchange rate tf is null, it will set value to result tf to null
+            else {
+                one_tf_customer_result.setText("");
+            }
+
+        } catch (Exception e) {
+            System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+        }
+    }
+
+    public static void one_set_money_type_to_lb(String cus_money, String result_money, javax.swing.JLabel one_money_type_lb, javax.swing.JLabel one_rate_type_lb, javax.swing.JLabel one_money_type_result_lb) {
+        one_money_type_lb.setText("( " + cus_money + " )");
+        one_rate_type_lb.setText("( " + cus_money + " → " + result_money + " )");
+        one_money_type_result_lb.setText("( " + result_money + " )");
+    }
+
+     public static void exc_close_or_print(Boolean is_print, javax.swing.JTextField one_tf_customer_money,
+            javax.swing.JTextField one_tf_exchange_rate, javax.swing.JTextField one_tf_customer_result,
+            javax.swing.JButton one_bn_S_to_R, javax.swing.JButton one_bn_S_to_B,
+            javax.swing.JButton one_bn_B_to_R, javax.swing.JButton one_bn_R_to_S,
+            javax.swing.JButton one_bn_B_to_S, javax.swing.JButton one_bn_R_to_B,
+            javax.swing.JLabel one_lb_operator, type_of_exchange selected_exchange_rate) {
+
+        if (selected_exchange_rate != type_of_exchange.not_select && !one_tf_customer_result.getText().isEmpty()) {
+            String result = cut_the_lastest_point(one_tf_customer_money.getText());
+            switch (selected_exchange_rate) {
+
+                case R_to_S:
+                case R_to_B:
+                    result = money_S_B_R_validate(type_of_money.Rial, result);
+
+                    break;
+
+                case S_to_R:
+                case S_to_B:
+                    result = money_S_B_R_validate(type_of_money.Dollar, result);
+                    break;
+
+                case B_to_R:
+                case B_to_S:
+                    result = money_S_B_R_validate(type_of_money.Bart, result);
+                    break;
+
+            }
+            one_tf_customer_money.setText(result);
+            exchanging exchanging_obj = new exchanging(
+                    one_tf_customer_money.getText(),
+                    one_tf_customer_result.getText(),
+                    one_tf_exchange_rate.getText(),
+                    current_date(),
+                    selected_exchange_rate
+            );
+            if (is_print) {
+                String path = "";
+                try {
+                    File file = new File("x.txt");
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    path = file.getAbsolutePath();
+                    path = path.substring(0, path.length() - 6);
+//                                System.out.println("path : " + path);
+                } catch (IOException e) {
+                    System.out.println("error");
+                }
+
+                print_reciept(path + "\\reciept_for_print\\exchanging.jrxml",
+                        exchanging_obj.insert_to_db());
+            } else {
+                exchanging_obj.insert_to_db();
+            }
+            one_tf_customer_money.setText("");
+            one_tf_exchange_rate.setText("");
+            one_tf_customer_result.setText("");
+            one_bn_S_to_R.setEnabled(true);
+            one_bn_S_to_B.setEnabled(true);
+            one_bn_B_to_R.setEnabled(true);
+            one_bn_R_to_S.setEnabled(true);
+            one_bn_B_to_S.setEnabled(true);
+            one_bn_R_to_B.setEnabled(true);
+            one_lb_operator.setText("");
+        }
+
+    }
 }

@@ -10,6 +10,7 @@ import static UI_and_operation.connection_to_ms_sql.*;
 import static UI_and_operation.exchanging.R_B_validation;
 import static UI_and_operation.exchanging.S_B_validation;
 import static UI_and_operation.exchanging.S_R_validation;
+import static UI_and_operation.exchanging.*;
 import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.validate_double_value.*;
@@ -93,62 +94,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         return id;
     }
 
-    private void one_set_money_type_to_lb(String cus_money, String result_money) {
-        one_money_type_lb.setText("( " + cus_money + " )");
-        one_rate_type_lb.setText("( " + cus_money + " → " + result_money + " )");
-        one_money_type_result_lb.setText("( " + result_money + " )");
-    }
-
-    //function that calutation exchanging money
-    private void one_calculation() {
-
-        try {
-            //find out that customer money and exchange rate ft is null or not
-            Boolean cus_mon_is_empty = one_tf_customer_money.getText().isEmpty();
-            Boolean exc_rate_is_empty = one_tf_exchange_rate.getText().isEmpty();
-
-            //if customer money and exchange rate tf is not null, it will * or / between the 2 tf then set value to result tf
-            if (!cus_mon_is_empty && !exc_rate_is_empty) {
-                double customer_money = Double.parseDouble(clear_cvot(one_tf_customer_money.getText()));
-                double exchange_rate = Double.parseDouble(clear_cvot(one_tf_exchange_rate.getText()));
-                String result = "";
-                switch (selected_exchange_rate) {
-
-                    //do * operator when......
-                    case S_to_R:
-                    case B_to_R:
-                        result = money_S_B_R_validate(type_of_money.Rial, String.format("%.2f", (Double) (customer_money * exchange_rate)));
-
-                        break;
-
-                    case S_to_B:
-                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money * exchange_rate)));
-                        break;
-
-                    //do / operator when......
-                    case R_to_S:
-                    case B_to_S:
-                        result = money_S_B_R_validate(type_of_money.Dollar, String.format("%.2f", (Double) (customer_money / exchange_rate)));
-                        break;
-
-                    //do / operator when......
-                    case R_to_B:
-                        result = money_S_B_R_validate(type_of_money.Bart, String.format("%.2f", (Double) (customer_money / exchange_rate)));
-                        break;
-                }
-
-                //set value to result tf
-                one_tf_customer_result.setText(add_cuot_to_money(result));
-            } //if customer money and exchange rate tf is null, it will set value to result tf to null
-            else {
-                one_tf_customer_result.setText("");
-            }
-
-        } catch (Exception e) {
-            System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
-        }
-    }
-
     //function that get current date
     public static Timestamp current_date() {
         long millis = System.currentTimeMillis();
@@ -224,21 +169,20 @@ public class UI_and_operation extends javax.swing.JFrame {
                         pur_type.add(rs.getString("pur_type"));
                         id_invoice.add(rs.getInt("id_invoice"));
                     }
-                }
-                else {
-                    
-                        DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
-                        dft1.setRowCount(0);
-                        Vector v3 = new Vector();
+                } else {
 
-                        //set to v2 all data only 1 row
-                        v3.add("0");
-                        v3.add("0");
-                        v3.add("0");
-                        v3.add("0");
+                    DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
+                    dft1.setRowCount(0);
+                    Vector v3 = new Vector();
 
-                        //set data to table history row
-                        dft1.addRow(v3);
+                    //set to v2 all data only 1 row
+                    v3.add("0");
+                    v3.add("0");
+                    v3.add("0");
+                    v3.add("0");
+
+                    //set data to table history row
+                    dft1.addRow(v3);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
@@ -285,15 +229,19 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 Bart = rs.getString("bart");
                                 Bank_Bart = rs.getString("bank_bart");
                             }
-
-                            //query to access
-                            pst = con.prepareStatement("SELECT id_invoice, (select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS type_of_exchanging, (select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc , "
-                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
+//query to access
+                            pst = con.prepareStatement("SELECT id_invoice, "
+                                    + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.exchanging) + ") AS id_invoice_man, "
+                                    + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS type_of_exchanging, "
+                                    + "(select  user_name FROM account_tb WHERE account_tb.id_acc = exc_invoice_tb.id_acc) AS acc, "
+                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = exc_invoice_tb.id_pur) AS pur,  "
+                                    + "exchanging_money, result_exchanging_money, invoice_date, exchange_rate, "
                                     + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
                                     + "FROM exc_invoice_tb WHERE id_invoice = ?;");
 
 //            System.out.println(id_invoice.get(i));
                             pst.setInt(1, id_invoice.get(i));
+                            pst.setInt(2, id_invoice.get(i));
                             rs = pst.executeQuery();
 
                             //table in UI
@@ -315,7 +263,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                                 //set to v2 all data only 1 row
                                 v3.add(date_history);
-                                v3.add(String.valueOf(rs.getInt("id_invoice")));
+                                v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                                 v3.add(rs.getString("acc"));
                                 v3.add(rs.getString("pur"));
                                 v3.add(money_S_B_R_validate(type_of_money.Rial, Rial));
@@ -324,7 +272,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 v3.add(money_S_B_R_validate(type_of_money.Bart, Bank_Bart));
                                 v3.add("គេ: "
                                         + rs.getString("exchanging_money") + " " + cus_money_type + "  |  យើង: -"
-                                        + rs.getString("result_exchanging_money") + " " +  owner_money_type + "  |  អត្រា: "
+                                        + rs.getString("result_exchanging_money") + " " + owner_money_type + "  |  អត្រា: "
                                         + rs.getString("exchange_rate") + "  |  "
                                         + rs.getString("exchange_type"));
                                 v2.add(v3);
@@ -336,7 +284,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     }
                 }
                 if (pur_type.get(i).equals("add_total_money")) {
-
+//
                     try {
                         con = DriverManager.getConnection(
                                 getLocal_host(),
@@ -372,12 +320,16 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 Bank_Bart = rs.getString("bank_bart");
                             }
 
-                            pst = con.prepareStatement("SELECT  id_add, (select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
-                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, add_date, add_money, type_of_money "
+                            pst = con.prepareStatement("SELECT  id_add, "
+                                    + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.add_total_money) + ") AS id_invoice_man, "
+                                    + "(select  user_name FROM account_tb WHERE account_tb.id_acc = add_money_history_tb.id_acc) AS acc , "
+                                    + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = add_money_history_tb.id_pur) AS pur, "
+                                    + "add_date, add_money, type_of_money "
                                     + "FROM add_money_history_tb INNER JOIN money_type_tb "
                                     + "ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money"
                                     + " WHERE id_add = ? ");
                             pst.setInt(1, id_invoice.get(i));
+                            pst.setInt(2, id_invoice.get(i));
                             rs = pst.executeQuery();
 
                             //table in UI
@@ -397,7 +349,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                                 //set to v2 all data only 1 row
                                 v3.add(date_history);
-                                v3.add(String.valueOf(rs.getInt("id_add")));
+                                v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                                 v3.add(rs.getString("acc"));
                                 v3.add(rs.getString("pur"));
                                 v3.add(money_S_B_R_validate(type_of_money.Rial, Rial));
@@ -427,70 +379,6 @@ public class UI_and_operation extends javax.swing.JFrame {
             three_calendar_cld.setBackground(Color.red);
             JOptionPane.showMessageDialog(this, "Wrong day or month or year");
         }
-    }
-
-    private void exc_perform(Boolean is_print) {
-
-        if (selected_exchange_rate != type_of_exchange.not_select && !one_tf_customer_result.getText().isEmpty()) {
-            String result = cut_the_lastest_point(one_tf_customer_money.getText());
-            switch (selected_exchange_rate) {
-
-                case R_to_S:
-                case R_to_B:
-                    result = money_S_B_R_validate(type_of_money.Rial, result);
-
-                    break;
-
-                case S_to_R:
-                case S_to_B:
-                    result = money_S_B_R_validate(type_of_money.Dollar, result);
-                    break;
-
-                case B_to_R:
-                case B_to_S:
-                    result = money_S_B_R_validate(type_of_money.Bart, result);
-                    break;
-
-            }
-            one_tf_customer_money.setText(result);
-            exchanging exchanging_obj = new exchanging(
-                    one_tf_customer_money.getText(),
-                    one_tf_customer_result.getText(),
-                    one_tf_exchange_rate.getText(),
-                    current_date(),
-                    selected_exchange_rate
-            );
-            if (is_print) {
-                String path = "";
-                try {
-                    File file = new File("x.txt");
-                    if (!file.exists()) {
-                        file.createNewFile();
-                    }
-                    path = file.getAbsolutePath();
-                    path = path.substring(0, path.length() - 6);
-//                                System.out.println("path : " + path);
-                } catch (IOException e) {
-                    System.out.println("error");
-                }
-
-                print_reciept(path + "\\reciept_for_print\\exchanging.jrxml",
-                        exchanging_obj.insert_to_db());
-            } else {
-                exchanging_obj.insert_to_db();
-            }
-            one_tf_customer_money.setText("");
-            one_tf_exchange_rate.setText("");
-            one_tf_customer_result.setText("");
-            one_bn_S_to_R.setEnabled(true);
-            one_bn_S_to_B.setEnabled(true);
-            one_bn_B_to_R.setEnabled(true);
-            one_bn_R_to_S.setEnabled(true);
-            one_bn_B_to_S.setEnabled(true);
-            one_bn_R_to_B.setEnabled(true);
-            one_lb_operator.setText("");
-        }
-
     }
 
     //-----------------------------------------------------class call--------------------------------------------------
@@ -676,6 +564,44 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_tf_customer_money = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        two_three_sender_phone_no_tf = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        two_three_receiver_phone_no_tf = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        two_three_sender_money_tf = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        two_three_service_money_tf = new javax.swing.JTextField();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jLabel19 = new javax.swing.JLabel();
+        two_three_province_name_tf = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        two_three_total_money_tf = new javax.swing.JTextField();
+        two_three_balance_money_tf = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        two_three_bn_finish = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        two_three_dollar_money_rb = new javax.swing.JRadioButton();
+        two_three_rial_money_rb = new javax.swing.JRadioButton();
+        two_three_bart_money_rb = new javax.swing.JRadioButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        two_four_receiver_phone_no_tf = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        two_four_province_name_tf = new javax.swing.JTextField();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jLabel23 = new javax.swing.JLabel();
+        two_four_sender_money_tf = new javax.swing.JTextField();
+        two_four_balance_money_tf = new javax.swing.JTextField();
+        jLabel27 = new javax.swing.JLabel();
+        two_four_total_money_tf = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        jButton15 = new javax.swing.JButton();
+        two_four_bn_finish = new javax.swing.JButton();
+        two_four_rial_money_rb = new javax.swing.JRadioButton();
+        two_four_dollar_money_rb = new javax.swing.JRadioButton();
+        two_four_bart_money_rb = new javax.swing.JRadioButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         two_one_tf_cus_ph_no = new javax.swing.JTextField();
@@ -721,44 +647,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_two_PM_rb = new javax.swing.JRadioButton();
         jLabel34 = new javax.swing.JLabel();
         two_two_reveiver_ph_no_tf = new javax.swing.JTextField();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel24 = new javax.swing.JLabel();
-        two_three_sender_phone_no_tf = new javax.swing.JTextField();
-        jLabel25 = new javax.swing.JLabel();
-        two_three_receiver_phone_no_tf = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        two_three_sender_money_tf = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        two_three_service_money_tf = new javax.swing.JTextField();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        jLabel19 = new javax.swing.JLabel();
-        two_three_province_name_tf = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        two_three_total_money_tf = new javax.swing.JTextField();
-        two_three_balance_money_tf = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        two_three_bn_finish = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        two_three_dollar_money_rb = new javax.swing.JRadioButton();
-        two_three_rial_money_rb = new javax.swing.JRadioButton();
-        two_three_bart_money_rb = new javax.swing.JRadioButton();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel22 = new javax.swing.JLabel();
-        two_four_receiver_phone_no_tf = new javax.swing.JTextField();
-        jLabel26 = new javax.swing.JLabel();
-        two_four_province_name_tf = new javax.swing.JTextField();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        jLabel23 = new javax.swing.JLabel();
-        two_four_sender_money_tf = new javax.swing.JTextField();
-        two_four_balance_money_tf = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        two_four_total_money_tf = new javax.swing.JTextField();
-        jLabel28 = new javax.swing.JLabel();
-        jButton15 = new javax.swing.JButton();
-        two_four_bn_finish = new javax.swing.JButton();
-        two_four_rial_money_rb = new javax.swing.JRadioButton();
-        two_four_dollar_money_rb = new javax.swing.JRadioButton();
-        two_four_bart_money_rb = new javax.swing.JRadioButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         three_tb_total_money = new javax.swing.JTable();
@@ -1148,6 +1036,385 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         jTabbedPane2.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
 
+        jLabel24.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel24.setText("លេខទូរស័ព្ទអ្នកផ្ញើរ");
+
+        two_three_sender_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_sender_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_sender_phone_no_tfActionPerformed(evt);
+            }
+        });
+        two_three_sender_phone_no_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_three_sender_phone_no_tfKeyReleased(evt);
+            }
+        });
+
+        jLabel25.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel25.setText("លេខទូរស័ព្ទអ្នកទទួល");
+
+        two_three_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_receiver_phone_no_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jLabel17.setText("ចំនួនទឹកប្រាក់");
+
+        two_three_sender_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_sender_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_three_sender_money_tfKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                two_three_sender_money_tfKeyTyped(evt);
+            }
+        });
+
+        jLabel18.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jLabel18.setText("ថ្លៃសេវា");
+
+        two_three_service_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_service_money_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_service_money_tfActionPerformed(evt);
+            }
+        });
+        two_three_service_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_three_service_money_tfKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                two_three_service_money_tfKeyTyped(evt);
+            }
+        });
+
+        jLabel19.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel19.setText("បើកនៅ");
+
+        two_three_province_name_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_province_name_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_province_name_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jLabel20.setText("ទឹកប្រាក់ទទួល");
+
+        two_three_total_money_tf.setEditable(false);
+        two_three_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_total_money_tf.setFocusable(false);
+        two_three_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_total_money_tfActionPerformed(evt);
+            }
+        });
+        two_three_total_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_three_total_money_tfKeyReleased(evt);
+            }
+        });
+
+        two_three_balance_money_tf.setEditable(false);
+        two_three_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_balance_money_tf.setFocusable(false);
+        two_three_balance_money_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_balance_money_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jLabel21.setText("​Balance");
+
+        two_three_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_three_bn_finish.setText("រួចរាល់");
+        two_three_bn_finish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_bn_finishActionPerformed(evt);
+            }
+        });
+
+        jButton13.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jButton13.setText("ព្រីនវិក្កិយបត្រ");
+
+        buttonGroup2.add(two_three_dollar_money_rb);
+        two_three_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_three_dollar_money_rb.setText("$");
+        two_three_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_dollar_money_rbActionPerformed(evt);
+            }
+        });
+
+        buttonGroup2.add(two_three_rial_money_rb);
+        two_three_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_three_rial_money_rb.setText("៛");
+        two_three_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
+
+        buttonGroup2.add(two_three_bart_money_rb);
+        two_three_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_three_bart_money_rb.setText("฿");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(two_three_receiver_phone_no_tf, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(two_three_sender_phone_no_tf, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(two_three_province_name_tf)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel19))
+                        .addGap(0, 219, Short.MAX_VALUE)))
+                .addGap(67, 67, 67)
+                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(two_three_total_money_tf)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel17)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(two_three_dollar_money_rb)
+                                        .addGap(40, 40, 40)
+                                        .addComponent(two_three_bart_money_rb))
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel20)
+                                    .addComponent(jLabel21))
+                                .addGap(0, 176, Short.MAX_VALUE))
+                            .addComponent(two_three_service_money_tf))
+                        .addGap(100, 100, 100))))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(filler2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_sender_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel25)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_receiver_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_province_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel17)
+                                    .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(two_three_dollar_money_rb)
+                                    .addComponent(two_three_bart_money_rb))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_service_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel20)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(two_three_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel21)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(249, 249, 249))))
+        );
+
+        jTabbedPane2.addTab("ផ្ទេរប្រាក់តាមតំបន់", jPanel7);
+
+        jLabel22.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel22.setText("លេខទូរស័ព្ទអ្នកទទួល");
+
+        two_four_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_four_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_receiver_phone_no_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel26.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel26.setText("ផ្ទេរពី");
+
+        two_four_province_name_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_four_province_name_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_province_name_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel23.setText("ចំនួនទឹកប្រាក់");
+
+        two_four_sender_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_four_sender_money_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_sender_money_tfActionPerformed(evt);
+            }
+        });
+
+        two_four_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+
+        jLabel27.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel27.setText("ទឹកប្រាក់ប្រគល់");
+
+        two_four_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_four_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_total_money_tfActionPerformed(evt);
+            }
+        });
+
+        jLabel28.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        jLabel28.setText("Balance");
+
+        jButton15.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        jButton15.setText("ព្រីនវិក្កិយបត្រ");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        two_four_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_four_bn_finish.setText("រួចរាល់");
+        two_four_bn_finish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_bn_finishActionPerformed(evt);
+            }
+        });
+
+        buttonGroup3.add(two_four_rial_money_rb);
+        two_four_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_four_rial_money_rb.setText("៛");
+        two_four_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
+
+        buttonGroup3.add(two_four_dollar_money_rb);
+        two_four_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_four_dollar_money_rb.setText("$");
+        two_four_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_four_dollar_money_rbActionPerformed(evt);
+            }
+        });
+
+        buttonGroup3.add(two_four_bart_money_rb);
+        two_four_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_four_bart_money_rb.setText("฿");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26)
+                    .addComponent(two_four_province_name_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                    .addComponent(two_four_receiver_phone_no_tf))
+                .addGap(40, 40, 40)
+                .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(187, 187, 187)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                    .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                    .addComponent(two_four_sender_money_tf)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel28)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jLabel23)
+                                .addGap(18, 18, 18)
+                                .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(two_four_dollar_money_rb)
+                                .addGap(41, 41, 41)
+                                .addComponent(two_four_bart_money_rb)))
+                        .addGap(0, 144, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_four_receiver_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel26)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_four_province_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(two_four_dollar_money_rb)
+                            .addComponent(two_four_bart_money_rb))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_four_sender_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel28)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("ដកប្រាក់តាមតំបន់", jPanel6);
+
         jLabel7.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel7.setText("ឈ្មោះ");
 
@@ -1531,355 +1798,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("ដកប្រាក់ពីថៃ", jPanel5);
 
-        jLabel24.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel24.setText("លេខទូរស័ព្ទអ្នកផ្ញើរ");
-
-        two_three_sender_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_sender_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_sender_phone_no_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel25.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel25.setText("លេខទូរស័ព្ទអ្នកទទួល");
-
-        two_three_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_receiver_phone_no_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel17.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jLabel17.setText("ចំនួនទឹកប្រាក់");
-
-        two_three_sender_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-
-        jLabel18.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jLabel18.setText("ថ្លៃសេវា");
-
-        two_three_service_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_service_money_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_service_money_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel19.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel19.setText("បើកនៅ");
-
-        two_three_province_name_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_province_name_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_province_name_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel20.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jLabel20.setText("ទឹកប្រាក់ទទួល");
-
-        two_three_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_total_money_tfActionPerformed(evt);
-            }
-        });
-
-        two_three_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_three_balance_money_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_balance_money_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel21.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jLabel21.setText("​Balance");
-
-        two_three_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        two_three_bn_finish.setText("រួចរាល់");
-        two_three_bn_finish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_bn_finishActionPerformed(evt);
-            }
-        });
-
-        jButton13.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jButton13.setText("ព្រីនវិក្កិយបត្រ");
-
-        buttonGroup2.add(two_three_dollar_money_rb);
-        two_three_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_three_dollar_money_rb.setText("$");
-        two_three_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_three_dollar_money_rbActionPerformed(evt);
-            }
-        });
-
-        buttonGroup2.add(two_three_rial_money_rb);
-        two_three_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_three_rial_money_rb.setText("៛");
-        two_three_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
-
-        buttonGroup2.add(two_three_bart_money_rb);
-        two_three_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_three_bart_money_rb.setText("฿");
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(two_three_receiver_phone_no_tf, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(two_three_sender_phone_no_tf, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(two_three_province_name_tf)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel19))
-                        .addGap(0, 313, Short.MAX_VALUE)))
-                .addGap(67, 67, 67)
-                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_three_sender_money_tf)
-                            .addComponent(two_three_service_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
-                            .addComponent(two_three_total_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
-                            .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addComponent(jLabel17)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(two_three_dollar_money_rb)
-                                        .addGap(40, 40, 40)
-                                        .addComponent(two_three_bart_money_rb))
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel20)
-                                    .addComponent(jLabel21))
-                                .addGap(0, 270, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(filler2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel24)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_sender_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel25)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_receiver_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel19)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_province_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel17)
-                                    .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(two_three_dollar_money_rb)
-                                    .addComponent(two_three_bart_money_rb))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_service_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel20)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_three_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel21)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(249, 249, 249))))
-        );
-
-        jTabbedPane2.addTab("ផ្ទេរប្រាក់តាមតំបន់", jPanel7);
-
-        jLabel22.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel22.setText("លេខទូរស័ព្ទអ្នកទទួល");
-
-        two_four_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_receiver_phone_no_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel26.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel26.setText("ផ្ទេរពី");
-
-        two_four_province_name_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_province_name_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_province_name_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel23.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel23.setText("ចំនួនទឹកប្រាក់");
-
-        two_four_sender_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_sender_money_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_sender_money_tfActionPerformed(evt);
-            }
-        });
-
-        two_four_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-
-        jLabel27.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel27.setText("ទឹកប្រាក់ប្រគល់");
-
-        two_four_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_total_money_tfActionPerformed(evt);
-            }
-        });
-
-        jLabel28.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
-        jLabel28.setText("Balance");
-
-        jButton15.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jButton15.setText("ព្រីនវិក្កិយបត្រ");
-        jButton15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
-            }
-        });
-
-        two_four_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        two_four_bn_finish.setText("រួចរាល់");
-        two_four_bn_finish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_bn_finishActionPerformed(evt);
-            }
-        });
-
-        buttonGroup3.add(two_four_rial_money_rb);
-        two_four_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_rial_money_rb.setText("៛");
-        two_four_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
-
-        buttonGroup3.add(two_four_dollar_money_rb);
-        two_four_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_dollar_money_rb.setText("$");
-        two_four_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_dollar_money_rbActionPerformed(evt);
-            }
-        });
-
-        buttonGroup3.add(two_four_bart_money_rb);
-        two_four_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_bart_money_rb.setText("฿");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel26)
-                    .addComponent(two_four_province_name_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
-                    .addComponent(two_four_receiver_phone_no_tf))
-                .addGap(40, 40, 40)
-                .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(187, 187, 187)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                    .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                    .addComponent(two_four_sender_money_tf)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel28)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel23)
-                                .addGap(18, 18, 18)
-                                .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(two_four_dollar_money_rb)
-                                .addGap(41, 41, 41)
-                                .addComponent(two_four_bart_money_rb)))
-                        .addGap(0, 144, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_receiver_phone_no_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel26)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_province_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel23)
-                            .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(two_four_dollar_money_rb)
-                            .addComponent(two_four_bart_money_rb))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_sender_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel27)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel28)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("ដកប្រាក់តាមតំបន់", jPanel6);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1893,7 +1811,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 914, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 776, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2843,12 +2761,16 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_five_user_name_tfActionPerformed
 
     private void one_bn_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_printActionPerformed
-        exc_perform(true);
+        exc_close_or_print(true, one_tf_customer_money, one_tf_exchange_rate, one_tf_customer_result,
+                one_bn_S_to_R, one_bn_S_to_B, one_bn_B_to_R, one_bn_R_to_S, one_bn_B_to_S, one_bn_R_to_B,
+                one_lb_operator, selected_exchange_rate);
         set_history();
     }//GEN-LAST:event_one_bn_printActionPerformed
 
     private void one_bn_finishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_finishedActionPerformed
-        exc_perform(false);
+        exc_close_or_print(false, one_tf_customer_money, one_tf_exchange_rate, one_tf_customer_result,
+                one_bn_S_to_R, one_bn_S_to_B, one_bn_B_to_R, one_bn_R_to_S, one_bn_B_to_S, one_bn_R_to_B,
+                one_lb_operator, selected_exchange_rate);
         set_history();
     }//GEN-LAST:event_one_bn_finishedActionPerformed
 
@@ -2861,12 +2783,12 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_one_tf_exchange_rateActionPerformed
 
     private void one_tf_exchange_rateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_one_tf_exchange_rateCaretUpdate
-        one_calculation();
+        one_calculation(selected_exchange_rate, one_tf_customer_money, one_tf_exchange_rate, one_tf_customer_result);
     }//GEN-LAST:event_one_tf_exchange_rateCaretUpdate
 
     private void one_bn_R_to_BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_R_to_BActionPerformed
         one_lb_operator.setText("/");
-        one_set_money_type_to_lb("៛", "฿");
+        one_set_money_type_to_lb("៛", "฿", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.R_to_B;
 
@@ -2882,7 +2804,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void one_bn_B_to_SActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_B_to_SActionPerformed
         one_lb_operator.setText("/");
-        one_set_money_type_to_lb("฿", "$");
+        one_set_money_type_to_lb("฿", "$", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.B_to_S;
 
@@ -2898,7 +2820,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void one_bn_R_to_SActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_R_to_SActionPerformed
         one_lb_operator.setText("/");
-        one_set_money_type_to_lb("៛", "$");
+        one_set_money_type_to_lb("៛", "$", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.R_to_S;
 
@@ -2914,7 +2836,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void one_bn_B_to_RActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_B_to_RActionPerformed
         one_lb_operator.setText("x");
-        one_set_money_type_to_lb("฿", "៛");
+        one_set_money_type_to_lb("฿", "៛", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.B_to_R;
 
@@ -2932,7 +2854,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void one_bn_S_to_BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_S_to_BActionPerformed
 
         one_lb_operator.setText("x");
-        one_set_money_type_to_lb("$", "฿");
+        one_set_money_type_to_lb("$", "฿", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
 
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.S_to_B;
@@ -2950,7 +2872,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void one_bn_S_to_RActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_S_to_RActionPerformed
 
         one_lb_operator.setText("x");
-        one_set_money_type_to_lb("$", "៛");
+        one_set_money_type_to_lb("$", "៛", one_money_type_lb, one_rate_type_lb, one_money_type_result_lb);
         //store user choose type of exchange in selected_exchange_rate
         selected_exchange_rate = type_of_exchange.S_to_R;
 
@@ -3013,24 +2935,13 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_one_tf_customer_moneyKeyTyped
 
     private void one_tf_customer_moneyCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyCaretUpdate
-        one_calculation();
+        one_calculation(selected_exchange_rate, one_tf_customer_money, one_tf_exchange_rate, one_tf_customer_result);
     }//GEN-LAST:event_one_tf_customer_moneyCaretUpdate
 
     private void one_tf_customer_moneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyKeyReleased
 
-        char c = evt.getKeyChar();
-        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(one_tf_customer_money.getText())))) {
-            evt.consume();
-        } else {
-            if (!one_tf_customer_money.getText().isEmpty()) {
-                one_tf_customer_money.setFocusable(false);
-                String str = one_tf_customer_money.getText();
-                one_tf_customer_money.setText("");
-                one_tf_customer_money.setText(add_cuot_to_money(add_zero_in_front_of_point(str)));
-                one_tf_customer_money.setFocusable(true);
-                one_tf_customer_money.requestFocus();
-            }
-        }
+//        char c = evt.getKeyChar();
+        validate_keyboard(evt, one_tf_customer_money);
     }//GEN-LAST:event_one_tf_customer_moneyKeyReleased
 
     private void one_tf_customer_moneyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyKeyPressed
@@ -3292,7 +3203,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     String Rial = "0";
                     String Dollar = "0";
                     String Bart = "0";
-                            String Bank_Bart = "0";
+                    String Bank_Bart = "0";
                     pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart, bank_bart FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
                     rs = pst.executeQuery();
                     while (rs.next()) {
@@ -3373,25 +3284,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_add_tfKeyPressed
 
     private void three_add_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_three_add_tfKeyReleased
-        char c = evt.getKeyChar();
-        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(three_add_tf.getText())))) {
-            evt.consume();
-        } else {
-            if (!three_add_tf.getText().isEmpty()) {
-                three_add_tf.setFocusable(false);
-                String str = three_add_tf.getText();
-//            System.out.println(one_tf_customer_money.getText());
-                three_add_tf.setText("");
-                three_add_tf.setText(add_cuot_to_money(add_zero_in_front_of_point(str)));
-
-//            one_tf_customer_money.setText(add_cuot_to_money(str));
-//            one_tf_customer_money.setText(str);
-//            System.out.println(one_tf_customer_money.getText());
-                three_add_tf.setFocusable(true);
-                three_add_tf.requestFocus();
-            }
-        }
-
+        validate_keyboard(evt, three_add_tf);
     }//GEN-LAST:event_three_add_tfKeyReleased
 
     private void three_add_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_three_add_tfKeyTyped
@@ -3977,7 +3870,32 @@ public class UI_and_operation extends javax.swing.JFrame {
                             int selectedIndex = three_tb_history.getSelectedRow();
 
                             //get id from to store inside variable id here
-                            int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
+                            int id = -1;
+
+                            Connection con_;
+                            PreparedStatement pst_;
+                            ResultSet rs_;
+                            try {
+                                con_ = DriverManager.getConnection(
+                                        getLocal_host(),
+                                        getLocal_host_user_name(),
+                                        getLocal_host_password()
+                                );
+
+                                pst_ = con_.prepareStatement("SELECT id_invoice "
+                                        + "FROM invoice_management_tb "
+                                        + "WHERE id_invoice_man = ?;");
+                                pst_.setInt(1, Integer.parseInt(model.getValueAt(selectedIndex, 1).toString()));
+                                rs_ = pst_.executeQuery();
+                                while (rs_.next()) {
+                                    id = rs_.getInt("id_invoice");
+                                }
+
+                            } catch (SQLException ex) {
+                                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+                                JOptionPane.showMessageDialog(this, ex);
+
+                            }
                             String acc = model.getValueAt(selectedIndex, 2).toString();
                             String pur = model.getValueAt(selectedIndex, 3).toString();
                             int dialogresult = JOptionPane.showConfirmDialog(this, "Do you want to delete the record", "Warning", JOptionPane.YES_NO_OPTION);
@@ -3995,149 +3913,152 @@ public class UI_and_operation extends javax.swing.JFrame {
                                                 getLocal_host_password()
                                         );
 
-                                        String exchanging_money = "";
-                                        String result_exchanging_money = "";
-                                        String type_of_exchanging = "";
-
-                                        //query to access
-                                        pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
-                                                + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
-                                                + "where id_invoice = ? "
-                                                + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                        int count_id_invoice_man = 0;
+                                        pst = con.prepareStatement("SELECT COUNT(*) AS count_id_invoice_man "
+                                                + "FROM invoice_management_tb "
+                                                + "WHERE id_invoice_man >= (SELECT id_invoice_man "
+                                                + "FROM invoice_management_tb "
+                                                + "WHERE id_invoice = ? "
+                                                + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
                                         pst.setInt(1, id);
                                         pst.setString(2, acc);
                                         pst.setString(3, pur);
                                         rs = pst.executeQuery();
                                         while (rs.next()) {
-                                            exchanging_money = rs.getString("exchanging_money");
-                                            result_exchanging_money = rs.getString("result_exchanging_money");
-                                            type_of_exchanging = rs.getString("type_of_exchanging");
+                                            count_id_invoice_man = rs.getInt("count_id_invoice_man");
                                         }
+                                        if (count_id_invoice_man <= 2) {
 
-//                                        String Rial = "0";
-//                                        String Dollar = "0";
-//                                        String Bart = "0";
-//                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM invoice_management_tb");
-//                                        rs = pst.executeQuery();
-//                                        while (rs.next()) {
-//                                            //set to v2 all data only 1 row
-//                                            Rial = rs.getString("rial");
-//                                            Dollar = rs.getString("dollar");
-//                                            Bart = rs.getString("bart");
-//                                        }
-                                        switch (type_of_exchanging) {
-                                            case "S_to_R":
-//                                                System.out.println("clear_cvot(exchanging_money) : "+ clear_cvot(exchanging_money));
-//                                                System.out.println("clear_cvot(result_exchanging_money) : "+ clear_cvot(result_exchanging_money));
-//                                                System.out.println("id : " + id);
-//                                                System.out.println("acc : " + acc);
-//                                                System.out.println("pur : " + pur);
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET dollar = dollar - "+ clear_cvot(exchanging_money) +", rial = rial + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "S_to_B":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET dollar = dollar - "+ clear_cvot(exchanging_money) +", bart = bart + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "B_to_R":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET bart = bart - "+ clear_cvot(exchanging_money) +", rial = rial + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "R_to_S":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET rial = rial - "+ clear_cvot(exchanging_money) +", dollar = dollar + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "B_to_S":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET bart = bart - "+ clear_cvot(exchanging_money) +", dollar = dollar + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "R_to_B":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET rial = rial - "+ clear_cvot(exchanging_money) +", bart = bart + "+ clear_cvot(result_exchanging_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            default:
-                                                System.out.println("Error");
+                                            String exchanging_money = "";
+                                            String result_exchanging_money = "";
+                                            String type_of_exchanging = "";
+
+                                            //query to access
+                                            pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
+                                                    + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
+                                                    + "where id_invoice = ? "
+                                                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            rs = pst.executeQuery();
+                                            while (rs.next()) {
+                                                exchanging_money = rs.getString("exchanging_money");
+                                                result_exchanging_money = rs.getString("result_exchanging_money");
+                                                type_of_exchanging = rs.getString("type_of_exchanging");
+                                            }
+
+                                            switch (type_of_exchanging) {
+                                                case "S_to_R":
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET dollar = dollar - " + clear_cvot(exchanging_money) + ", rial = rial + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "S_to_B":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET dollar = dollar - " + clear_cvot(exchanging_money) + ", bart = bart + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "B_to_R":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET bart = bart - " + clear_cvot(exchanging_money) + ", rial = rial + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "R_to_S":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET rial = rial - " + clear_cvot(exchanging_money) + ", dollar = dollar + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "B_to_S":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET bart = bart - " + clear_cvot(exchanging_money) + ", dollar = dollar + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "R_to_B":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET rial = rial - " + clear_cvot(exchanging_money) + ", bart = bart + " + clear_cvot(result_exchanging_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                default:
+                                                    System.out.println("Error");
+                                            }
+                                            //update sql query to access
+                                            pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            pst.executeUpdate();
+                                            set_history();
+                                            //dialog when added to access is success
+                                            //                        JOptionPane.showMessageDialog(this, "records update");
+
+                                            //update sql query to access
+                                            pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            pst.executeUpdate();
+                                            set_history();
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "your data is more than 10000 when count from the top. So you can't delete it", "Alert", JOptionPane.WARNING_MESSAGE);
                                         }
-                                        //update sql query to access
-                                        pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
-
-                                        pst.setInt(1, id);
-                                        pst.setString(2, acc);
-                                        pst.setString(3, pur);
-                                        pst.executeUpdate();
-                                        set_history();
-                                        //dialog when added to access is success
-                                        //                        JOptionPane.showMessageDialog(this, "records update");
-
-                                        //update sql query to access
-                                        pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
-
-                                        pst.setInt(1, id);
-                                        pst.setString(2, acc);
-                                        pst.setString(3, pur);
-                                        pst.executeUpdate();
-                                        set_history();
-
                                     } catch (SQLException ex) {
                                         Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
                                         JOptionPane.showMessageDialog(this, ex);
@@ -4155,100 +4076,110 @@ public class UI_and_operation extends javax.swing.JFrame {
                                                 getLocal_host_password()
                                         );
 
-                                        String add_money = "";
-                                        String money_type = "";
-
-                                        //query to access
-                                        pst = con.prepareStatement("SELECT add_money, type_of_money "
-                                                + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                                                + "where id_add = ? "
-                                                + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                        int count_id_invoice_man = 0;
+                                        pst = con.prepareStatement("SELECT COUNT(*) AS count_id_invoice_man "
+                                                + "FROM invoice_management_tb "
+                                                + "WHERE id_invoice_man >= (SELECT id_invoice_man "
+                                                + "FROM invoice_management_tb "
+                                                + "WHERE id_invoice = ? "
+                                                + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
                                         pst.setInt(1, id);
                                         pst.setString(2, acc);
                                         pst.setString(3, pur);
                                         rs = pst.executeQuery();
                                         while (rs.next()) {
-                                            add_money = rs.getString("add_money");
-                                            money_type = rs.getString("type_of_money");
+                                            count_id_invoice_man = rs.getInt("count_id_invoice_man");
                                         }
+//                                        System.out.println("count_id_invoice_man : " + count_id_invoice_man);
+                                        if (count_id_invoice_man <= 2) {
 
-//                                        String Rial = "";
-//                                        String Dollar = "";
-//                                        String Bart = "";
-//                                        pst = con.prepareStatement("SELECT rial, dollar, bart FROM total_money_tb");
-//                                        rs = pst.executeQuery();
-//                                        while (rs.next()) {
-//                                            //set to v2 all data only 1 row
-//                                            Rial = rs.getString("rial");
-//                                            Dollar = rs.getString("dollar");
-//                                            Bart = rs.getString("bart");
-//                                        }
-                                        switch (money_type) {
-                                            case "Rial":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET rial = rial - "+ clear_cvot(add_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "Dollar":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET dollar = dollar - "+ clear_cvot(add_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            case "Bart":
-                                                //write sql query to access
-                                                pst = con.prepareStatement("UPDATE invoice_management_tb "
-                                                        + "SET bart = bart - "+ clear_cvot(add_money) +" "
-                                                        + "WHERE id_invoice_man > (SELECT id_invoice_man "
-                                                        + "FROM invoice_management_tb "
-                                                        + "WHERE id_invoice = ? "
-                                                        + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                                                        + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
-                                                pst.setInt(1, id);
-                                                pst.setString(2, acc);
-                                                pst.setString(3, pur);
-                                                pst.executeUpdate();
-                                                break;
-                                            default:
-                                                System.out.println("Error");
+                                            String add_money = "";
+                                            String money_type = "";
+
+                                            //query to access
+                                            pst = con.prepareStatement("SELECT add_money, type_of_money "
+                                                    + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                                                    + "where id_add = ? "
+                                                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            rs = pst.executeQuery();
+                                            while (rs.next()) {
+                                                add_money = rs.getString("add_money");
+                                                money_type = rs.getString("type_of_money");
+                                            }
+
+                                            switch (money_type) {
+                                                case "Rial":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET rial = rial - " + clear_cvot(add_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "Dollar":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET dollar = dollar - " + clear_cvot(add_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                case "Bart":
+                                                    //write sql query to access
+                                                    pst = con.prepareStatement("UPDATE invoice_management_tb "
+                                                            + "SET bart = bart - " + clear_cvot(add_money) + " "
+                                                            + "WHERE id_invoice_man > (SELECT id_invoice_man "
+                                                            + "FROM invoice_management_tb "
+                                                            + "WHERE id_invoice = ? "
+                                                            + "AND id_acc = (select id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                                                            + "AND id_pur = (select id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?));");
+                                                    pst.setInt(1, id);
+                                                    pst.setString(2, acc);
+                                                    pst.setString(3, pur);
+                                                    pst.executeUpdate();
+                                                    break;
+                                                default:
+                                                    System.out.println("Error");
+                                            }
+                                            //update sql query to access
+                                            pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            pst.executeUpdate();
+                                            set_history();
+
+                                            //update sql query to access
+                                            pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+
+                                            pst.setInt(1, id);
+                                            pst.setString(2, acc);
+                                            pst.setString(3, pur);
+                                            pst.executeUpdate();
+                                            set_history();
+                                            //dialog when added to access is success
+                                            //                        JOptionPane.showMessageDialog(this, "records update");
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, "your data is more than 10000 when count from the top. So you can't delete it", "Alert", JOptionPane.WARNING_MESSAGE);
                                         }
-                                        //update sql query to access
-                                        pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
-
-                                        pst.setInt(1, id);
-                                        pst.setString(2, acc);
-                                        pst.setString(3, pur);
-                                        pst.executeUpdate();
-                                        set_history();
-
-                                        //update sql query to access
-                                        pst = con.prepareStatement("delete from invoice_management_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
-
-                                        pst.setInt(1, id);
-                                        pst.setString(2, acc);
-                                        pst.setString(3, pur);
-                                        pst.executeUpdate();
-                                        set_history();
-                                        //dialog when added to access is success
-                                        //                        JOptionPane.showMessageDialog(this, "records update");
                                     } catch (SQLException ex) {
                                         Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
                                         JOptionPane.showMessageDialog(this, ex);
@@ -4406,6 +4337,40 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_one_tf_cus_noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_two_one_tf_cus_noActionPerformed
+
+    private void two_three_sender_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_sender_phone_no_tfKeyReleased
+
+    private void two_three_sender_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfKeyReleased
+        
+        validate_keyboard(evt, two_three_sender_money_tf);
+    }//GEN-LAST:event_two_three_sender_money_tfKeyReleased
+
+    private void two_three_sender_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfKeyTyped
+        
+        char c = evt.getKeyChar();
+        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(two_three_sender_money_tf.getText())))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_two_three_sender_money_tfKeyTyped
+
+    private void two_three_service_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_service_money_tfKeyReleased
+        
+        validate_keyboard(evt, two_three_service_money_tf);
+    }//GEN-LAST:event_two_three_service_money_tfKeyReleased
+
+    private void two_three_service_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_service_money_tfKeyTyped
+        
+        char c = evt.getKeyChar();
+        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(two_three_service_money_tf.getText())))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_two_three_service_money_tfKeyTyped
+
+    private void two_three_total_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_total_money_tfKeyReleased
+        
+    }//GEN-LAST:event_two_three_total_money_tfKeyReleased
 
     /**
      * @param args the command line arguments

@@ -6,6 +6,7 @@
 package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.type_of_money;
+import com.sun.glass.events.KeyEvent;
 
 
 /**
@@ -179,4 +180,19 @@ public class validate_double_value {
                  
     }
     
+    public static void validate_keyboard(java.awt.event.KeyEvent evt,  javax.swing.JTextField one_tf_customer_money){
+    
+        if (!((Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar() == KeyEvent.VK_BACKSPACE) || (evt.getKeyChar() == KeyEvent.VK_DELETE)) || (evt.getKeyChar() == '.' && !is_has_double_points(one_tf_customer_money.getText())))) {
+            evt.consume();
+        } else {
+            if (!one_tf_customer_money.getText().isEmpty()) {
+                one_tf_customer_money.setFocusable(false);
+                String str = one_tf_customer_money.getText();
+                one_tf_customer_money.setText("");
+                one_tf_customer_money.setText(add_cuot_to_money(add_zero_in_front_of_point(str)));
+                one_tf_customer_money.setFocusable(true);
+                one_tf_customer_money.requestFocus();
+            }
+        }
+}
 }

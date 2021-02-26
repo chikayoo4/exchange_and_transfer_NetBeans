@@ -10,19 +10,6 @@ package UI_and_operation;
  * @author Chhann_chikay
  */
 public class connection_to_ms_sql {
-
-    //url to locate where database file is
-    private String url_db;
-
-    public connection_to_ms_sql() {
-        url_db = "jdbc:ucanaccess://C:/Users/Chhann_chikay/Desktop/my_documents/project/java_project/exchange_and_tranfer_money/database/exchanging_transfer_db.accdb";
-    }
-
-    public String getUrl_db() {
-        return url_db;
-    }
-
-    //----------------------------------------------------------------------------------
     private static String local_host;
     private static String local_host_user_name;
     private static String local_host_password;
@@ -60,10 +47,6 @@ public class connection_to_ms_sql {
 
     public static String getWifi_host() {
         return wifi_host;
-    }
-
-    public void setUrl_db(String url_db) {
-        this.url_db = url_db;
     }
 
     public static void setLocal_host_user_name(String local_host_user_name) {

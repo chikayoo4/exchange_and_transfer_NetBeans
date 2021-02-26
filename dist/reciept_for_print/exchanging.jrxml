@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="226" pageHeight="566" columnWidth="207" leftMargin="0" rightMargin="19" topMargin="8" bottomMargin="8" uuid="e8ba0723-52e6-4219-b857-e87047bd1f13">
 	<property name="ireport.zoom" value="4.507888805409509"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1205"/>
 	<parameter name="invoice_id" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -20,9 +20,24 @@
      account_tb."user_name" AS account_tb_user_name,
      account_tb."password" AS account_tb_password,
      project_path."id_proj" AS project_path_id_proj,
-     project_path."path_name" AS project_path_path_name
+     project_path."path_name" AS project_path_path_name,
+     invoice_management_tb."id_invoice_man" AS invoice_management_tb_id_invoice_man,
+     invoice_management_tb."id_invoice" AS invoice_management_tb_id_invoice,
+     invoice_management_tb."invoice_man_date" AS invoice_management_tb_invoice_man_date,
+     invoice_management_tb."rial" AS invoice_management_tb_rial,
+     invoice_management_tb."dollar" AS invoice_management_tb_dollar,
+     invoice_management_tb."bart" AS invoice_management_tb_bart,
+     invoice_management_tb."bank_bart" AS invoice_management_tb_bank_bart,
+     invoice_management_tb."id_acc" AS invoice_management_tb_id_acc,
+     invoice_management_tb."id_pur" AS invoice_management_tb_id_pur,
+         (SELECT invoice_management_tb."id_invoice_man" 
+	FROM "dbo"."invoice_management_tb" 
+	WHERE invoice_management_tb."id_acc" = exc_invoice_tb."id_acc"
+	AND invoice_management_tb."id_pur" = exc_invoice_tb."id_pur"
+	AND invoice_management_tb."id_invoice" = exc_invoice_tb."id_invoice") AS id_inv_man
 FROM
-     "dbo"."account_tb" account_tb FULL OUTER JOIN "dbo"."exc_invoice_tb" exc_invoice_tb ON account_tb."id_acc" = exc_invoice_tb."id_acc",
+     "dbo"."account_tb" account_tb FULL OUTER JOIN "dbo"."exc_invoice_tb" exc_invoice_tb ON account_tb."id_acc" = exc_invoice_tb."id_acc"
+     FULL OUTER JOIN "dbo"."invoice_management_tb" invoice_management_tb ON account_tb."id_acc" = invoice_management_tb."id_acc",
      "dbo"."project_path" project_path
 WHERE
      exc_invoice_tb."id_invoice" = $P{invoice_id}]]>
@@ -40,6 +55,16 @@ WHERE
 	<field name="account_tb_password" class="java.lang.String"/>
 	<field name="project_path_id_proj" class="java.lang.Integer"/>
 	<field name="project_path_path_name" class="java.lang.String"/>
+	<field name="invoice_management_tb_id_invoice_man" class="java.lang.Integer"/>
+	<field name="invoice_management_tb_id_invoice" class="java.lang.Integer"/>
+	<field name="invoice_management_tb_invoice_man_date" class="java.sql.Timestamp"/>
+	<field name="invoice_management_tb_rial" class="java.lang.String"/>
+	<field name="invoice_management_tb_dollar" class="java.lang.String"/>
+	<field name="invoice_management_tb_bart" class="java.lang.String"/>
+	<field name="invoice_management_tb_bank_bart" class="java.lang.String"/>
+	<field name="invoice_management_tb_id_acc" class="java.lang.Integer"/>
+	<field name="invoice_management_tb_id_pur" class="java.lang.Integer"/>
+	<field name="id_inv_man" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -197,7 +222,7 @@ $F{exc_invoice_tb_exchange_rate}]]></textFieldExpression>
 			</staticText>
 			<textField>
 				<reportElement x="63" y="157" width="141" height="20" uuid="6c50d20c-40c6-4996-8915-cd8a079f0ecd"/>
-				<textFieldExpression><![CDATA[$F{exc_invoice_tb_id_invoice}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{id_inv_man}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="63" y="176" width="145" height="20" uuid="be32774b-4533-44fa-b6cc-acf2271b5986"/>
