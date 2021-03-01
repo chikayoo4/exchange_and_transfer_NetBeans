@@ -91,9 +91,17 @@ CREATE TABLE province_name_tb (
     id_province int IDENTITY(1,1) PRIMARY KEY,
    transfer_province VARCHAR(50) NOT NULL
 );
+CREATE TABLE province_name_history_tb (
+   transfer_province VARCHAR(50) NOT NULL
+);
+CREATE TABLE to_pro_sender_ph_no_history_tb (
+   sender_phone_no VARCHAR(50) NOT NULL
+);
+CREATE TABLE to_pro_receiver_ph_no_history_tb (
+   receiver_phone_no VARCHAR(50) NOT NULL
+);
 CREATE TABLE to_province_invoice_tb (
     id_invoice int IDENTITY(1,1) PRIMARY KEY,
-    invoice_date DATETIME NOT NULL,
     service_money VARCHAR(40) NOT NULL,
     balance_money VARCHAR(40) NOT NULL,
     transfering_money VARCHAR(40) NOT NULL,

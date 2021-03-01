@@ -19,6 +19,7 @@ public class exchange_rate_show extends javax.swing.JFrame {
     public exchange_rate_show() {
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
