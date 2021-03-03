@@ -176,7 +176,7 @@ public class validate_value {
 
     }
 
-    public static void validate_keyboard_money(java.awt.event.KeyEvent evt, javax.swing.JTextField one_tf_customer_money) {
+    public static void validate_KeyReleased_money(java.awt.event.KeyEvent evt, javax.swing.JTextField one_tf_customer_money) {
 
         if (!one_tf_customer_money.getText().isEmpty()) {
             one_tf_customer_money.setFocusable(false);
@@ -188,7 +188,7 @@ public class validate_value {
         }
     }
 
-    public static void validate_keyboard_ph_num(java.awt.event.KeyEvent evt, javax.swing.JTextField input_tf) {
+    public static void validate_keyTyped_ph_num(java.awt.event.KeyEvent evt, javax.swing.JTextField input_tf) {
         if (!((Character.isDigit(evt.getKeyChar()) || (evt.getKeyChar() == KeyEvent.VK_BACKSPACE) || (evt.getKeyChar() == KeyEvent.VK_DELETE)))) {
             evt.consume();
         } else {
@@ -198,4 +198,11 @@ public class validate_value {
         }
     }
 
+    public static void validate_KeyTyped_money(java.awt.event.KeyEvent evt, javax.swing.JTextField input_tf) {
+      
+        char c = evt.getKeyChar();
+        if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(input_tf.getText())))) {
+            evt.consume();
+        }
+    }
 }

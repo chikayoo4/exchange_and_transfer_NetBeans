@@ -23,6 +23,16 @@ CREATE TABLE exc_rate_tb (
     bart_to_rial VARCHAR(40) NOT NULL,
     rial_to_bart VARCHAR(40) NOT NULL
 );
+CREATE TABLE province_service (
+    id_pro_service int IDENTITY(1,1) PRIMARY KEY,
+    start_money VARCHAR(40) NOT NULL,
+	end_money VARCHAR(40) NOT NULL,
+	price VARCHAR(40) NOT NULL,
+    id_province INTEGER NOT NULL,
+	CONSTRAINT FK_province_service_id_province FOREIGN KEY (id_province) REFERENCES province_name_tb (id_province),
+    id_type_of_money INTEGER NOT NULL,
+	CONSTRAINT FK_province_service_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
+);
 CREATE TABLE exc_invoice_tb (
     id_invoice int IDENTITY(1,1) PRIMARY KEY,
     invoice_date DATETIME NOT NULL,

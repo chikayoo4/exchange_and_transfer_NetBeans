@@ -552,7 +552,11 @@
                                                       <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                                                       <Component id="two_three_bart_money_rb" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Component id="jLabel18" alignment="0" min="-2" pref="134" max="-2" attributes="0"/>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jLabel18" min="-2" pref="134" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="two_one_set_service_bn" min="-2" pref="157" max="-2" attributes="0"/>
+                                                  </Group>
                                                   <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
@@ -584,8 +588,11 @@
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="two_three_sender_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="two_one_set_service_bn" alignment="3" max="32767" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="two_three_service_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -975,7 +982,7 @@
                           </Events>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                              <AbsoluteConstraints x="12" y="422" width="680" height="75"/>
+                              <AbsoluteConstraints x="12" y="422" width="690" height="75"/>
                             </Constraint>
                           </Constraints>
                         </Component>
@@ -1029,6 +1036,17 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JButton" name="two_one_set_service_bn">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="24" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="set servise"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="two_one_set_service_bnActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanel6">

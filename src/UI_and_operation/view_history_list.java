@@ -5,12 +5,12 @@
  */
 package UI_and_operation;
 
+import UI_and_operation.UI_and_operation.dialog_choose_e_d_c;
+import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.set_admin_password;
-import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
-import static UI_and_operation.validate_value.money_S_B_R_validate;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -40,14 +40,10 @@ public class view_history_list extends javax.swing.JFrame
     private String dia_add_title;
     private String dia_edit_app_bar;
     private String dia_add_app_bar;
-private Boolean is_allow_validate;
-    private enum dialog_choose {
-        Edit, Delete, Close
-    };
-
-    public static enum dialog_type_for_db {
-        Edit, Add
-    };
+    private Boolean is_allow_validate;
+    private Boolean is_validate_ph;
+    private Boolean is_input_pass;
+ 
 
     public void set_history() {
 
@@ -61,12 +57,12 @@ private Boolean is_allow_validate;
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            pst = con.prepareStatement("SELECT "+ col_sql +" FROM "+ tb_sql +";");
+            pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + ";");
             rs = pst.executeQuery();
             if (rs.next()) {
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
-                pst = con.prepareStatement("SELECT "+ col_sql +" FROM "+ tb_sql +" ORDER BY "+ col_sql +";");
+                pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + " ORDER BY " + col_sql + ";");
                 rs = pst.executeQuery();
                 while (rs.next()) {
 
@@ -91,9 +87,10 @@ private Boolean is_allow_validate;
     /**
      * Creates new form to_pro_sender_ph_history
      */
-    public view_history_list(UI_and_operation ui_and_ope_obj, String col_sql, String tb_sql, 
-            String history_app_bar, String his_title, String dia_edit_title, String dia_add_title
-    , String dia_edit_app_bar, String dia_add_app_bar, Boolean is_allow_validate) {
+    public view_history_list(UI_and_operation ui_and_ope_obj, String col_sql, String tb_sql,
+            String history_app_bar, String his_title, String dia_edit_title, String dia_add_title,
+            String dia_edit_app_bar, String dia_add_app_bar, Boolean is_allow_validate,
+            Boolean is_validate_ph, Boolean is_input_pass) {
         this.col_sql = col_sql;
         this.tb_sql = tb_sql;
         this.dia_edit_title = dia_edit_title;
@@ -102,6 +99,8 @@ private Boolean is_allow_validate;
         this.dia_add_app_bar = dia_add_app_bar;
         this.ui_and_ope_obj = ui_and_ope_obj;
         this.is_allow_validate = is_allow_validate;
+        this.is_validate_ph = is_validate_ph;
+        this.is_input_pass = is_input_pass;
         initComponents();
 //        setTitle("To Province Sender Phone number");
         setTitle(history_app_bar);
@@ -144,7 +143,7 @@ private Boolean is_allow_validate;
 
         histroy_lb.setFont(new java.awt.Font("Khmer OS Battambang", 1, 40)); // NOI18N
         histroy_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        histroy_lb.setText("sender phone number");
+        histroy_lb.setText("x");
 
         history_tb.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         history_tb.setModel(new javax.swing.table.DefaultTableModel(
@@ -152,7 +151,7 @@ private Boolean is_allow_validate;
 
             },
             new String [] {
-                "phone number"
+                "History"
             }
         ) {
             Class[] types = new Class [] {
@@ -207,25 +206,34 @@ private Boolean is_allow_validate;
             String sender_ph_no = model.getValueAt(selectedIndex, 0).toString();
 
 //            JOptionPane.showMessageDialog(this, "You can not edit this table");
-            Object[] options = {dialog_choose.Edit, dialog_choose.Delete, dialog_choose.Close};
-            dialog_choose choose_from_dialog = dialog_choose.Close;
+            Object[] options = {dialog_choose_e_d_c.Edit, dialog_choose_e_d_c.Delete, dialog_choose_e_d_c.Close};
+            dialog_choose_e_d_c choose_from_dialog = dialog_choose_e_d_c.Close;
             int idx = JOptionPane.showOptionDialog(this, "what you choose?", null, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (idx != -1) {
-                choose_from_dialog = dialog_choose.values()[idx];
+                choose_from_dialog = dialog_choose_e_d_c.values()[idx];
             }
 
 //System.out.println("choose_from_dialog : " + choose_from_dialog);
             switch (choose_from_dialog) {
                 case Edit:
 //                    input_dialog in_di = new input_dialog(this, "Edit Phone number", "Save", dialog_type_for_db.Edit);
-                    input_dialog in_di = new input_dialog(this, dia_edit_app_bar, dia_edit_title, "Save", dialog_type_for_db.Edit, is_allow_validate);
+                    input_dialog in_di = new input_dialog(this, dia_edit_app_bar, dia_edit_title,
+                            "Save", dialog_type_for_db_e_a.Edit, is_allow_validate, is_validate_ph, is_input_pass);
                     in_di.set_default_edit_value(sender_ph_no);
                     in_di.setVisible(true);
                     this.setEnabled(false);
                     break;
                 case Delete:
-                    if (set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
 
+                    Boolean is_correct_pass = true;
+                    if (is_input_pass) {
+                        if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+                            is_correct_pass = false;
+                            JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+
+                    if (is_correct_pass) {
                         Connection con;
                         PreparedStatement pst;
                         try {
@@ -235,8 +243,8 @@ private Boolean is_allow_validate;
                                     getLocal_host_password()
                             );
                             //update sql query to access
-                            pst = con.prepareStatement("delete from "+ tb_sql +" "
-                                    + "where "+ col_sql +" = '" + sender_ph_no + "'");
+                            pst = con.prepareStatement("delete from " + tb_sql + " "
+                                    + "where " + col_sql + " = '" + sender_ph_no + "'");
                             pst.executeUpdate();
                         } catch (SQLException ex) {
                             Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,7 +258,8 @@ private Boolean is_allow_validate;
     }//GEN-LAST:event_history_tbMouseClicked
 
     private void history_add_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_history_add_bnActionPerformed
-        input_dialog in_di = new input_dialog(this, dia_add_app_bar, dia_add_title, "Add", dialog_type_for_db.Add, is_allow_validate);
+        input_dialog in_di = new input_dialog(this, dia_add_app_bar, dia_add_title,
+                "Add", dialog_type_for_db_e_a.Add, is_allow_validate, is_validate_ph, is_input_pass);
         in_di.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_history_add_bnActionPerformed

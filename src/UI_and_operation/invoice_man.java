@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
@@ -13,6 +14,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -60,7 +65,34 @@ public class invoice_man {
             System.err.println(ex);
         }
     }
+    
+    public static Boolean is_null_in_invoice_man_db(){
+        
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            try {
+                con = DriverManager.getConnection(
+                        getLocal_host(),
+                        getLocal_host_user_name(),
+                        getLocal_host_password()
+                );
+                pst = con.prepareStatement("SELECT id_invoice "
+                        + "FROM invoice_management_tb "
+                        + "WHERE id_acc = ?");
+                pst.setInt(1, get_acc_id());
+                rs = pst.executeQuery();
 
+                if (rs.next()) {
+                    return true;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+                    return false;
+    }
+    
     public String getRial() {
         return Rial;
     }
