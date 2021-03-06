@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  */
 public class to_province {
 
-    public static String get_service_from_db(String money) {
+    public static String get_service_from_db(String money, type_of_money money_type) {
 
         Connection con;
         PreparedStatement pst;
@@ -59,7 +59,8 @@ public class to_province {
             //query to access
             pst = con.prepareStatement("SELECT price "
                     + "FROM province_service "
-                    + "WHERE " + clear_cvot(money) + " "
+                    + "WHERE id_type_of_money = " + get_id_money_type_from_db(money_type) + " "
+                    + "AND " + clear_cvot(money) + " "
                     + "BETWEEN start_money AND end_money;");
             rs = pst.executeQuery();
 

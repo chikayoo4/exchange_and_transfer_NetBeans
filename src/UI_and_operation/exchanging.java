@@ -489,22 +489,6 @@ delete_inv_man(id, acc, pur);
                     //get date of exchanging money
                     String date_history = objSDF.format(rs.getTimestamp("invoice_date"));
 
-                    //set to v2 all data only 1 row
-//                    v3.add(date_history);
-//                    v3.add(String.valueOf(rs.getInt("id_invoice_man")));
-//                    v3.add(rs.getString("acc"));
-//                    v3.add(rs.getString("pur"));
-//                    v3.add(money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial()));
-//                    v3.add(money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar()));
-//                    v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart()));
-//                    v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBank_Bart()));
-//                    v3.add("គេ: "
-//                            + rs.getString("exchanging_money") + " " + cus_money_type + "  |  យើង: -"
-//                            + rs.getString("result_exchanging_money") + " " + owner_money_type + "  |  អត្រា: "
-//                            + rs.getString("exchange_rate") + "  |  "
-//                            + rs.getString("exchange_type"));
-
-
                     String exe_type = rs.getString("exchange_type");
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));

@@ -147,6 +147,27 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
+    public static int get_id_inv_by_id_inv_man_from_db(int id_inv_man) {
+        int id = -1;
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT id_invoice FROM invoice_management_tb WHERE id_invoice_man = " + id_inv_man + ";");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("id_invoice");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return id;
+    }
     public static int get_id_money_type_from_db(type_of_money money_type) {
         int id = -1;
         Connection con;
@@ -2093,7 +2114,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2)
                 .addContainerGap())
         );
 
@@ -3020,14 +3041,14 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1558, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 959, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -4083,6 +4104,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         //get id from to store inside variable id here
                         int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
                         String pur = model.getValueAt(selectedIndex, 3).toString();
+                        id = get_id_inv_by_id_inv_man_from_db(id);
                         if (pur.equals("exchanging")) {
                             print_reciept(get_path() + "\\reciept_for_print\\exchanging.jrxml", id);
                         }
@@ -4300,6 +4322,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
+        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
+                two_three_bart_money_rb.isSelected())) {
+            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
+        }
     }//GEN-LAST:event_two_three_dollar_money_rbActionPerformed
 
     private void two_three_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bn_finishActionPerformed
@@ -4376,6 +4403,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
+        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
+                two_three_bart_money_rb.isSelected())) {
+            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
+        }
     }//GEN-LAST:event_two_three_rial_money_rbActionPerformed
 
     private void two_three_bart_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbActionPerformed
@@ -4384,6 +4416,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
+        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
+                two_three_bart_money_rb.isSelected())) {
+            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
+        }
     }//GEN-LAST:event_two_three_bart_money_rbActionPerformed
 
     private void two_three_sender_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfCaretUpdate
@@ -4391,8 +4428,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit) {
-            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText()));
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
+        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
+                two_three_bart_money_rb.isSelected())) {
+            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_three_sender_money_tfCaretUpdate
 
@@ -4474,8 +4513,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit) {
-            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText()));
+        if ((!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit && 
+                ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
+                two_three_bart_money_rb.isSelected()))) {
+            two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_one_edit_bnActionPerformed
 

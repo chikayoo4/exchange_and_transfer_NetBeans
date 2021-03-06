@@ -77,16 +77,16 @@ public class from_province {
                     //get date of exchanging money
                     String date_history = objSDF.format(rs.getTimestamp("invoice_man_date"));
 
-                    String money_type = convert_to_short_money_type(rs.getString("type_of_money"));
+                    String money_type = rs.getString("type_of_money");
                     //set to v2 all data only 1 row
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
                     v3.add(rs.getString("pur"));
-                    v3.add(money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial()));
-                    v3.add(money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar()));
-                    v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart()));
-                    v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBank_Bart()));
+                    v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial()) : "");
+                    v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar()) : "");
+                    v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart()) : "");
+                    v3.add("");
                     v3.add("លុយទទូល: -" + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
                             + " | លុយទទូល: -" + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
                             + " | លុយសរុប: " + rs.getString("pro_name")
@@ -174,6 +174,9 @@ public class from_province {
             two_four_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_from_pro,
                     String.valueOf((Double.parseDouble(clear_cvot(two_four_sender_money_tf.getText()))
                             - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText()))) / 2)));
+        }
+        else {
+            two_four_balance_money_tf.setText("");
         }
     }
 }
