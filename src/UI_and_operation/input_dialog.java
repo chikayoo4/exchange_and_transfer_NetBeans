@@ -6,6 +6,7 @@
 package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
+import static UI_and_operation.UI_and_operation.is_has_history_list_db;
 import static UI_and_operation.UI_and_operation.set_admin_password;
 import static UI_and_operation.UI_and_operation.set_history_list_db;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static UI_and_operation.validate_value.validate_keyTyped_ph_num;
+import static UI_and_operation.UI_and_operation.set_cb;
 
 /**
  *
@@ -38,6 +40,16 @@ public class input_dialog extends javax.swing.JFrame
     private Boolean is_allow_validate_input;
     private Boolean is_validate_ph;
     private Boolean is_input_pass;
+    private UI_and_operation ui_and_ope_obj;
+
+    private Boolean input_pass_dia_for_to_pro() {
+        Boolean is_correct_pass = true;
+        if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+            is_correct_pass = false;
+            JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
+        }
+        return is_correct_pass;
+    }
 
     public void set_default_edit_value(String default_edit_value) {
         this.default_edit_value = default_edit_value;
@@ -49,7 +61,8 @@ public class input_dialog extends javax.swing.JFrame
      */
     public input_dialog(view_history_list view_his_obj, String dia_app_bar, String dialog_title,
             String dialog_bn_name, dialog_type_for_db_e_a dialog_type, Boolean is_allow_validate,
-            Boolean is_validate_ph, Boolean is_input_pass) {
+            Boolean is_validate_ph, Boolean is_input_pass, UI_and_operation ui_and_ope_obj) {
+        this.ui_and_ope_obj = ui_and_ope_obj;
         this.view_his_obj = view_his_obj;
         this.dialog_type = dialog_type;
         this.is_allow_validate_input = is_allow_validate;
@@ -156,7 +169,6 @@ public class input_dialog extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void agree_bn_fn() {
-        view_his_obj.setEnabled(true);
         Connection con;
         PreparedStatement pst;
         try {
@@ -165,50 +177,61 @@ public class input_dialog extends javax.swing.JFrame
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-                    Boolean is_correct_pass = true;
-                    if (is_input_pass) {
-                        if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
-                            is_correct_pass = false;
-                            JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
+            switch (dialog_type) {
+                case Add:
+                    if (is_has_history_list_db(input_tf.getText().trim(), col_sql, tb_sql)) {
+                        JOptionPane.showMessageDialog(this, "it is already exsit", "Alert", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        if (is_input_pass) {
+                            if (input_pass_dia_for_to_pro()) {
+                                set_history_list_db(input_tf.getText().trim(), col_sql, tb_sql);
+                            }
+                        } else {
+                            set_history_list_db(input_tf.getText().trim(), col_sql, tb_sql);
                         }
-                    }
-
-            if (is_correct_pass) {
-                switch (dialog_type) {
-                    case Add:
-                        int is_has = set_history_list_db(input_tf.getText().trim(), col_sql, tb_sql);
-                        if(is_has == 0){
-                            JOptionPane.showMessageDialog(this, "it is already exsit", "Alert", JOptionPane.WARNING_MESSAGE);
-                        }
-//                        pst = con.prepareStatement("INSERT INTO " + tb_sql + " (" + col_sql + ") "
-//                                + "VALUES ('" + input_tf.getText().trim() + "');");
-//                        pst.executeUpdate();
+                        set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                        set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
                         view_his_obj.set_history();
-                        break;
-                    case Edit:
-//                            System.out.println("input_tf.getText() : " + input_tf.getText());
+                        view_his_obj.setEnabled(true);
+                        this.setVisible(false);
+                        this.dispose();
+                    }
+                    break;
+                case Edit:
+
+                    if (is_input_pass) {
+                        if (input_pass_dia_for_to_pro()) {
+                            pst = con.prepareStatement("UPDATE " + tb_sql + " "
+                                    + "SET " + col_sql + " = '" + input_tf.getText().trim() + "' "
+                                    + "where " + col_sql + " = '" + default_edit_value + "'");
+                            pst.executeUpdate();
+                        }
+                    } else {
                         pst = con.prepareStatement("UPDATE " + tb_sql + " "
                                 + "SET " + col_sql + " = '" + input_tf.getText().trim() + "' "
                                 + "where " + col_sql + " = '" + default_edit_value + "'");
                         pst.executeUpdate();
-                        view_his_obj.set_history();
-                        break;
-                    default:
-                        System.out.println("Eorror");
-                }
+                    }
+                        set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                    view_his_obj.set_history();
+                        view_his_obj.setEnabled(true);
+                    this.setVisible(false);
+                    this.dispose();
+                    break;
+                default:
+                    System.out.println("Eorror");
             }
         } catch (SQLException ex) {
             Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex);
         }
-        this.setVisible(false);
-        this.dispose();
-
     }
+
     private void agree_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agree_bnActionPerformed
         if (!input_tf.getText().isEmpty()) {
             if (input_tf.getText().length() >= 9 || !is_validate_ph) {
                 agree_bn_fn();
+                
             }
         }
     }//GEN-LAST:event_agree_bnActionPerformed

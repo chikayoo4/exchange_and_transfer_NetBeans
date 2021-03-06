@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
 public class view_history_list extends javax.swing.JFrame
         implements WindowListener {
 
-    UI_and_operation ui_and_ope_obj;
+    private UI_and_operation ui_and_ope_obj;
     public static String col_sql;
     public static String tb_sql;
     private String dia_edit_title;
@@ -218,7 +218,7 @@ public class view_history_list extends javax.swing.JFrame
                 case Edit:
 //                    input_dialog in_di = new input_dialog(this, "Edit Phone number", "Save", dialog_type_for_db.Edit);
                     input_dialog in_di = new input_dialog(this, dia_edit_app_bar, dia_edit_title,
-                            "Save", dialog_type_for_db_e_a.Edit, is_allow_validate, is_validate_ph, is_input_pass);
+                            "Save", dialog_type_for_db_e_a.Edit, is_allow_validate, is_validate_ph, is_input_pass, ui_and_ope_obj);
                     in_di.set_default_edit_value(sender_ph_no);
                     in_di.setVisible(true);
                     this.setEnabled(false);
@@ -259,7 +259,7 @@ public class view_history_list extends javax.swing.JFrame
 
     private void history_add_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_history_add_bnActionPerformed
         input_dialog in_di = new input_dialog(this, dia_add_app_bar, dia_add_title,
-                "Add", dialog_type_for_db_e_a.Add, is_allow_validate, is_validate_ph, is_input_pass);
+                "Add", dialog_type_for_db_e_a.Add, is_allow_validate, is_validate_ph, is_input_pass, ui_and_ope_obj);
         in_di.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_history_add_bnActionPerformed

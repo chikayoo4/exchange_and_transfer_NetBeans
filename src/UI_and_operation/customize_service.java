@@ -8,6 +8,7 @@ package UI_and_operation;
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.get_id_money_type_from_db;
 import static UI_and_operation.UI_and_operation.get_id_province_name_from_db;
+import static UI_and_operation.UI_and_operation.get_id_province_name_history_from_db;
 import static UI_and_operation.UI_and_operation.set_admin_password;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
@@ -25,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static UI_and_operation.UI_and_operation.set_cb;
 
 /**
  *
@@ -34,7 +36,7 @@ public class customize_service extends javax.swing.JFrame
         implements WindowListener {
 
     type_of_money selected_money_type_pro_ser;
-    set_service set_service_obj;
+    view_service set_service_obj;
     dialog_type_for_db_e_a type_input;
 
     public void set_default_data(String set_service_start_money, String set_service_end_money,
@@ -68,8 +70,8 @@ public class customize_service extends javax.swing.JFrame
         initComponents();
     }
 
-    private void short_constructor(set_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input){
-        
+    private void short_constructor(view_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input) {
+
         this.set_service_obj = set_service_obj;
         this.type_input = type_input;
         initComponents();
@@ -80,6 +82,22 @@ public class customize_service extends javax.swing.JFrame
         set_service_title_lb.setText(title);
         set_service_agree_bn.setText(title_bn);
         set_service_id_lb.setText("new id");
+        set_cb(set_service_pro_name_cb, "transfer_province", "province_name_history_tb");
+    }
+
+//for add
+    public customize_service(view_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input) {
+        short_constructor(set_service_obj, title, app_bar, title_bn, type_input);
+    }
+
+    //for edit
+    public customize_service(view_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input, String id) {
+        short_constructor(set_service_obj, title, app_bar, title_bn, type_input);
+        set_service_id_lb.setText(id);
+    }
+
+    public static Boolean is_has_service_db(String start_m, String end_m, String price, int id_money_type, int id_pro_name) {
+
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -89,27 +107,26 @@ public class customize_service extends javax.swing.JFrame
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            //query to access
-            pst = con.prepareStatement("SELECT transfer_province FROM province_name_history_tb;");
+            pst = con.prepareStatement("SELECT id_pro_service "
+                    + "FROM province_service "
+                    + "WHERE start_money = ? "
+                    + "AND end_money = ? "
+                    + "AND price = ? "
+                    + "AND id_type_of_money = ? "
+                    + "AND id_pro_name = ?;");
+            pst.setString(1, start_m);
+            pst.setString(2, end_m);
+            pst.setString(3, price);
+            pst.setInt(4, id_money_type);
+            pst.setInt(5, id_pro_name);
             rs = pst.executeQuery();
-
-            while (rs.next()) {
-                set_service_pro_name_cb.addItem(rs.getString("transfer_province"));
+            if (rs.next()) {
+                return true;
             }
-//        set_service_pro_name_cb.addItem();
         } catch (SQLException ex) {
-            System.err.println(ex);
+            System.err.println("error: two_three_bn_finish\n" + ex);
         }
-    }
-    //for add
-    public customize_service(set_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input) {
-        short_constructor( set_service_obj,  title,  app_bar,  title_bn,  type_input);
-    }
-
-    //for edit
-    public customize_service(set_service set_service_obj, String title, String app_bar, String title_bn, dialog_type_for_db_e_a type_input, String id) {
-        short_constructor( set_service_obj,  title,  app_bar,  title_bn,  type_input);
-        set_service_id_lb.setText(id);
+        return false;
     }
 
     /**
@@ -386,54 +403,65 @@ public class customize_service extends javax.swing.JFrame
         if ((!set_service_start_money_tf.getText().isEmpty() && !set_service_end_money_tf.getText().isEmpty() && !set_service_price_tf.getText().isEmpty()
                 && !set_service_pro_name_cb.getSelectedItem().equals("none")) && (pro_service_rial_rb.isSelected()
                 || pro_service_dollar_rb.isSelected() || pro_service_bart_rb.isSelected())) {
-            if (set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
-                Connection con;
-                PreparedStatement pst;
-                try {
-                    con = DriverManager.getConnection(
-                            getLocal_host(),
-                            getLocal_host_user_name(),
-                            getLocal_host_password()
-                    );
-                    switch (type_input) {
-                        case Add:
-                            pst = con.prepareStatement("INSERT INTO province_service (start_money, end_money, price, id_type_of_money, id_province) "
-                                    + "VALUES (?, ?, ?, ?, ?);");
-                            pst.setString(1, clear_cvot(set_service_start_money_tf.getText()));
-                            pst.setString(2, clear_cvot(set_service_end_money_tf.getText()));
-                            pst.setString(3, clear_cvot(set_service_price_tf.getText()));
-                            pst.setInt(4, get_id_money_type_from_db(selected_money_type_pro_ser));
-                            pst.setInt(5, get_id_province_name_from_db(set_service_pro_name_cb.getSelectedItem().toString()));
-                            pst.executeUpdate();
-                            break;
-                        case Edit:
-                            pst = con.prepareStatement("UPDATE province_service "
-                                    + "SET start_money = ?, "
-                                    + "end_money = ?, "
-                                    + "price = ?, "
-                                    + "id_type_of_money = ?, "
-                                    + "id_province = ? "
-                                    + "WHERE id_pro_service = ?;");
-                            pst.setString(1, clear_cvot(set_service_start_money_tf.getText()));
-                            pst.setString(2, clear_cvot(set_service_end_money_tf.getText()));
-                            pst.setString(3, clear_cvot(set_service_price_tf.getText()));
-                            pst.setInt(4, get_id_money_type_from_db(selected_money_type_pro_ser));
-                            pst.setInt(5, get_id_province_name_from_db(set_service_pro_name_cb.getSelectedItem().toString()));
-                            pst.setInt(6, Integer.parseInt(set_service_id_lb.getText()));
-                            pst.executeUpdate();
-                            break;
-                        default:
-                            System.out.println("errorrrrrrr");
+
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            try {
+                con = DriverManager.getConnection(
+                        getLocal_host(),
+                        getLocal_host_user_name(),
+                        getLocal_host_password()
+                );
+
+                if (!is_has_service_db(clear_cvot(set_service_start_money_tf.getText()), 
+                        clear_cvot(set_service_end_money_tf.getText()), 
+                        clear_cvot(set_service_price_tf.getText()),
+                        get_id_money_type_from_db(selected_money_type_pro_ser),
+                        get_id_province_name_history_from_db(set_service_pro_name_cb.getSelectedItem().toString()))) {
+                    if (set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+                        switch (type_input) {
+                            case Add:
+                                pst = con.prepareStatement("INSERT INTO province_service (start_money, end_money, price, id_type_of_money, id_pro_name) "
+                                        + "VALUES (?, ?, ?, ?, ?);");
+                                pst.setString(1, clear_cvot(set_service_start_money_tf.getText()));
+                                pst.setString(2, clear_cvot(set_service_end_money_tf.getText()));
+                                pst.setString(3, clear_cvot(set_service_price_tf.getText()));
+                                pst.setInt(4, get_id_money_type_from_db(selected_money_type_pro_ser));
+                                pst.setInt(5, get_id_province_name_history_from_db(set_service_pro_name_cb.getSelectedItem().toString()));
+                                pst.executeUpdate();
+                                break;
+                            case Edit:
+                                pst = con.prepareStatement("UPDATE province_service "
+                                        + "SET start_money = ?, "
+                                        + "end_money = ?, "
+                                        + "price = ?, "
+                                        + "id_type_of_money = ?, "
+                                        + "id_pro_name = ? "
+                                        + "WHERE id_pro_service = ?;");
+                                pst.setString(1, clear_cvot(set_service_start_money_tf.getText()));
+                                pst.setString(2, clear_cvot(set_service_end_money_tf.getText()));
+                                pst.setString(3, clear_cvot(set_service_price_tf.getText()));
+                                pst.setInt(4, get_id_money_type_from_db(selected_money_type_pro_ser));
+                                pst.setInt(5, get_id_province_name_history_from_db(set_service_pro_name_cb.getSelectedItem().toString()));
+                                pst.setInt(6, Integer.parseInt(set_service_id_lb.getText()));
+                                pst.executeUpdate();
+                                break;
+                            default:
+                                System.out.println("errorrrrrrr");
+                        }
+                        set_service_obj.set_ser_to_tb();
+                        set_service_obj.setEnabled(true);
+                        this.setVisible(false);
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
                     }
-                } catch (SQLException ex) {
-                    System.err.println(ex);
+                } else {
+                    JOptionPane.showMessageDialog(this, "it is already exsit", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
-                set_service_obj.set_ser_to_tb();
-                set_service_obj.setEnabled(true);
-                this.setVisible(false);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
+            } catch (SQLException ex) {
+                System.err.println(ex);
             }
         }
     }//GEN-LAST:event_set_service_agree_bnActionPerformed

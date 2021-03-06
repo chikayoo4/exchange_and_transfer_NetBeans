@@ -23,16 +23,6 @@ CREATE TABLE exc_rate_tb (
     bart_to_rial VARCHAR(40) NOT NULL,
     rial_to_bart VARCHAR(40) NOT NULL
 );
-CREATE TABLE province_service (
-    id_pro_service int IDENTITY(1,1) PRIMARY KEY,
-    start_money VARCHAR(40) NOT NULL,
-	end_money VARCHAR(40) NOT NULL,
-	price VARCHAR(40) NOT NULL,
-    id_province INTEGER NOT NULL,
-	CONSTRAINT FK_province_service_id_province FOREIGN KEY (id_province) REFERENCES province_name_tb (id_province),
-    id_type_of_money INTEGER NOT NULL,
-	CONSTRAINT FK_province_service_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
-);
 CREATE TABLE exc_invoice_tb (
     id_invoice int IDENTITY(1,1) PRIMARY KEY,
     invoice_date DATETIME NOT NULL,
@@ -102,6 +92,7 @@ CREATE TABLE province_name_tb (
    transfer_province VARCHAR(50) NOT NULL
 );
 CREATE TABLE province_name_history_tb (
+    id_pro_name int IDENTITY(1,1) PRIMARY KEY,
    transfer_province VARCHAR(50) NOT NULL
 );
 CREATE TABLE to_pro_sender_ph_no_history_tb (
@@ -109,6 +100,16 @@ CREATE TABLE to_pro_sender_ph_no_history_tb (
 );
 CREATE TABLE to_pro_receiver_ph_no_history_tb (
    receiver_phone_no VARCHAR(50) NOT NULL
+);
+CREATE TABLE province_service (
+    id_pro_service int IDENTITY(1,1) PRIMARY KEY,
+    start_money VARCHAR(40) NOT NULL,
+	end_money VARCHAR(40) NOT NULL,
+	price VARCHAR(40) NOT NULL,
+    id_pro_name INTEGER NOT NULL,
+	CONSTRAINT FK_province_service_id_pro_name FOREIGN KEY (id_pro_name) REFERENCES province_name_history_tb (id_pro_name),
+    id_type_of_money INTEGER NOT NULL,
+	CONSTRAINT FK_province_service_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
 );
 CREATE TABLE to_province_invoice_tb (
     id_invoice int IDENTITY(1,1) PRIMARY KEY,
@@ -126,6 +127,24 @@ CREATE TABLE to_province_invoice_tb (
 	CONSTRAINT FK_to_province_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
     id_pur INTEGER NOT NULL,
 	CONSTRAINT FK_to_province_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE from_pro_receiver_ph_no_history_tb (
+   receiver_phone_no VARCHAR(50) NOT NULL
+);
+CREATE TABLE from_province_invoice_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    balance_money VARCHAR(40) NOT NULL,
+    transfering_money VARCHAR(40) NOT NULL,
+    total_money VARCHAR(40) NOT NULL,
+    receiver_phone_no VARCHAR(20) NOT NULL,
+    id_type_of_money INTEGER NOT NULL,
+	CONSTRAINT FK_from_province_id_type_of_money FOREIGN KEY (id_type_of_money) REFERENCES money_type_tb (id_type_of_money),
+    id_province INTEGER NOT NULL,
+	CONSTRAINT FK_from_province_id_province FOREIGN KEY (id_province) REFERENCES province_name_tb (id_province),
+    id_acc INTEGER NOT NULL,
+	CONSTRAINT FK_from_province_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+	CONSTRAINT FK_from_province_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
 );
 CREATE TABLE invoice_management_tb (
     id_invoice_man int IDENTITY(1,1) PRIMARY KEY,

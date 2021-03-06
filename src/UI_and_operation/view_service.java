@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Chhann_chikay
  */
-public class set_service extends javax.swing.JFrame
+public class view_service extends javax.swing.JFrame
         implements WindowListener {
 
     type_of_money selected_money_type_pro_ser;
@@ -55,7 +55,7 @@ public class set_service extends javax.swing.JFrame
             //query to access
             pst = con.prepareStatement("SELECT id_pro_service, start_money, end_money, price, "
                     + "(SELECT type_of_money FROM money_type_tb WHERE money_type_tb.id_type_of_money = province_service.id_type_of_money) AS money_type, "
-                    + "(SELECT transfer_province FROM province_name_tb WHERE province_name_tb.id_province = province_service.id_province) AS name "
+                    + "(SELECT transfer_province FROM province_name_history_tb WHERE province_name_history_tb.id_pro_name = province_service.id_pro_name) AS name "
                     + "FROM province_service;");
             rs = pst.executeQuery();
 
@@ -81,7 +81,7 @@ public class set_service extends javax.swing.JFrame
     /**
      * Creates new form set_service
      */
-    public set_service(UI_and_operation ui_and_ope_obj) {
+    public view_service(UI_and_operation ui_and_ope_obj) {
         initComponents();
         this.ui_and_ope_obj = ui_and_ope_obj;
         setTitle("set service province");
@@ -93,7 +93,7 @@ public class set_service extends javax.swing.JFrame
         set_service_title_lb.setText("Province service");
     }
 
-    public set_service() {
+    public view_service() {
         initComponents();
     }
 
@@ -279,20 +279,21 @@ public class set_service extends javax.swing.JFrame
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(set_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(view_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(set_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(view_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(set_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(view_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(set_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(view_service.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new set_service().setVisible(true);
+                new view_service().setVisible(true);
             }
         });
     }
