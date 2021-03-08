@@ -46,30 +46,15 @@ import java.util.logging.Logger;
 public class to_province {
 
     public static String get_service_from_db(String money, type_of_money money_type) {
-
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-            //query to access
-            pst = con.prepareStatement("SELECT price "
-                    + "FROM province_service "
-                    + "WHERE id_type_of_money = " + get_id_money_type_from_db(money_type) + " "
-                    + "AND " + clear_cvot(money) + " "
-                    + "BETWEEN start_money AND end_money;");
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                return rs.getString("price");
-            }
-//        set_service_pro_name_cb.addItem();
-        } catch (SQLException ex) {
-            System.err.println("error between \n" + ex);
+        switch (money_type) {
+            case Rial:
+                
+                break;
+            case Dollar:
+                
+                return String.valueOf(Double.parseDouble(money)  / 1000);
+            default:
+                System.out.println("error");
         }
         return "";
     }

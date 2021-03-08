@@ -14,6 +14,37 @@ import com.sun.glass.events.KeyEvent;
  */
 public class validate_value {
 
+    //500 / 1000 = 0.5 => 1
+    //1000.6 / 1000 = 1.0006 => 2
+    //1000 / 1000 = 1.0 => 1
+    //3000 / 1000 = 3.0 => 3
+    public static String service_validate( String num_str, type_of_money money_type) {
+        try {
+            num_str = clear_cvot(num_str);
+            Double num = 0.0;
+            int ser = 0;
+            switch (money_type) {
+                case Rial:
+                    num = Double.parseDouble(num_str) / 4000000;
+                    ser = (int) Math.ceil(num);
+                    return String.valueOf(ser * 4000);
+                case Dollar:
+                    num = Double.parseDouble(num_str) / 1000;
+                    ser = (int) Math.ceil(num);
+                    return String.valueOf(ser);
+                case Bart:
+                    num = Double.parseDouble(num_str) / 30000;
+                    ser = (int) Math.ceil(num);
+                    return String.valueOf(ser * 30);
+                default:
+                    System.out.println("error");
+            }
+        } catch (Exception e) {
+            return "";
+        }
+        return "";
+    }
+
     //dollar 1.0 -> 1
     //dollar 1.055 -> 1.05
     //dollar 1.054 -> 1.05
@@ -199,7 +230,7 @@ public class validate_value {
     }
 
     public static void validate_KeyTyped_money(java.awt.event.KeyEvent evt, javax.swing.JTextField input_tf) {
-      
+
         char c = evt.getKeyChar();
         if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(input_tf.getText())))) {
             evt.consume();
