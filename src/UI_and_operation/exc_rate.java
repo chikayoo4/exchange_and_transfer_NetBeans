@@ -5,44 +5,217 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.current_date;
+import static UI_and_operation.UI_and_operation.get_path;
 import UI_and_operation.UI_and_operation.type_of_exchange;
+import static UI_and_operation.connection_to_ms_sql.getLocal_host;
+import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
+import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
 
 /**
  *
  * @author Chhann_chikay
  */
 public class exc_rate {
+
     private String S_to_R_one;
     private String S_to_R_two;
     private String S_to_R_three;
     private String S_to_R_four;
-    
-    
+
     private String R_to_S_one;
     private String R_to_S_two;
     private String R_to_S_three;
     private String R_to_S_four;
-    
+
     private String S_to_B_one;
     private String S_to_B_two;
     private String S_to_B_three;
     private String S_to_B_four;
-    
+
     private String B_to_S_one;
     private String B_to_S_two;
     private String B_to_S_three;
     private String B_to_S_four;
-    
+
     private String B_to_R_one;
     private String B_to_R_two;
     private String B_to_R_three;
     private String B_to_R_four;
-    
+
     private String R_to_B_one;
     private String R_to_B_two;
     private String R_to_B_three;
     private String R_to_B_four;
-    public void set_each_rate(type_of_exchange type, String rate){
+
+    private String S_to_R;
+    private String R_to_S;
+    private String S_to_B;
+    private String B_to_S;
+    private String B_to_R;
+    private String R_to_B;
+
+    public static void end_task_ppt() {
+        try {
+            Runtime.getRuntime().exec("taskkill /f /im POWERPNT.EXE");
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void open_exc_rate_ppt() {
+        try {
+            Desktop.getDesktop().open(new File(get_path() + "\\54 exchange.pptx"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void get_top_1_rate_from_db() {
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        //        System.out.println(five_local_host_tf.getText());
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            //write sql query to access
+            pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
+                    + "bart_to_dollar, bart_to_rial, rial_to_bart "
+                    + "FROM exc_rate_tb ORDER BY date_rate DESC;");
+
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                S_to_R = rs.getString("dollar_to_rial");
+                R_to_S = rs.getString("rial_to_dollar");
+                S_to_B = rs.getString("dollar_to_bart");
+                B_to_S = rs.getString("bart_to_dollar");
+                B_to_R = rs.getString("bart_to_rial");
+                R_to_B = rs.getString("rial_to_bart");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public static void set_rate_to_excel(String S_to_R, String R_to_S, String S_to_B,
+            String B_to_S, String B_to_R, String R_to_B) {
+
+        Workbook wb;
+        Sheet sh;
+        FileInputStream fis;
+        FileOutputStream fos;
+        Row row;
+        try {
+            fis = new FileInputStream("./set_exching_rate.xlsx");
+            wb = WorkbookFactory.create(fis);
+            sh = wb.getSheet("rate");
+
+            // Create a new font and alter it.
+            Font font = wb.createFont();
+//            font.setFontHeightInPoints((short) 24);
+//            font.setFontName("Courier New");
+            font.setItalic(true);
+//            font.setStrikeout(true);
+            HSSFWorkbook hwb = new HSSFWorkbook();
+            HSSFPalette palette = hwb.getCustomPalette();
+//            HSSFColor myColor = palette.findSimilarColor(44, 19, 63);
+            HSSFColor myColor = palette.findSimilarColor(112, 40, 120);
+// get the palette index of that color 
+            short palIndex = myColor.getIndex();
+            font.setColor(palIndex);
+            CellStyle style = wb.createCellStyle();
+            style.setFont(font);
+
+            String[] SSBxRBR = new String[3];
+            SSBxRBR[0] = S_to_R;
+            SSBxRBR[1] = S_to_B;
+            SSBxRBR[2] = B_to_R;
+
+            String[] RBRxSSB = new String[3];
+            RBRxSSB[0] = R_to_S;
+            RBRxSSB[1] = B_to_S;
+            RBRxSSB[2] = R_to_B;
+
+            for (int i = 0; i < 3; i++) {
+
+                row = sh.createRow(i);
+                for (int j = 0; j < 3; j++) {
+                    Cell cell = row.createCell(j);
+                    if (cell.getColumnIndex() == 0) {
+                        cell.setCellValue(SSBxRBR[i]);
+                        cell.setCellStyle(style);
+
+                    }
+                    if (cell.getColumnIndex() == 1) {
+                        cell.setCellValue(RBRxSSB[i]);
+                        cell.setCellStyle(style);
+                    }
+                }
+            }
+
+            fos = new FileOutputStream("./set_exching_rate.xlsx");
+            wb.write(fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public static void set_rate_to_db(String S_to_R, String R_to_S, String S_to_B,
+            String B_to_S, String B_to_R, String R_to_B) {
+
+        Connection con;
+        PreparedStatement pst;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            //write sql query to access
+            pst = con.prepareStatement("insert into exc_rate_tb "
+                    + "(date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) "
+                    + "values( ?, ?, ?, ?, ?, ?, ?);");
+
+            //set value to ?
+            pst.setTimestamp(1, current_date());
+            pst.setString(2, S_to_R);
+            pst.setString(3, R_to_S);
+            pst.setString(4, S_to_B);
+            pst.setString(5, B_to_S);
+            pst.setString(6, B_to_R);
+            pst.setString(7, R_to_B);
+            pst.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public void set_each_rate(type_of_exchange type, String rate) {
         switch (type) {
             case S_to_R:
                 S_to_R_one = rate.substring(0, 1);
@@ -83,6 +256,30 @@ public class exc_rate {
             default:
                 System.out.println("errorrrrr");
         }
+    }
+
+    public String getS_to_R() {
+        return S_to_R;
+    }
+
+    public String getR_to_S() {
+        return R_to_S;
+    }
+
+    public String getS_to_B() {
+        return S_to_B;
+    }
+
+    public String getB_to_S() {
+        return B_to_S;
+    }
+
+    public String getB_to_R() {
+        return B_to_R;
+    }
+
+    public String getR_to_B() {
+        return R_to_B;
     }
 
     public String getS_to_R_one() {

@@ -9,6 +9,10 @@ import static UI_and_operation.account.*;
 import static UI_and_operation.add_total_money.detele_add_total_to_db;
 import static UI_and_operation.add_total_money.get_add_total_db_set_to_tb;
 import static UI_and_operation.connection_to_ms_sql.*;
+import static UI_and_operation.exc_rate.end_task_ppt;
+import static UI_and_operation.exc_rate.open_exc_rate_ppt;
+import static UI_and_operation.exc_rate.set_rate_to_db;
+import static UI_and_operation.exc_rate.set_rate_to_excel;
 import static UI_and_operation.exchanging.R_B_validation;
 import static UI_and_operation.exchanging.S_B_validation;
 import static UI_and_operation.exchanging.S_R_validation;
@@ -26,12 +30,10 @@ import static UI_and_operation.validate_value.*;
 import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,21 +43,17 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
-import static UI_and_operation.invoice_man.update_inv_man_money;
 import static UI_and_operation.to_province.detele_to_pro_to_db;
 import static UI_and_operation.to_province.get_to_pro_db_set_to_tb;
 import static UI_and_operation.to_province.set_to_pro_to_db;
+
+import java.awt.Desktop;
 
 /**
  *
@@ -88,6 +86,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     public static enum dialog_type_for_db_e_a {
         Edit, Add
     };
+    
     public static String set_admin_password = "";
     private Boolean two_one_is_off_edit = true;
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
@@ -97,7 +96,8 @@ public class UI_and_operation extends javax.swing.JFrame {
     type_of_money selected_money_type_from_pro;
 
     //------------------------------------------------------my function------------------------------------------------------
-    public javax.swing.JComboBox<String> get_to_pro_cb_from_ui_oper() {
+    
+  public javax.swing.JComboBox<String> get_to_pro_cb_from_ui_oper() {
         return two_one_pro_name_cb;
     }
 
@@ -106,7 +106,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     }
 
     private void remove_all_in_list(javax.swing.JList<String> list) {
-
         DefaultListModel mode = new DefaultListModel();
         list.setModel(mode);
         mode.removeAllElements();
@@ -168,6 +167,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
         return id;
     }
+
     public static int get_id_money_type_from_db(type_of_money money_type) {
         int id = -1;
         Connection con;
@@ -522,7 +522,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
         return path;
     }
-
+    
     //-----------------------------------------------------class call--------------------------------------------------
     exchange_rate_show exe_rate_show = new exchange_rate_show();
 
@@ -536,6 +536,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        this.setResizable(true);
 //        this.setVisible(true);
         initComponents();
+
         Toolkit a = Toolkit.getDefaultToolkit();
         int xSize = (int) a.getScreenSize().getWidth();
         int ySize = (int) a.getScreenSize().getHeight();
@@ -649,10 +650,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         four_R_to_B_two_tf.setText(exc_ra.getR_to_B_two());
         four_R_to_B_three_tf.setText(exc_ra.getR_to_B_three());
         four_R_to_B_four_tf.setText(exc_ra.getR_to_B_four());
-//        System.out.println(exc_ra.getS_to_R_one()+ "  " + exc_ra.getS_to_R_two() + "  " + exc_ra.getS_to_R_three() + "  " + exc_ra.getS_to_R_four());
-
-        exe_rate_show.set_rate(S_to_R, R_to_S, S_to_B, B_to_S, B_to_R, R_to_B);
-        exe_rate_show.setVisible(true);
+        
+//        exe_rate_show.set_rate(S_to_R, R_to_S, S_to_B, B_to_S, B_to_R, R_to_B);
+//        exe_rate_show.setVisible(true);
 
         //set name of the window next to logo
         setTitle("Exchange and Transfer money");
@@ -3600,93 +3600,56 @@ public class UI_and_operation extends javax.swing.JFrame {
         four_R_to_B_two_tf.setText((!four_R_to_B_two_tf.getText().isEmpty() ? four_R_to_B_two_tf.getText() : "0"));
         four_R_to_B_three_tf.setText((!four_R_to_B_three_tf.getText().isEmpty() ? four_R_to_B_three_tf.getText() : "0"));
         four_R_to_B_four_tf.setText((!four_R_to_B_four_tf.getText().isEmpty() ? four_R_to_B_four_tf.getText() : "0"));
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        //        System.out.println(five_local_host_tf.getText());
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-
-            String S_to_R = "";
-            String R_to_S = "";
-            String S_to_B = "";
-            String B_to_S = "";
-            String B_to_R = "";
-            String R_to_B = "";
-            //write sql query to access
-            pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
-                    + "bart_to_dollar, bart_to_rial, rial_to_bart "
-                    + "FROM exc_rate_tb ORDER BY date_rate DESC;");
-
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                S_to_R = rs.getString("dollar_to_rial");
-                R_to_S = rs.getString("rial_to_dollar");
-                S_to_B = rs.getString("dollar_to_bart");
-                B_to_S = rs.getString("bart_to_dollar");
-                B_to_R = rs.getString("bart_to_rial");
-                R_to_B = rs.getString("rial_to_bart");
-            }
-
-            String S_to_R_tf = S_R_validation(Double.parseDouble(four_S_to_R_one_tf.getText()
+            
+            exc_rate exc_rate_obj = new exc_rate();
+            exc_rate_obj.get_top_1_rate_from_db();
+            
+            String S_to_R = S_R_validation(Double.parseDouble(four_S_to_R_one_tf.getText()
                     + four_S_to_R_two_tf.getText()
                     + four_S_to_R_three_tf.getText()
                     + four_S_to_R_four_tf.getText()));
-            String R_to_S_tf = S_R_validation(Double.parseDouble(four_R_to_S_one_tf.getText()
+            String R_to_S = S_R_validation(Double.parseDouble(four_R_to_S_one_tf.getText()
                     + four_R_to_S_two_tf.getText()
                     + four_R_to_S_three_tf.getText()
                     + four_R_to_S_four_tf.getText()));
-            String S_to_B_tf = S_B_validation(Double.parseDouble(four_S_to_B_one_tf.getText() + four_S_to_B_two_tf.getText()
+            String S_to_B = S_B_validation(Double.parseDouble(four_S_to_B_one_tf.getText() + four_S_to_B_two_tf.getText()
                     + "."
                     + four_S_to_B_three_tf.getText()
                     + four_S_to_B_four_tf.getText()));
-            String B_to_S_tf = S_B_validation(Double.parseDouble(four_B_to_S_one_tf.getText()
+            String B_to_S = S_B_validation(Double.parseDouble(four_B_to_S_one_tf.getText()
                     + four_B_to_S_two_tf.getText()
                     + "."
                     + four_B_to_S_three_tf.getText()
                     + four_B_to_S_four_tf.getText()));
-            String B_to_R_tf = R_B_validation(Double.parseDouble(four_B_to_R_one_tf.getText()
+            String B_to_R = R_B_validation(Double.parseDouble(four_B_to_R_one_tf.getText()
                     + four_B_to_R_two_tf.getText()
                     + four_B_to_R_three_tf.getText()
                     + "."
                     + four_B_to_R_four_tf.getText()));
-            String R_to_B_tf = R_B_validation(Double.parseDouble(four_R_to_B_one_tf.getText()
+            String R_to_B = R_B_validation(Double.parseDouble(four_R_to_B_one_tf.getText()
                     + four_R_to_B_two_tf.getText()
                     + four_R_to_B_three_tf.getText()
                     + "."
                     + four_R_to_B_four_tf.getText()));
-            if (!(S_to_R.equals(S_to_R_tf)
-                    && R_to_S.equals(R_to_S_tf)
-                    && S_to_B.equals(S_to_B_tf)
-                    && B_to_S.equals(B_to_S_tf)
-                    && B_to_R.equals(B_to_R_tf)
-                    && R_to_B.equals(R_to_B_tf))) {
-                //write sql query to access
-                pst = con.prepareStatement("insert into exc_rate_tb "
-                        + "(date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) "
-                        + "values( ?, ?, ?, ?, ?, ?, ?);");
-
-                //set value to ?
-                pst.setTimestamp(1, current_date());
-                pst.setString(2, S_to_R_tf);
-                pst.setString(3, R_to_S_tf);
-                pst.setString(4, S_to_B_tf);
-                pst.setString(5, B_to_S_tf);
-                pst.setString(6, B_to_R_tf);
-                pst.setString(7, R_to_B_tf);
-                pst.executeUpdate();
-                exe_rate_show.set_rate(S_to_R_tf, R_to_S_tf, S_to_B_tf, B_to_S_tf, B_to_R_tf, R_to_B_tf);
+            
+            if (!(exc_rate_obj.getS_to_R().equals(S_to_R)
+                    && exc_rate_obj.getR_to_S().equals(R_to_S)
+                    && exc_rate_obj.getS_to_B().equals(S_to_B)
+                    && exc_rate_obj.getB_to_S().equals(B_to_S)
+                    && exc_rate_obj.getB_to_R().equals(B_to_R)
+                    && exc_rate_obj.getR_to_B().equals(R_to_B))) {
+                
+                set_rate_to_db( S_to_R,  R_to_S,  S_to_B, B_to_S,  B_to_R,  R_to_B);
+                
+                end_task_ppt();
+                set_rate_to_excel(S_to_R,  R_to_S,  S_to_B, B_to_S,  B_to_R,  R_to_B);
+                open_exc_rate_ppt();
+                
+//                exe_rate_show.set_rate(S_to_R_tf, R_to_S_tf, S_to_B_tf, B_to_S_tf, B_to_R_tf, R_to_B_tf);
                 JOptionPane.showMessageDialog(this, "Exchange rate saved.");
             } else {
                 JOptionPane.showMessageDialog(this, "You change nothing.");
             }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
     }//GEN-LAST:event_four_bn_edit_exchange_rateActionPerformed
 
     private void four_S_to_R_four_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_four_S_to_R_four_tfActionPerformed
@@ -4201,11 +4164,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_four_dollar_money_rbActionPerformed
 
     private void two_four_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_bn_finishActionPerformed
-           if((!two_four_receiver_phone_no_tf.getText().isEmpty() && !two_two_pro_name_cb.getSelectedItem().equals("none") 
-                   && !two_four_reciece_money_tf.getText().isEmpty() && !two_four_total_money_tf.getText().isEmpty()
-                   ) && (two_four_rial_money_rb.isSelected()
-                || two_four_dollar_money_rb.isSelected() || two_four_bart_money_rb.isSelected())){
-                     int lastinsert_id_invoice = -1;
+        if ((!two_four_receiver_phone_no_tf.getText().isEmpty() && !two_two_pro_name_cb.getSelectedItem().equals("none")
+                && !two_four_reciece_money_tf.getText().isEmpty() && !two_four_total_money_tf.getText().isEmpty()) && (two_four_rial_money_rb.isSelected()
+                || two_four_dollar_money_rb.isSelected() || two_four_bart_money_rb.isSelected())) {
+            int lastinsert_id_invoice = -1;
             Connection con;
             PreparedStatement pst;
             try {
@@ -4214,12 +4176,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                         getLocal_host_user_name(),
                         getLocal_host_password()
                 );
-                
+
                 if (!is_has_history_list_db(two_two_pro_name_cb.getSelectedItem().toString(), "transfer_province", "province_name_tb")) {
                     set_history_list_db(two_two_pro_name_cb.getSelectedItem().toString(), "transfer_province", "province_name_tb");
                 }
-                
-                
+
                 //write sql query to access
                 pst = con.prepareStatement("insert into from_province_invoice_tb "
                         + "(balance_money, "
@@ -4243,11 +4204,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 if (generatekey.next()) {
                     lastinsert_id_invoice = generatekey.getInt(1);
                 }
-                
+
                 if (!is_has_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "to_pro_receiver_ph_no_history_tb")) {
                     set_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "to_pro_receiver_ph_no_history_tb");
                 }
-                
+
                 invoice_man in_man = new invoice_man();
                 in_man.get_R_D_B_B_top_1_from_db();
 
@@ -4289,15 +4250,15 @@ public class UI_and_operation extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 System.err.println("error: two_three_bn_finish\n" + ex);
             }
-           
+
             two_four_receiver_phone_no_tf.setText("");
             two_two_pro_name_cb.getModel().setSelectedItem("none");
             two_four_reciece_money_tf.setText("");
             two_four_total_money_tf.setText("");
             buttonGroup3.clearSelection();
             remove_all_in_list(two_two_ph_recieve_list);
-           set_history();
-           }
+            set_history();
+        }
     }//GEN-LAST:event_two_four_bn_finishActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
@@ -4322,9 +4283,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
-        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
-                two_three_bart_money_rb.isSelected())) {
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
+                && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
+                || two_three_bart_money_rb.isSelected())) {
             two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_three_dollar_money_rbActionPerformed
@@ -4332,10 +4293,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_three_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bn_finishActionPerformed
 
         set_to_pro_to_db(two_three_sender_phone_no_tf, two_three_receiver_phone_no_tf,
-                 two_one_total_money_tf, two_three_sender_money_tf, two_three_balance_money_tf,
-                 two_three_service_money_tf, two_one_pro_name_cb,
+                two_one_total_money_tf, two_three_sender_money_tf, two_three_balance_money_tf,
+                two_three_service_money_tf, two_one_pro_name_cb,
                 two_three_rial_money_rb, two_three_dollar_money_rb,
-                two_three_bart_money_rb, selected_money_type_to_pro, buttonGroup2, this);        
+                two_three_bart_money_rb, selected_money_type_to_pro, buttonGroup2, this);
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
     }//GEN-LAST:event_two_three_bn_finishActionPerformed
@@ -4403,9 +4364,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
-        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
-                two_three_bart_money_rb.isSelected())) {
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
+                && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
+                || two_three_bart_money_rb.isSelected())) {
             two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_three_rial_money_rbActionPerformed
@@ -4416,9 +4377,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
-        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
-                two_three_bart_money_rb.isSelected())) {
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
+                && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
+                || two_three_bart_money_rb.isSelected())) {
             two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_three_bart_money_rbActionPerformed
@@ -4428,9 +4389,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit 
-        && ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
-                two_three_bart_money_rb.isSelected())) {
+        if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
+                && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
+                || two_three_bart_money_rb.isSelected())) {
             two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_three_sender_money_tfCaretUpdate
@@ -4513,9 +4474,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
-        if ((!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit && 
-                ( two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected() || 
-                two_three_bart_money_rb.isSelected()))) {
+        if ((!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
+                && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
+                || two_three_bart_money_rb.isSelected()))) {
             two_three_service_money_tf.setText(get_service_from_db(two_three_sender_money_tf.getText(), selected_money_type_to_pro));
         }
     }//GEN-LAST:event_two_one_edit_bnActionPerformed
@@ -4731,32 +4692,32 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_pro_name_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbMouseClicked
 
-            remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_two_pro_name_cbMouseClicked
 
     private void two_four_reciece_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfMouseClicked
 
-            remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_reciece_money_tfMouseClicked
 
     private void two_four_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_rial_money_rbMouseClicked
 
-            remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_rial_money_rbMouseClicked
 
     private void two_four_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbMouseClicked
-        
-            remove_all_in_list(two_two_ph_recieve_list);
+
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_dollar_money_rbMouseClicked
 
     private void two_four_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_bart_money_rbMouseClicked
 
-            remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_bart_money_rbMouseClicked
 
     private void two_four_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_total_money_tfMouseClicked
-  
-            remove_all_in_list(two_two_ph_recieve_list);
+
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_total_money_tfMouseClicked
 
     /**

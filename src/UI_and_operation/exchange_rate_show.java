@@ -69,20 +69,20 @@ public class exchange_rate_show extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(0, 204, 0));
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel3.setBackground(new java.awt.Color(83, 158, 57));
+        jPanel3.setBackground(new java.awt.Color(51, 51, 255));
 
         jPanel1.setBackground(new java.awt.Color(189, 215, 238));
         jPanel1.setMaximumSize(new java.awt.Dimension(50, 50));
 
-        jLabel1.setFont(new java.awt.Font("Khmer OS Battambang", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Khmer OS Battambang", 1, 36)); // NOI18N
         jLabel1.setText("54 ប្តូរប្រាក់ ផ្ទេរប្រាក់");
 
-        jLabel2.setFont(new java.awt.Font("Khmer OS Battambang", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Khmer OS Battambang", 1, 18)); // NOI18N
         jLabel2.setText("ម៉ោងធ្វើការ 7:00AM - 5:20PM");
 
-        jLabel3.setFont(new java.awt.Font("Khmer OS Battambang", 1, 15)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Khmer OS Fasthand", 1, 24)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel3.setText("អត្រាប្តូរប្រាក់");
 
@@ -116,21 +116,23 @@ public class exchange_rate_show extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
         jPanel4.setBackground(new java.awt.Color(255, 255, 0));
 
-        jLabel20.setFont(new java.awt.Font("Khmer OS Battambang", 0, 10)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Khmer OS Battambang", 0, 27)); // NOI18N
         jLabel20.setText("ទំនាក់ទំនង:");
 
-        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel16.setText("(+885)061 36 0000");
 
-        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel18.setText("Line : 54Exchange&transfer");
 
-        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel19.setText("Line ID: 061360000");
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel17.setText("(+885)069 23 23 69");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -148,7 +150,7 @@ public class exchange_rate_show extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel19)
                     .addComponent(jLabel18))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,115 +168,133 @@ public class exchange_rate_show extends javax.swing.JFrame {
                             .addComponent(jLabel17)))))
         );
 
-        jLabel4.setFont(new java.awt.Font("Khmer OS Battambang", 2, 12)); // NOI18N
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Khmer OS Freehand", 2, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(204, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("លក់ចេញ");
         jLabel4.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setFont(new java.awt.Font("Khmer OS Battambang", 2, 12)); // NOI18N
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Khmer OS Freehand", 2, 24)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("រូបិយប័ណ្ណ");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel6.setFont(new java.awt.Font("Khmer OS Battambang", 2, 12)); // NOI18N
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel6.setFont(new java.awt.Font("Khmer OS Freehand", 2, 24)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 0, 0));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("ទិញចូល");
         jLabel6.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        S_to_R_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        S_to_R_lb.setBackground(new java.awt.Color(255, 255, 255));
+        S_to_R_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        S_to_R_lb.setForeground(new java.awt.Color(204, 0, 204));
         S_to_R_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         S_to_R_lb.setText("4080");
         S_to_R_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Khmer OS Battambang", 0, 8)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Khmer OS Battambang", 0, 16)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("\n\tចូលក្នុង Group Telegram របស់ពួក\n\tយើងដើម្បីទទួលបានអត្រាប្តូរប្រាក់ប្រចាំថ្ងៃ\n\tនៅលើទូរស័ព្ទដៃរបស់លោកអ្នក");
+        jTextArea1.setText("\tចូលក្នុង Group Telegram របស់ពួក\n\tយើងដើម្បីទទួលបានអត្រាប្តូរប្រាក់ប្រចាំថ្ងៃ\n\tនៅលើទូរស័ព្ទដៃរបស់លោកអ្នក");
         jScrollPane1.setViewportView(jTextArea1);
 
         jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Khmer OS Battambang", 0, 8)); // NOI18N
+        jTextArea2.setFont(new java.awt.Font("Khmer OS Battambang", 0, 16)); // NOI18N
         jTextArea2.setRows(5);
+        jTextArea2.setText("\t54 ABA account\n           001 526 322 CHHANN CHIKAY\n");
         jScrollPane2.setViewportView(jTextArea2);
 
         jTextArea3.setColumns(20);
-        jTextArea3.setFont(new java.awt.Font("Khmer OS Battambang", 0, 8)); // NOI18N
+        jTextArea3.setFont(new java.awt.Font("Khmer OS Battambang", 0, 16)); // NOI18N
         jTextArea3.setRows(5);
         jScrollPane3.setViewportView(jTextArea3);
 
         jTextArea4.setColumns(20);
-        jTextArea4.setFont(new java.awt.Font("Khmer OS Battambang", 0, 8)); // NOI18N
+        jTextArea4.setFont(new java.awt.Font("Khmer OS Battambang", 0, 16)); // NOI18N
         jTextArea4.setForeground(new java.awt.Color(255, 0, 0));
         jTextArea4.setRows(5);
-        jTextArea4.setText("\tចំណាំ : អត្រាប្តូរប្រាក់អាចមានការប្រែប្រួល");
+        jTextArea4.setText("         ចំណាំ : អត្រាប្តូរប្រាក់អាចមានការប្រែប្រួល");
         jScrollPane4.setViewportView(jTextArea4);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane4)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jLabel8.setFont(new java.awt.Font("Khmer OS Battambang", 0, 15)); // NOI18N
+        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel8.setFont(new java.awt.Font("Khmer OS Freehand", 2, 16)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("ដុល្លារ    |    រៀល");
         jLabel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        R_to_S_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        R_to_S_lb.setBackground(new java.awt.Color(255, 255, 255));
+        R_to_S_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        R_to_S_lb.setForeground(new java.awt.Color(204, 0, 204));
         R_to_S_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         R_to_S_lb.setText("4080");
         R_to_S_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        S_to_B_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        S_to_B_lb.setBackground(new java.awt.Color(255, 255, 255));
+        S_to_B_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        S_to_B_lb.setForeground(new java.awt.Color(204, 0, 204));
         S_to_B_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         S_to_B_lb.setText("30.37");
         S_to_B_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel11.setFont(new java.awt.Font("Khmer OS Battambang", 0, 15)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Khmer OS Freehand", 2, 16)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("ដុល្លារ    |    បាត");
         jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        B_to_S_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        B_to_S_lb.setBackground(new java.awt.Color(255, 255, 255));
+        B_to_S_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        B_to_S_lb.setForeground(new java.awt.Color(204, 0, 204));
         B_to_S_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         B_to_S_lb.setText("30.27");
         B_to_S_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        B_to_R_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        B_to_R_lb.setBackground(new java.awt.Color(255, 255, 255));
+        B_to_R_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        B_to_R_lb.setForeground(new java.awt.Color(204, 0, 204));
         B_to_R_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         B_to_R_lb.setText("30.37");
         B_to_R_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel14.setFont(new java.awt.Font("Khmer OS Battambang", 0, 15)); // NOI18N
+        jLabel14.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel14.setFont(new java.awt.Font("Khmer OS Freehand", 2, 16)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("   បាត    |    រៀល");
         jLabel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        R_to_B_lb.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        R_to_B_lb.setBackground(new java.awt.Color(255, 255, 255));
+        R_to_B_lb.setFont(new java.awt.Font("Tahoma", 2, 36)); // NOI18N
+        R_to_B_lb.setForeground(new java.awt.Color(204, 0, 204));
         R_to_B_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         R_to_B_lb.setText("30.27");
         R_to_B_lb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -334,8 +354,7 @@ public class exchange_rate_show extends javax.swing.JFrame {
                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(R_to_B_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, 0)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, 0))
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -356,7 +375,7 @@ public class exchange_rate_show extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -365,13 +384,14 @@ public class exchange_rate_show extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
