@@ -18,7 +18,7 @@ public class validate_value {
     //1000.6 / 1000 = 1.0006 => 2
     //1000 / 1000 = 1.0 => 1
     //3000 / 1000 = 3.0 => 3
-    public static String service_validate( String num_str, type_of_money money_type) {
+    public static String service_validate(String num_str, type_of_money money_type) {
         try {
             num_str = clear_cvot(num_str);
             Double num = 0.0;
@@ -172,7 +172,7 @@ public class validate_value {
         return minus_or_not + clear_cvot(money);
     }
 
-    public static String money_S_B_R_validate(type_of_money selected_exchange_rate, String money) {
+    public static String money_S_B_R_validate(type_of_money selected_exchange_rate, String money, Boolean is_add_cvot) {
         String str = "";
         money = clear_cvot(money);
         switch (selected_exchange_rate) {
@@ -187,7 +187,11 @@ public class validate_value {
                 str = bart_validation(Double.parseDouble(money));
                 break;
         }
-        return add_cuot_to_money(str);
+        if (is_add_cvot) {
+            return add_cuot_to_money(str);
+        } else {
+            return str;
+        }
 
     }
 

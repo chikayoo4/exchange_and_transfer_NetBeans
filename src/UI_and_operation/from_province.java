@@ -33,7 +33,6 @@ import java.util.logging.Logger;
  * @author Chhann_chikay
  */
 public class from_province {
-
     
     public static void get_from_pro_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
 
@@ -83,9 +82,9 @@ public class from_province {
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
                     v3.add(rs.getString("pur"));
-                    v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial()) : "");
-                    v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar()) : "");
-                    v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart()) : "");
+                    v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
+                    v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
+                    v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
                     v3.add("លុយទទូល: -" + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
                             + " | លុយទទូល: -" + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
@@ -173,7 +172,7 @@ public class from_province {
                 || two_four_bart_money_rb.isSelected())) {
             two_four_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_from_pro,
                     String.valueOf((Double.parseDouble(clear_cvot(two_four_sender_money_tf.getText()))
-                            - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText()))) / 2)));
+                            - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText()))) / 2), true));
         }
         else {
             two_four_balance_money_tf.setText("");

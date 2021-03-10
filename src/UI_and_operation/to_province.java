@@ -161,7 +161,6 @@ public class to_province {
             two_three_sender_money_tf.setText("");
             two_three_service_money_tf.setText("");
             buttonGroup2.clearSelection();
-            ui_ope.set_history();
         }
     }
     
@@ -175,10 +174,10 @@ public class to_province {
             try {
                 two_one_total_money_tf.setText(money_S_B_R_validate(selected_money_type_to_pro,
                         String.valueOf(Double.parseDouble(clear_cvot(two_three_sender_money_tf.getText()))
-                                + Double.parseDouble(clear_cvot(two_three_service_money_tf.getText())))));
+                                + Double.parseDouble(clear_cvot(two_three_service_money_tf.getText()))), true));
 
                 two_three_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_to_pro,
-                        String.valueOf(Double.parseDouble(clear_cvot(two_three_service_money_tf.getText())) / 2)));
+                        String.valueOf(Double.parseDouble(clear_cvot(two_three_service_money_tf.getText())) / 2), true));
             } catch (Exception e) {
                 System.out.println("to_province \n" + e);
             }
@@ -236,9 +235,9 @@ public class to_province {
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
                     v3.add(rs.getString("pur"));
-                    v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial()) : "");
-                    v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar()) : "");
-                    v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart()) : "");
+                    v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
+                    v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
+                    v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
                     v3.add("លុយផ្ញើរ: " + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
                             + " | លុយសរុប: " + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)

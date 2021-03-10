@@ -86,7 +86,8 @@ public class exc_rate {
         }
     }
 
-    public void get_top_1_rate_from_db() {
+    public  int get_top_1_rate_from_db() {
+        int id = -1;
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -99,12 +100,14 @@ public class exc_rate {
             );
 
             //write sql query to access
-            pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
+            pst = con.prepareStatement("SELECT TOP 1 id_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, "
                     + "bart_to_dollar, bart_to_rial, rial_to_bart "
                     + "FROM exc_rate_tb ORDER BY date_rate DESC;");
 
             rs = pst.executeQuery();
             while (rs.next()) {
+                
+                id = rs.getInt("id_rate");
                 S_to_R = rs.getString("dollar_to_rial");
                 R_to_S = rs.getString("rial_to_dollar");
                 S_to_B = rs.getString("dollar_to_bart");
@@ -115,6 +118,7 @@ public class exc_rate {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        return id;
     }
 
     public static void set_rate_to_excel(String S_to_R, String R_to_S, String S_to_B,

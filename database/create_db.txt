@@ -36,6 +36,23 @@ CREATE TABLE exc_invoice_tb (
     id_pur INTEGER NOT NULL,
     CONSTRAINT FK_exchanging_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
 );
+CREATE TABLE exc_invoice_two_operator_tb (
+    id_invoice int IDENTITY(1,1) PRIMARY KEY,
+    exchanging_money_one VARCHAR(40) NOT NULL,
+    result_exchanging_money_one VARCHAR(40) NOT NULL,
+    exchanging_money_two VARCHAR(40) NOT NULL,
+    result_exchanging_money_two VARCHAR(40) NOT NULL,
+    one_rate VARCHAR(40) NOT NULL,
+    two_rate VARCHAR(40) NOT NULL,
+    id_type_one INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_two_one_id_type FOREIGN KEY (id_type_one) REFERENCES exc_type_tb (id_type),
+    id_type_two INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_two_two_id_type FOREIGN KEY (id_type_two) REFERENCES exc_type_tb (id_type),
+    id_acc INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_two_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
+    id_pur INTEGER NOT NULL,
+    CONSTRAINT FK_exchanging_two_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
 CREATE TABLE to_thai_bank_tb (
     id_bank int IDENTITY(1,1) PRIMARY KEY,
     bank_name VARCHAR(50) NOT NULL
@@ -146,6 +163,13 @@ CREATE TABLE from_province_invoice_tb (
     id_pur INTEGER NOT NULL,
 	CONSTRAINT FK_from_province_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
 );
+CREATE TABLE to_thai_history_tb (
+    id_to_thai int IDENTITY(1,1) PRIMARY KEY,
+    bank VARCHAR(50),
+    bank_id VARCHAR(50),
+    name VARCHAR(50),
+    phone_no VARCHAR(50),
+);
 CREATE TABLE invoice_management_tb (
     id_invoice_man int IDENTITY(1,1) PRIMARY KEY,
     id_invoice INTEGER NOT NULL,
@@ -182,6 +206,7 @@ INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('B_to_S');
 INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('B_to_R');
 INSERT INTO exc_type_tb ( type_of_exchanging ) VALUES ('R_to_B');
 INSERT INTO purpose_tb ( pur_type ) VALUES ('exchanging');
+INSERT INTO purpose_tb ( pur_type ) VALUES ('double_exchanging');
 INSERT INTO purpose_tb ( pur_type ) VALUES ('to_thai');
 INSERT INTO purpose_tb ( pur_type ) VALUES ('from_thai');
 INSERT INTO purpose_tb ( pur_type ) VALUES ('to_province');

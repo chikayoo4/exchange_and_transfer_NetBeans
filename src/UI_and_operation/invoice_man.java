@@ -34,7 +34,7 @@ public class invoice_man {
         Bank_Bart = "0";
     }
 
-    void get_R_D_B_B_top_1_from_db() {
+    public void get_R_D_B_B_top_1_from_db() {
 
         Connection con;
         PreparedStatement pst;
