@@ -29,6 +29,7 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author Chhann_chikay
  */
 public class reciept {
+    
     public static void print_reciept(String dir, int lastinsertid){
         
             HashMap m = new HashMap();
@@ -47,10 +48,10 @@ public class reciept {
                 JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
                 //view report
-//                JasperViewer.viewReport(jprint);
+                JasperViewer.viewReport(jprint);
 
                 //print report 
-                JasperPrintManager.printReport(jprint, false);
+//                JasperPrintManager.printReport(jprint, false);
 
             } catch (SQLException | JRException ex) {
 

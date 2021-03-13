@@ -6,11 +6,11 @@
 package UI_and_operation;
 
 import static UI_and_operation.UI_and_operation.current_date;
-import static UI_and_operation.UI_and_operation.get_path;
 import UI_and_operation.UI_and_operation.type_of_exchange;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
+import static UI_and_operation.path_file.get_path;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;

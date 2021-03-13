@@ -23,9 +23,11 @@ import static UI_and_operation.from_province.two_two_cal;
 import static UI_and_operation.invoice_man.get_count_id_invoice_man_from_db;
 import static UI_and_operation.invoice_man.get_id_invoice;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
+import static UI_and_operation.path_file.double_exc_reciept_path;
+import static UI_and_operation.path_file.exc_reciept_path;
+import static UI_and_operation.path_file.get_path;
 import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
-import static UI_and_operation.to_province.get_service_from_db;
 import static UI_and_operation.to_province.two_one_cal;
 import static UI_and_operation.validate_value.*;
 import com.sun.glass.events.KeyEvent;
@@ -95,6 +97,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         Edit, Add
     };
 
+    int next_show_his = 0;
+    int num_show_his = 10;
     public static String set_admin_password = "";
     private Boolean two_one_is_off_edit = true;
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
@@ -248,9 +252,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
-    public static void set_invoice_man_db(String rial, String dollar, String bart, String bank_bart,
+    public static int set_invoice_man_db(String rial, String dollar, String bart, String bank_bart,
             int id_invoice, int id_acc, purpose_type pur, Timestamp invoice_man_date) {
-
+        int id_inv_man = -1;
         Connection con;
         PreparedStatement pst;
         try {
@@ -261,7 +265,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             );
             //write sql query to access
             pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                    Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, rial);
             pst.setString(2, dollar);
             pst.setString(3, bart);
@@ -271,10 +276,15 @@ public class UI_and_operation extends javax.swing.JFrame {
             pst.setInt(7, get_id_pur_from_db(pur));
             pst.setTimestamp(8, invoice_man_date);
             pst.executeUpdate();
+            ResultSet generatekey = pst.getGeneratedKeys();
+            if (generatekey.next()) {
+                id_inv_man = generatekey.getInt(1);
+            }
 
         } catch (SQLException ex) {
             System.err.println(ex);
         }
+        return id_inv_man;
     }
 
     public static int get_id_province_name_from_db(String province_name) {
@@ -370,6 +380,49 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
+    private int count_db_to_list_pur_and_id() {
+
+        int count = 0;
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            Calendar start_cal = three_calendar_cld.getCalendar();
+            Calendar start_cal2 = three_calendar_cld.getCalendar();
+            Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
+            start_cal.add(Calendar.DAY_OF_MONTH, 1);
+            String start_date = sdf.format(start_cal.getTime());
+            String start_date2 = sdf2.format(start_cal2.getTime());
+            pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, 0);
+            String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+//            String pre_7_day_from_start_date2 = sdf2.format(pre_7_day_from_start_cal.getTime());
+            date_history_lb.setText(start_date2);
+            pst = con.prepareStatement("SELECT COUNT(id_invoice_man) AS count "
+                    + "FROM invoice_management_tb INNER JOIN purpose_tb "
+                    + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
+                    + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+                    + "AND invoice_man_date <= '" + start_date + "';");
+            pst.setInt(1, get_acc_id());
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                count = rs.getInt("count");
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("error: two_three_bn_finish\n" + ex);
+        }
+        return count;
+    }
+
     private list_pur_and_id set_data_db_to_list_pur_and_id() {
 
         list_pur_and_id list_pur_id_obj = new list_pur_and_id();
@@ -391,17 +444,18 @@ public class UI_and_operation extends javax.swing.JFrame {
             start_cal.add(Calendar.DAY_OF_MONTH, 1);
             String start_date = sdf.format(start_cal.getTime());
             String start_date2 = sdf2.format(start_cal2.getTime());
-            pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
+            pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, 0);
             String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
-            String pre_7_day_from_start_date2 = sdf2.format(pre_7_day_from_start_cal.getTime());
-
-            date_history_lb.setText(start_date2 + "  to  " + pre_7_day_from_start_date2);
+//            String pre_7_day_from_start_date2 = sdf2.format(pre_7_day_from_start_cal.getTime());
+            date_history_lb.setText(start_date2);
             pst = con.prepareStatement("SELECT id_invoice, pur_type "
                     + "FROM invoice_management_tb INNER JOIN purpose_tb "
                     + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
                     + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
                     + "AND invoice_man_date <= '" + start_date + "' "
-                    + "ORDER BY id_invoice_man DESC;");
+                    + "ORDER BY id_invoice_man DESC "
+                    + "OFFSET " + next_show_his + " ROWS "
+                    + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
             pst.setInt(1, get_acc_id());
             rs = pst.executeQuery();
 
@@ -433,6 +487,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }
 
     public void set_history() {
+//        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
         if (three_calendar_cld.getDate() != null) {
             three_calendar_cld.setBackground(Color.lightGray);
             list_pur_and_id list_pur_id_obj = new list_pur_and_id();
@@ -544,21 +599,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.err.println("error: two_three_bn_finish\n" + ex);
         }
-    }
-
-    public static String get_path() {
-        String path = "";
-        try {
-            File file = new File("x.txt");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            path = file.getAbsolutePath();
-            path = path.substring(0, path.length() - 6);
-        } catch (IOException e) {
-            System.out.println("error");
-        }
-        return path;
     }
 
     //-----------------------------------------------------class call--------------------------------------------------
@@ -705,21 +745,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_cb(two_one_pro_name_cb, "transfer_province", "province_name_history_tb");
         set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
         one_tf_customer_money.requestFocus();
-
-//        final JScrollPane p = new JScrollPane();
-//        p.setViewportView(three_tb_history);
-//        p.getVerticalScrollBar().getModel().addChangeListener(new ChangeListener() {
-//            @Override
-//            public void stateChanged(ChangeEvent e) {
-//                BoundedRangeModel scModel = p.getVerticalScrollBar().getModel();
-//                boolean valueIsAdjusting = scModel.getValueIsAdjusting();
-//                if (!valueIsAdjusting) {
-//                    if (scModel.getValue() + scModel.getExtent() == scModel.getMaximum()) {
-//                        System.out.println("max");
-//                    }
-//                }
-//            }
-//        });
+        three_up.setEnabled(false);
+        set_history();
     }
 
     /**
@@ -890,8 +917,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_calendar_cld = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
         date_history_lb = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        three_up = new javax.swing.JButton();
+        three_down = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -2693,11 +2720,21 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         date_history_lb.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton2.setText("up");
+        three_up.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        three_up.setText("up");
+        three_up.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_upActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jButton3.setText("down");
+        three_down.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        three_down.setText("down");
+        three_down.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_downActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -2735,8 +2772,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))))
+                            .addComponent(three_up, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(three_down))))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -2764,9 +2801,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(three_up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(three_down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -4531,9 +4568,16 @@ public class UI_and_operation extends javax.swing.JFrame {
                         //get id from to store inside variable id here
                         int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
                         String pur = model.getValueAt(selectedIndex, 3).toString();
+                        switch (pur) {
+                            case "exchanging":
                         id = get_id_inv_by_id_inv_man_from_db(id);
-                        if (pur.equals("exchanging")) {
-                            print_reciept(get_path() + "\\reciept_for_print\\exchanging.jrxml", id);
+                                print_reciept(get_path() + exc_reciept_path, id);
+                                break;
+                            case "double_exchanging":
+                                print_reciept(get_path() + double_exc_reciept_path, id);
+                                break;
+                            default:
+                                System.out.println("errorrrrrrrrr");
                         }
                     }
                     break;
@@ -4589,6 +4633,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_tb_historyMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (count_db_to_list_pur_and_id() < num_show_his) {
+            three_down.setEnabled(false);
+        } else {
+            three_down.setEnabled(true);
+        }
         set_history();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -5243,138 +5292,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_one_tf_customer_result1ActionPerformed
 
     private void one_two_bn_finishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_two_bn_finishedActionPerformed
-        if (!one_tf_customer_money1.getText().isEmpty() && !one_tf_customer_money2.getText().isEmpty()
-                && !one_two_rate_bc1.getSelectedItem().equals("none") && !one_two_rate_bc2.getSelectedItem().equals("none")) {
-            String one_customer_money = cut_the_lastest_point(one_tf_customer_money1.getText());
-            String one_type_exc = String.valueOf(one_two_rate_bc1.getSelectedItem());
-            String one_rate_exc = one_tf_exchange_rate1.getText();
-            String one_customer_result = one_tf_customer_result1.getText();
-            String two_customer_money = cut_the_lastest_point(one_tf_customer_money2.getText());
-            String two_type_exc = String.valueOf(one_two_rate_bc2.getSelectedItem());
-            String two_rate_exc = one_tf_exchange_rate2.getText();
-            String two_customer_result = one_tf_customer_result2.getText();
-
-            int lastinsert_id_invoice = -1;
-            Connection con;
-            PreparedStatement pst;
-            try {
-                con = DriverManager.getConnection(
-                        getLocal_host(),
-                        getLocal_host_user_name(),
-                        getLocal_host_password()
-                );
-
-                //write sql query to access
-                pst = con.prepareStatement("insert into exc_invoice_two_operator_tb("
-                        + "exchanging_money_one, "
-                        + " result_exchanging_money_one, "
-                        + "exchanging_money_two, "
-                        + "result_exchanging_money_two, "
-                        + "one_rate, "
-                        + "two_rate, "
-                        + "id_type_one, "
-                        + "id_type_two, "
-                        + "id_acc, id_pur)"
-                        + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-                        Statement.RETURN_GENERATED_KEYS);
-                //set value to ? in query
-                pst.setString(1, one_customer_money);
-                pst.setString(2, one_customer_result);
-                pst.setString(3, two_customer_money);
-                pst.setString(4, two_customer_result);
-                pst.setString(5, one_rate_exc);
-                pst.setString(6, two_rate_exc);
-                pst.setInt(7, get_id_type_from_db(convert_to_stan_exc_type(one_type_exc)));
-                pst.setInt(8, get_id_type_from_db(convert_to_stan_exc_type(two_type_exc)));
-                pst.setInt(9, get_acc_id());
-                pst.setInt(10, get_id_pur_from_db(purpose_type.double_exchanging));
-                pst.executeUpdate();
-                ResultSet generatekey = pst.getGeneratedKeys();
-                if (generatekey.next()) {
-                    lastinsert_id_invoice = generatekey.getInt(1);
-                }
-
-                invoice_man in_man = new invoice_man();
-                in_man.get_R_D_B_B_top_1_from_db();
-
-                Double tf_one_cus = Double.parseDouble(clear_cvot(one_customer_money));
-                Double tf_one_res = Double.parseDouble(clear_cvot(one_customer_result));
-                Double tf_two_cus = Double.parseDouble(clear_cvot(two_customer_money));
-                Double tf_two_res = Double.parseDouble(clear_cvot(two_customer_result));
-
-                Double db_rial = Double.parseDouble(in_man.getRial());
-                Double db_dollar = Double.parseDouble(in_man.getDollar());
-                Double db_bart = Double.parseDouble(in_man.getBart());
-
-//                //set value to ? in query
-                switch (convert_to_stan_exc_type(one_two_rate_bc1.getSelectedItem().toString())) {
-                    case S_to_R:
-                        db_dollar = db_dollar + tf_one_cus;
-                        db_rial = db_rial - tf_one_res;
-                        break;
-                    case S_to_B:
-                        db_dollar = db_dollar + tf_one_cus;
-                        db_bart = db_bart - tf_one_res;
-                        break;
-                    case B_to_R:
-                        db_bart = db_bart + tf_one_cus;
-                        db_rial = db_rial - tf_one_res;
-                        break;
-                    case R_to_S:
-                        db_rial = db_rial + tf_one_cus;
-                        db_dollar = db_dollar - tf_one_res;
-                        break;
-                    case B_to_S:
-                        db_bart = db_bart + tf_one_cus;
-                        db_dollar = db_dollar - tf_one_res;
-                        break;
-                    case R_to_B:
-                        db_rial = db_rial + tf_one_cus;
-                        db_bart = db_bart - tf_one_res;
-                        break;
-                    default:
-                        System.out.println("Error");
-                }
-                switch (convert_to_stan_exc_type(one_two_rate_bc2.getSelectedItem().toString())) {
-                    case S_to_R:
-                        db_dollar = db_dollar + tf_two_cus;
-                        db_rial = db_rial - tf_two_res;
-                        break;
-                    case S_to_B:
-                        db_dollar = db_dollar + tf_two_cus;
-                        db_bart = db_bart - tf_two_res;
-                        break;
-                    case B_to_R:
-                        db_bart = db_bart + tf_two_cus;
-                        db_rial = db_rial - tf_two_res;
-                        break;
-                    case R_to_S:
-                        db_rial = db_rial + tf_two_cus;
-                        db_dollar = db_dollar - tf_two_res;
-                        break;
-                    case B_to_S:
-                        db_bart = db_bart + tf_two_cus;
-                        db_dollar = db_dollar - tf_two_res;
-                        break;
-                    case R_to_B:
-                        db_rial = db_rial + tf_two_cus;
-                        db_bart = db_bart - tf_two_res;
-                        break;
-                    default:
-                        System.out.println("Error");
-                }
-                set_invoice_man_db(rial_validation(db_rial),
-                        dollar_validation(db_dollar),
-                        bart_validation(db_bart),
-                        bart_validation(Double.parseDouble(in_man.getBank_Bart())),
-                        lastinsert_id_invoice,
-                        get_acc_id(),
-                        purpose_type.double_exchanging,
-                        current_date());
-            } catch (SQLException ex) {
-                System.err.println(ex);
-            }
-        }
+        double_exc_close_or_print(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
+                one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
+                one_tf_exchange_rate2, one_tf_customer_result2, false);
     }//GEN-LAST:event_one_two_bn_finishedActionPerformed
 
     private void one_two_bn_finishedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_two_bn_finishedKeyPressed
@@ -5382,7 +5302,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_one_two_bn_finishedKeyPressed
 
     private void one_bn_print1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_print1ActionPerformed
-        // TODO add your handling code here:
+        double_exc_close_or_print(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
+                one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
+                one_tf_exchange_rate2, one_tf_customer_result2, true);
     }//GEN-LAST:event_one_bn_print1ActionPerformed
 
     private void one_bn_print1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_bn_print1KeyPressed
@@ -5453,6 +5375,28 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_one_pro_name_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_two_one_pro_name_cbActionPerformed
+
+    private void three_upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_upActionPerformed
+        if ((next_show_his - num_show_his) > 0) {
+            next_show_his = next_show_his - num_show_his;
+            three_down.setEnabled(true);
+            if (!((next_show_his - num_show_his) > 0)) {
+                three_up.setEnabled(false);
+            }
+        }
+        set_history();
+    }//GEN-LAST:event_three_upActionPerformed
+
+    private void three_downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_downActionPerformed
+        if ((next_show_his + num_show_his) < count_db_to_list_pur_and_id()) {
+            next_show_his = next_show_his + num_show_his;
+            three_up.setEnabled(true);
+            if (!((next_show_his + num_show_his) < count_db_to_list_pur_and_id())) {
+                three_down.setEnabled(false);
+            }
+        }
+        set_history();
+    }//GEN-LAST:event_three_downActionPerformed
 
     /**
      * @param args the command line arguments
@@ -5545,8 +5489,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton9;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
@@ -5667,9 +5609,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JRadioButton three_bart_rb;
     private com.toedter.calendar.JDateChooser three_calendar_cld;
     private javax.swing.JRadioButton three_dollar_rb;
+    private javax.swing.JButton three_down;
     private javax.swing.JRadioButton three_rial_rb;
     private javax.swing.JTable three_tb_history;
     private javax.swing.JTable three_tb_total_money;
+    private javax.swing.JButton three_up;
     private javax.swing.JTextField two_four_balance_money_tf;
     private javax.swing.JRadioButton two_four_bart_money_rb;
     private javax.swing.JButton two_four_bn_finish;
