@@ -21,8 +21,6 @@ import static UI_and_operation.path_file.get_path;
 import static UI_and_operation.purpose.get_id_pur_from_db;
 import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.validate_value.*;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

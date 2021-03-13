@@ -1214,6 +1214,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="&#x1796;&#x17d2;&#x179a;&#x17b8;&#x1793;&#x179c;&#x17b7;&#x1780;&#x17d2;&#x1780;&#x17b7;&#x1799;&#x1794;&#x178f;&#x17d2;&#x179a;"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton13ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JRadioButton" name="two_three_dollar_money_rb">
                       <Properties>
@@ -2510,7 +2513,7 @@
                           <Component id="three_calendar_cld" max="32767" attributes="0"/>
                           <Component id="jLabel35" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="three_chb_id" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
                           <Component id="three_chb_date" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
@@ -2524,7 +2527,7 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" pref="422" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="three_up" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -2798,6 +2801,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x179b;&#x17c1;&#x1781;&#x1794;&#x17d0;&#x178e;&#x17d2;&#x178e;"/>
               </Properties>
               <Events>
@@ -2809,6 +2813,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x1790;&#x17d2;&#x1784;&#x17c3;&#x1791;&#x17b8;"/>
               </Properties>
               <Events>
@@ -2820,6 +2825,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x1785;&#x17c1;&#x1789;&#x1794;&#x17d0;&#x178e;&#x17d2;&#x178e;&#x178a;&#x17c4;&#x1799;"/>
               </Properties>
               <Events>
@@ -2831,6 +2837,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x1794;&#x17c6;&#x178e;&#x1784;"/>
               </Properties>
               <Events>
@@ -2842,6 +2849,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; R"/>
               </Properties>
               <Events>
@@ -2853,6 +2861,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; S"/>
               </Properties>
               <Events>
@@ -2864,6 +2873,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; B"/>
               </Properties>
               <Events>
@@ -2875,6 +2885,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; B &#x1780;&#x17d2;&#x1793;&#x17bb;&#x1784;&#x1780;&#x17bb;&#x1784;"/>
               </Properties>
               <Events>
@@ -2886,6 +2897,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Khmer OS Battambang" size="24" style="0"/>
                 </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="detail"/>
               </Properties>
               <Events>

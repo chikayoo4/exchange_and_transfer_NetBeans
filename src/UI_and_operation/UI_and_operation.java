@@ -35,8 +35,6 @@ import com.sun.glass.events.KeyEvent;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -55,20 +53,9 @@ import javax.swing.table.DefaultTableModel;
 import static UI_and_operation.to_province.detele_to_pro_to_db;
 import static UI_and_operation.to_province.get_to_pro_db_set_to_tb;
 import static UI_and_operation.to_province.set_to_pro_to_db;
-
-import java.awt.Desktop;
-import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.BoundedRangeModel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  *
@@ -128,7 +115,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
-//table.getModel().addTableModelListener(l);
     public javax.swing.JComboBox<String> get_to_pro_cb_from_ui_oper() {
         return two_one_pro_name_cb;
     }
@@ -654,16 +640,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_tb_history.getColumnModel().getColumn(7).setPreferredWidth(140);
         three_tb_history.getColumnModel().getColumn(8).setPreferredWidth(1000);
 
-        three_chb_date.setSelected(true);
-        three_chb_id.setSelected(true);
-        three_chb_user.setSelected(true);
-        three_chb_pur.setSelected(true);
-        three_chb_m_r.setSelected(true);
-        three_chb_m_s.setSelected(true);
-        three_chb_m_b.setSelected(true);
-        three_chb_m_b_bank.setSelected(true);
-        three_chb_m_detail.setSelected(true);
-
         if (count_db_to_list_pur_and_id() < num_show_his) {
             three_down.setEnabled(false);
         } else {
@@ -763,6 +739,24 @@ public class UI_and_operation extends javax.swing.JFrame {
         setWifi_host_password(wifi_password_tf);
     }
 
+    private void add_listener_calendar_three(){
+        
+        three_calendar_cld.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                three_up.setEnabled(false);
+                next_show_his = 0;
+                if (count_db_to_list_pur_and_id() < num_show_his) {
+                    three_down.setEnabled(false);
+                } else {
+                    three_down.setEnabled(true);
+                }
+                set_history();
+            }
+        });
+    }
+    
     //-----------------------------------------------------class call--------------------------------------------------
     exchange_rate_show exe_rate_show = new exchange_rate_show();
 
@@ -808,23 +802,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         custom_three_tb_his_default();
 
         set_history();
+        
+        add_listener_calendar_three();
 
-        three_calendar_cld.getDateEditor().addPropertyChangeListener(
-                new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                three_up.setEnabled(false);
-                next_show_his = 0;
-                if (count_db_to_list_pur_and_id() < num_show_his) {
-                    three_down.setEnabled(false);
-                } else {
-                    three_down.setEnabled(true);
-                }
-                set_history();
-            }
-        });
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1813,6 +1795,11 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         jButton13.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         jButton13.setText("ព្រីនវិក្កិយបត្រ");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
 
         buttonGroup2.add(two_three_dollar_money_rb);
         two_three_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -2674,7 +2661,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 831, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2813,6 +2800,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_id.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_id.setSelected(true);
         three_chb_id.setText("លេខប័ណ្ណ");
         three_chb_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2821,6 +2809,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_date.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_date.setSelected(true);
         three_chb_date.setText("ថ្ងៃទី");
         three_chb_date.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2829,6 +2818,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_user.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_user.setSelected(true);
         three_chb_user.setText("ចេញប័ណ្ណដោយ");
         three_chb_user.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2837,6 +2827,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_pur.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_pur.setSelected(true);
         three_chb_pur.setText("បំណង");
         three_chb_pur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2845,6 +2836,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_m_r.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_r.setSelected(true);
         three_chb_m_r.setText("លុយ R");
         three_chb_m_r.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2853,6 +2845,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_m_s.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_s.setSelected(true);
         three_chb_m_s.setText("លុយ S");
         three_chb_m_s.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2861,6 +2854,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_m_b.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_b.setSelected(true);
         three_chb_m_b.setText("លុយ B");
         three_chb_m_b.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2869,6 +2863,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_m_b_bank.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_b_bank.setSelected(true);
         three_chb_m_b_bank.setText("លុយ B ក្នុងកុង");
         three_chb_m_b_bank.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2877,6 +2872,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         three_chb_m_detail.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_detail.setSelected(true);
         three_chb_m_detail.setText("detail");
         three_chb_m_detail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2963,7 +2959,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(48, 48, 48)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(three_chb_id, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_chb_date, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2976,7 +2972,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(three_chb_m_detail, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(three_up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -4797,6 +4793,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         default:
                                             System.out.println("error");
                                     }
+                                    set_history();
                                 } else {
                                     JOptionPane.showMessageDialog(this, "your data is more than 10000 when count from the top. So you can't delete it", "Alert", JOptionPane.WARNING_MESSAGE);
                                 }
@@ -5547,10 +5544,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_pro_name_cbActionPerformed
 
     private void three_upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_upActionPerformed
-        if ((next_show_his - num_show_his) > 0) {
+        if ((next_show_his - num_show_his) >= 0) {
             next_show_his = next_show_his - num_show_his;
             three_down.setEnabled(true);
-            if (!((next_show_his - num_show_his) > 0)) {
+            if (!((next_show_his - num_show_his) >= 0)) {
                 three_up.setEnabled(false);
             }
         }
@@ -5558,10 +5555,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_upActionPerformed
 
     private void three_downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_downActionPerformed
-        if ((next_show_his + num_show_his) < count_db_to_list_pur_and_id()) {
+        if ((next_show_his + num_show_his) <= count_db_to_list_pur_and_id()) {
             next_show_his = next_show_his + num_show_his;
             three_up.setEnabled(true);
-            if (!((next_show_his + num_show_his) < count_db_to_list_pur_and_id())) {
+            if (!((next_show_his + num_show_his) <= count_db_to_list_pur_and_id())) {
                 three_down.setEnabled(false);
             }
         }
@@ -5603,6 +5600,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void three_chb_dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_dateActionPerformed
         hide_or_show_column_his(three_chb_date, 0, 230, 300, 10);
     }//GEN-LAST:event_three_chb_dateActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton13ActionPerformed
 
     /**
      * @param args the command line arguments
