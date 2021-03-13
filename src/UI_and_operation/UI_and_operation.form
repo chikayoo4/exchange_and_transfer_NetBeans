@@ -2419,44 +2419,67 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="three_add_tf" min="-2" pref="283" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jLabel47" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="three_rial_rb" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="three_dollar_rb" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="three_bart_rb" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="three_add_bn" min="-2" pref="79" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="three_calendar_cld" min="-2" pref="236" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
-                                      <Component id="date_history_lb" pref="920" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jScrollPane2" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="three_up" min="-2" pref="99" max="-2" attributes="0"/>
                                   <Component id="three_down" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="three_calendar_cld" min="-2" pref="236" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="three_add_tf" min="-2" pref="283" max="-2" attributes="0"/>
+                                                  <Group type="102" alignment="0" attributes="0">
+                                                      <Component id="jLabel47" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                      <Component id="three_rial_rb" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="three_dollar_rb" min="-2" max="-2" attributes="0"/>
+                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                      <Component id="three_bart_rb" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="three_add_bn" min="-2" pref="79" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="three_chb_date" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                                              <Component id="three_chb_id" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                                              <Component id="three_chb_user" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                              <Component id="three_chb_pur" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                              <Component id="three_chb_m_r" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                              <Component id="three_chb_m_s" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                                              <Component id="three_chb_m_b" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                                              <Component id="three_chb_m_b_bank" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                              <Component id="three_chb_m_detail" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="0" pref="275" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="date_history_lb" min="-2" pref="1046" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -2484,13 +2507,24 @@
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="date_history_lb" max="32767" attributes="0"/>
-                          <Component id="jButton1" max="32767" attributes="0"/>
                           <Component id="three_calendar_cld" max="32767" attributes="0"/>
                           <Component id="jLabel35" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="three_chb_id" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_date" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_user" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_pur" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_m_r" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_m_s" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_m_b" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_m_b_bank" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                          <Component id="three_chb_m_detail" alignment="3" min="-2" pref="54" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" pref="526" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="422" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="three_up" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -2730,17 +2764,6 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="24" style="0"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Refresh"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JLabel" name="date_history_lb">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -2768,6 +2791,105 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_downActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_id">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x179b;&#x17c1;&#x1781;&#x1794;&#x17d0;&#x178e;&#x17d2;&#x178e;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_idActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_date">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x1790;&#x17d2;&#x1784;&#x17c3;&#x1791;&#x17b8;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_dateActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_user">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x1785;&#x17c1;&#x1789;&#x1794;&#x17d0;&#x178e;&#x17d2;&#x178e;&#x178a;&#x17c4;&#x1799;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_userActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_pur">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x1794;&#x17c6;&#x178e;&#x1784;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_purActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_m_r">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; R"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_m_rActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_m_s">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; S"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_m_sActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_m_b">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; B"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_m_bActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_m_b_bank">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x179b;&#x17bb;&#x1799; B &#x1780;&#x17d2;&#x1793;&#x17bb;&#x1784;&#x1780;&#x17bb;&#x1784;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_m_b_bankActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="three_chb_m_detail">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Khmer OS Battambang" size="24" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="detail"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="three_chb_m_detailActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

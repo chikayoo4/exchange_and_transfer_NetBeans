@@ -48,24 +48,24 @@ public class to_province {
     public static String get_service_from_db(String money, type_of_money money_type) {
         switch (money_type) {
             case Rial:
-                
+
                 break;
             case Dollar:
-                
-                return String.valueOf(Double.parseDouble(money)  / 1000);
+
+                return String.valueOf(Double.parseDouble(money) / 1000);
             default:
                 System.out.println("error");
         }
         return "";
     }
 
-    public static void set_to_pro_to_db(javax.swing.JTextField two_three_sender_phone_no_tf, javax.swing.JTextField two_three_receiver_phone_no_tf
-    ,javax.swing.JTextField two_one_total_money_tf, javax.swing.JTextField two_three_sender_money_tf, javax.swing.JTextField two_three_balance_money_tf
-            , javax.swing.JTextField two_three_service_money_tf, javax.swing.JComboBox<String> two_one_pro_name_cb,
-             javax.swing.JRadioButton two_three_rial_money_rb,  javax.swing.JRadioButton two_three_dollar_money_rb,
-              javax.swing.JRadioButton two_three_bart_money_rb, type_of_money selected_money_type_to_pro,
-    javax.swing.ButtonGroup buttonGroup2, UI_and_operation ui_ope){
-            if ((!two_three_sender_phone_no_tf.getText().isEmpty() && !two_three_receiver_phone_no_tf.getText().isEmpty()
+    public static void set_to_pro_to_db(javax.swing.JTextField two_three_sender_phone_no_tf, javax.swing.JTextField two_three_receiver_phone_no_tf,
+            javax.swing.JTextField two_one_total_money_tf, javax.swing.JTextField two_three_sender_money_tf, javax.swing.JTextField two_three_balance_money_tf,
+            javax.swing.JTextField two_three_service_money_tf, javax.swing.JComboBox<String> two_one_pro_name_cb,
+            javax.swing.JRadioButton two_three_rial_money_rb, javax.swing.JRadioButton two_three_dollar_money_rb,
+            javax.swing.JRadioButton two_three_bart_money_rb, type_of_money selected_money_type_to_pro,
+            javax.swing.ButtonGroup buttonGroup2, UI_and_operation ui_ope) {
+        if ((!two_three_sender_phone_no_tf.getText().isEmpty() && !two_three_receiver_phone_no_tf.getText().isEmpty()
                 && !two_one_pro_name_cb.getSelectedItem().equals("none") && !two_three_sender_money_tf.getText().isEmpty()
                 && !two_three_service_money_tf.getText().isEmpty()) && (two_three_rial_money_rb.isSelected()
                 || two_three_dollar_money_rb.isSelected() || two_three_bart_money_rb.isSelected())) {
@@ -161,9 +161,10 @@ public class to_province {
             two_three_sender_money_tf.setText("");
             two_three_service_money_tf.setText("");
             buttonGroup2.clearSelection();
+            ui_ope.set_history();
         }
     }
-    
+
     public static void two_one_cal(type_of_money selected_money_type_to_pro, javax.swing.JTextField two_three_sender_money_tf,
             javax.swing.JTextField two_three_service_money_tf, javax.swing.JTextField two_one_total_money_tf,
             javax.swing.JTextField two_three_balance_money_tf, javax.swing.JRadioButton two_three_rial_money_rb,

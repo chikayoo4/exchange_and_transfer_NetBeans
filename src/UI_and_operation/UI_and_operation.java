@@ -26,6 +26,7 @@ import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
 import static UI_and_operation.path_file.double_exc_reciept_path;
 import static UI_and_operation.path_file.exc_reciept_path;
 import static UI_and_operation.path_file.get_path;
+import static UI_and_operation.path_file.set_main_proj_path_to_db;
 import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.to_province.two_one_cal;
@@ -56,10 +57,14 @@ import static UI_and_operation.to_province.get_to_pro_db_set_to_tb;
 import static UI_and_operation.to_province.set_to_pro_to_db;
 
 import java.awt.Desktop;
+import java.awt.event.ComponentListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoundedRangeModel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
@@ -108,6 +113,21 @@ public class UI_and_operation extends javax.swing.JFrame {
     type_of_money selected_money_type_from_pro;
 
     //------------------------------------------------------my function------------------------------------------------------
+    public void hide_or_show_column_his(javax.swing.JCheckBox chb, int idx_col, int set_col_size, int set_max_col_size, int set_min_col_size) {
+        if (chb.isSelected()) {
+            three_tb_history.getColumnModel().getColumn(idx_col).setMaxWidth(set_max_col_size);
+            three_tb_history.getColumnModel().getColumn(idx_col).setMinWidth(set_min_col_size);
+
+            three_tb_history.getColumnModel().getColumn(idx_col).setPreferredWidth(set_col_size);
+        } else {
+
+            three_tb_history.getColumnModel().getColumn(idx_col).setMaxWidth(0);
+            three_tb_history.getColumnModel().getColumn(idx_col).setMinWidth(0);
+
+            three_tb_history.getColumnModel().getColumn(idx_col).setPreferredWidth(0);
+        }
+    }
+
 //table.getModel().addTableModelListener(l);
     public javax.swing.JComboBox<String> get_to_pro_cb_from_ui_oper() {
         return two_one_pro_name_cb;
@@ -601,45 +621,57 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
-    //-----------------------------------------------------class call--------------------------------------------------
-    exchange_rate_show exe_rate_show = new exchange_rate_show();
+    private void custom_three_tb_his_default() {
 
-    /**
-     * Creates new form UI_and_operation
-     */
-    public UI_and_operation() {
+        //design head table  total money in balance
+        three_tb_total_money.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 30));
+        three_tb_total_money.setRowHeight(40);
 
-//        this.setUndecorated(false);
-//        this.setAlwaysOnTop(true);
-//        this.setResizable(true);
-//        this.setVisible(true);
-        initComponents();
+        //design head table  history in balance
+        three_tb_history.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 20));
+        three_tb_history.setRowHeight(40);
 
-        Toolkit a = Toolkit.getDefaultToolkit();
-        int xSize = (int) a.getScreenSize().getWidth();
-        int ySize = (int) a.getScreenSize().getHeight();
-        this.setSize(xSize, ySize);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        three_tb_history.setShowGrid(true);
 
-        three_calendar_cld.setDate(current_date());
+        three_tb_history.getColumnModel().getColumn(0).setMaxWidth(300);
+        three_tb_history.getColumnModel().getColumn(1).setMaxWidth(150);
+        three_tb_history.getColumnModel().getColumn(2).setMaxWidth(170);
+        three_tb_history.getColumnModel().getColumn(3).setMaxWidth(200);
+        three_tb_history.getColumnModel().getColumn(4).setMaxWidth(200);
+        three_tb_history.getColumnModel().getColumn(5).setMaxWidth(200);
+        three_tb_history.getColumnModel().getColumn(6).setMaxWidth(200);
+        three_tb_history.getColumnModel().getColumn(7).setMaxWidth(200);
+        three_tb_history.getColumnModel().getColumn(8).setMaxWidth(1500);
 
-        //set account user to class for waiting to use
-        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
+        three_tb_history.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        three_tb_history.getColumnModel().getColumn(0).setPreferredWidth(230);
+        three_tb_history.getColumnModel().getColumn(1).setPreferredWidth(100);
+        three_tb_history.getColumnModel().getColumn(2).setPreferredWidth(150);
+        three_tb_history.getColumnModel().getColumn(3).setPreferredWidth(175);
+        three_tb_history.getColumnModel().getColumn(4).setPreferredWidth(130);
+        three_tb_history.getColumnModel().getColumn(5).setPreferredWidth(130);
+        three_tb_history.getColumnModel().getColumn(6).setPreferredWidth(130);
+        three_tb_history.getColumnModel().getColumn(7).setPreferredWidth(140);
+        three_tb_history.getColumnModel().getColumn(8).setPreferredWidth(1000);
 
-        String local_host_server_name = five_local_host_server_name_tf.getText();
-        String local_host_db_name = five_local_host_db_name_tf.getText();
-        String local_user_name = five_local_host_user_name_tf.getText();
-        String local_password_tf = five_local_host_password_tf.getText();
-        setLocal_host(local_host_server_name, local_host_db_name);
-        setLocal_host_user_name(local_user_name);
-        setLocal_host_password(local_password_tf);
+        three_chb_date.setSelected(true);
+        three_chb_id.setSelected(true);
+        three_chb_user.setSelected(true);
+        three_chb_pur.setSelected(true);
+        three_chb_m_r.setSelected(true);
+        three_chb_m_s.setSelected(true);
+        three_chb_m_b.setSelected(true);
+        three_chb_m_b_bank.setSelected(true);
+        three_chb_m_detail.setSelected(true);
 
-        String wifi_host = five_wifi_host_tf.getText();
-        String wifi_user_name = five_wifi_host_user_name_tf.getText();
-        String wifi_password_tf = five_wifi_host_password_tf.getText();
-        setWifi_host(wifi_host);
-        setWifi_host_user_name(wifi_user_name);
-        setWifi_host_password(wifi_password_tf);
+        if (count_db_to_list_pur_and_id() < num_show_his) {
+            three_down.setEnabled(false);
+        } else {
+            three_down.setEnabled(true);
+        }
+    }
+
+    private void custom_four_rate_default() {
 
         String S_to_R = "";
         String R_to_S = "";
@@ -657,23 +689,6 @@ public class UI_and_operation extends javax.swing.JFrame {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-
-            String path = "";
-            try {
-                File file = new File("x.txt");
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                path = file.getAbsolutePath();
-                path = path.substring(0, path.length() - 6);
-//                                System.out.println("path : " + path);
-            } catch (IOException e) {
-                System.out.println("error");
-            }
-
-            pst = con.prepareStatement("UPDATE project_path SET path_name = '" + path + "';");
-            pst.executeUpdate();
-
             //write sql query to access
             pst = con.prepareStatement("SELECT TOP 1 dollar_to_rial, rial_to_dollar, dollar_to_bart, "
                     + "bart_to_dollar, bart_to_rial, rial_to_bart "
@@ -728,30 +743,86 @@ public class UI_and_operation extends javax.swing.JFrame {
         four_R_to_B_two_tf.setText(exc_ra.getR_to_B_two());
         four_R_to_B_three_tf.setText(exc_ra.getR_to_B_three());
         four_R_to_B_four_tf.setText(exc_ra.getR_to_B_four());
+    }
 
-//        exe_rate_show.set_rate(S_to_R, R_to_S, S_to_B, B_to_S, B_to_R, R_to_B);
-//        exe_rate_show.setVisible(true);
-        //set name of the window next to logo
+    private void set_con_db() {
+
+        String local_host_server_name = five_local_host_server_name_tf.getText();
+        String local_host_db_name = five_local_host_db_name_tf.getText();
+        String local_user_name = five_local_host_user_name_tf.getText();
+        String local_password_tf = five_local_host_password_tf.getText();
+        setLocal_host(local_host_server_name, local_host_db_name);
+        setLocal_host_user_name(local_user_name);
+        setLocal_host_password(local_password_tf);
+
+        String wifi_host = five_wifi_host_tf.getText();
+        String wifi_user_name = five_wifi_host_user_name_tf.getText();
+        String wifi_password_tf = five_wifi_host_password_tf.getText();
+        setWifi_host(wifi_host);
+        setWifi_host_user_name(wifi_user_name);
+        setWifi_host_password(wifi_password_tf);
+    }
+
+    //-----------------------------------------------------class call--------------------------------------------------
+    exchange_rate_show exe_rate_show = new exchange_rate_show();
+
+    /**
+     * Creates new form UI_and_operation
+     */
+    public UI_and_operation() {
+
+//        this.setUndecorated(false);
+//        this.setAlwaysOnTop(true);
+//        this.setResizable(true);
+//        this.setVisible(true);
+        initComponents();
+
+        Toolkit a = Toolkit.getDefaultToolkit();
+        int xSize = (int) a.getScreenSize().getWidth();
+        int ySize = (int) a.getScreenSize().getHeight();
+        this.setSize(xSize, ySize);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        three_calendar_cld.setDate(current_date());
+
+        //set account user to class for waiting to use
+        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
+
+        set_con_db();
+
+        set_main_proj_path_to_db();
+
         setTitle("Exchange and Transfer money");
+
         setIconImage(Toolkit.getDefaultToolkit().getImage("logo_and_icon\\icon\\main_logo.png"));
 
-        //design head table  total money in balance
-        three_tb_total_money.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 30));
-        three_tb_total_money.setRowHeight(40);
-
-        //design head table  history in balance
-        three_tb_history.getTableHeader().setFont(new Font("Khmer OS Siemreap", Font.BOLD, 20));
-        three_tb_history.setRowHeight(40);
         set_cb(two_one_pro_name_cb, "transfer_province", "province_name_history_tb");
         set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
+
         one_tf_customer_money.requestFocus();
+
         three_up.setEnabled(false);
-        if (count_db_to_list_pur_and_id() < num_show_his) {
-            three_down.setEnabled(false);
-        } else {
-            three_down.setEnabled(true);
-        }
+
+        custom_four_rate_default();
+
+        custom_three_tb_his_default();
+
         set_history();
+
+        three_calendar_cld.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                three_up.setEnabled(false);
+                next_show_his = 0;
+                if (count_db_to_list_pur_and_id() < num_show_his) {
+                    three_down.setEnabled(false);
+                } else {
+                    three_down.setEnabled(true);
+                }
+                set_history();
+            }
+        });
     }
 
     /**
@@ -920,10 +991,18 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel35 = new javax.swing.JLabel();
         jLabel47 = new javax.swing.JLabel();
         three_calendar_cld = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
         date_history_lb = new javax.swing.JLabel();
         three_up = new javax.swing.JButton();
         three_down = new javax.swing.JButton();
+        three_chb_id = new javax.swing.JCheckBox();
+        three_chb_date = new javax.swing.JCheckBox();
+        three_chb_user = new javax.swing.JCheckBox();
+        three_chb_pur = new javax.swing.JCheckBox();
+        three_chb_m_r = new javax.swing.JCheckBox();
+        three_chb_m_s = new javax.swing.JCheckBox();
+        three_chb_m_b = new javax.swing.JCheckBox();
+        three_chb_m_b_bank = new javax.swing.JCheckBox();
+        three_chb_m_detail = new javax.swing.JCheckBox();
         jPanel9 = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -2595,7 +2674,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 831, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2715,14 +2794,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_calendar_cld.setDateFormatString("d-M-yyyy");
         three_calendar_cld.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jButton1.setText("Refresh");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         date_history_lb.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
 
         three_up.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -2741,6 +2812,78 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
+        three_chb_id.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_id.setText("លេខប័ណ្ណ");
+        three_chb_id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_idActionPerformed(evt);
+            }
+        });
+
+        three_chb_date.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_date.setText("ថ្ងៃទី");
+        three_chb_date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_dateActionPerformed(evt);
+            }
+        });
+
+        three_chb_user.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_user.setText("ចេញប័ណ្ណដោយ");
+        three_chb_user.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_userActionPerformed(evt);
+            }
+        });
+
+        three_chb_pur.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_pur.setText("បំណង");
+        three_chb_pur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_purActionPerformed(evt);
+            }
+        });
+
+        three_chb_m_r.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_r.setText("លុយ R");
+        three_chb_m_r.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_m_rActionPerformed(evt);
+            }
+        });
+
+        three_chb_m_s.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_s.setText("លុយ S");
+        three_chb_m_s.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_m_sActionPerformed(evt);
+            }
+        });
+
+        three_chb_m_b.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_b.setText("លុយ B");
+        three_chb_m_b.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_m_bActionPerformed(evt);
+            }
+        });
+
+        three_chb_m_b_bank.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_b_bank.setText("លុយ B ក្នុងកុង");
+        three_chb_m_b_bank.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_m_b_bankActionPerformed(evt);
+            }
+        });
+
+        three_chb_m_detail.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        three_chb_m_detail.setText("detail");
+        three_chb_m_detail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                three_chb_m_detailActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -2748,37 +2891,56 @@ public class UI_and_operation extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addComponent(jLabel47)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(three_rial_rb)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(three_dollar_rb)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(three_bart_rb)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(three_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel35)
-                                .addGap(18, 18, 18)
-                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
-                                .addGap(60, 60, 60)
-                                .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE))))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(three_up, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(three_down))))
+                            .addComponent(three_down)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jLabel35)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                                .addComponent(jLabel47)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(three_rial_rb)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(three_dollar_rb)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(three_bart_rb)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(three_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(three_chb_date)
+                                        .addGap(51, 51, 51)
+                                        .addComponent(three_chb_id)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(three_chb_user)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(three_chb_pur)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(three_chb_m_r)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(three_chb_m_s)
+                                        .addGap(37, 37, 37)
+                                        .addComponent(three_chb_m_b)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(three_chb_m_b_bank)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(three_chb_m_detail)))
+                                .addGap(0, 275, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 1046, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -2799,12 +2961,22 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(48, 48, 48)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(three_chb_id, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_date, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_user, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_pur, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_m_r, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_m_s, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_m_b, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_m_b_bank, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(three_chb_m_detail, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 526, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(three_up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -4046,6 +4218,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         default:
                             System.out.println("Error");
                     }
+                    set_history();
                 } catch (SQLException ex) {
                     System.err.println(ex);
                 }
@@ -4637,18 +4810,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_three_tb_historyMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        three_up.setEnabled(false);
-        next_show_his = 0;
-        if (count_db_to_list_pur_and_id() < num_show_his) {
-            three_down.setEnabled(false);
-        } else {
-            three_down.setEnabled(true);
-        }
-        set_history();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void five_dev_permission_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_dev_permission_bnActionPerformed
         if (five_dev_permission_tf.getText().equals("Chi0123456789kay")) {
             five_wifi_host_user_name_tf.setEditable(true);
@@ -4776,6 +4937,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_four_total_money_tf.setText("");
             buttonGroup3.clearSelection();
             remove_all_in_list(two_two_ph_recieve_list);
+            set_history();
         }
     }//GEN-LAST:event_two_four_bn_finishActionPerformed
 
@@ -5302,7 +5464,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void one_two_bn_finishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_two_bn_finishedActionPerformed
         double_exc_close_or_print(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
                 one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
-                one_tf_exchange_rate2, one_tf_customer_result2, false);
+                one_tf_exchange_rate2, one_tf_customer_result2, false, this);
     }//GEN-LAST:event_one_two_bn_finishedActionPerformed
 
     private void one_two_bn_finishedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_two_bn_finishedKeyPressed
@@ -5312,7 +5474,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void one_bn_print1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_print1ActionPerformed
         double_exc_close_or_print(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
                 one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
-                one_tf_exchange_rate2, one_tf_customer_result2, true);
+                one_tf_exchange_rate2, one_tf_customer_result2, true, this);
     }//GEN-LAST:event_one_bn_print1ActionPerformed
 
     private void one_bn_print1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_one_bn_print1KeyPressed
@@ -5406,6 +5568,42 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_history();
     }//GEN-LAST:event_three_downActionPerformed
 
+    private void three_chb_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_idActionPerformed
+        hide_or_show_column_his(three_chb_id, 1, 100, 150, 10);
+    }//GEN-LAST:event_three_chb_idActionPerformed
+
+    private void three_chb_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_userActionPerformed
+        hide_or_show_column_his(three_chb_user, 2, 150, 170, 10);
+    }//GEN-LAST:event_three_chb_userActionPerformed
+
+    private void three_chb_purActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_purActionPerformed
+        hide_or_show_column_his(three_chb_pur, 3, 175, 200, 10);
+    }//GEN-LAST:event_three_chb_purActionPerformed
+
+    private void three_chb_m_rActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_m_rActionPerformed
+        hide_or_show_column_his(three_chb_m_r, 4, 130, 200, 10);
+    }//GEN-LAST:event_three_chb_m_rActionPerformed
+
+    private void three_chb_m_sActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_m_sActionPerformed
+        hide_or_show_column_his(three_chb_m_s, 5, 130, 200, 10);
+    }//GEN-LAST:event_three_chb_m_sActionPerformed
+
+    private void three_chb_m_bActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_m_bActionPerformed
+        hide_or_show_column_his(three_chb_m_b, 6, 130, 200, 10);
+    }//GEN-LAST:event_three_chb_m_bActionPerformed
+
+    private void three_chb_m_b_bankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_m_b_bankActionPerformed
+        hide_or_show_column_his(three_chb_m_b_bank, 7, 140, 200, 10);
+    }//GEN-LAST:event_three_chb_m_b_bankActionPerformed
+
+    private void three_chb_m_detailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_m_detailActionPerformed
+        hide_or_show_column_his(three_chb_m_detail, 8, 1000, 1500, 10);
+    }//GEN-LAST:event_three_chb_m_detailActionPerformed
+
+    private void three_chb_dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_chb_dateActionPerformed
+        hide_or_show_column_his(three_chb_date, 0, 230, 300, 10);
+    }//GEN-LAST:event_three_chb_dateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5494,7 +5692,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField four_S_to_R_three_tf;
     private javax.swing.JTextField four_S_to_R_two_tf;
     private javax.swing.JButton four_bn_edit_exchange_rate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton9;
@@ -5616,6 +5813,15 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField three_add_tf;
     private javax.swing.JRadioButton three_bart_rb;
     private com.toedter.calendar.JDateChooser three_calendar_cld;
+    private javax.swing.JCheckBox three_chb_date;
+    private javax.swing.JCheckBox three_chb_id;
+    private javax.swing.JCheckBox three_chb_m_b;
+    private javax.swing.JCheckBox three_chb_m_b_bank;
+    private javax.swing.JCheckBox three_chb_m_detail;
+    private javax.swing.JCheckBox three_chb_m_r;
+    private javax.swing.JCheckBox three_chb_m_s;
+    private javax.swing.JCheckBox three_chb_pur;
+    private javax.swing.JCheckBox three_chb_user;
     private javax.swing.JRadioButton three_dollar_rb;
     private javax.swing.JButton three_down;
     private javax.swing.JRadioButton three_rial_rb;
