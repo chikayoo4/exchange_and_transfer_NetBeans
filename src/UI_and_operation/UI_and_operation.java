@@ -746,6 +746,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
         one_tf_customer_money.requestFocus();
         three_up.setEnabled(false);
+        if (count_db_to_list_pur_and_id() < num_show_his) {
+            three_down.setEnabled(false);
+        } else {
+            three_down.setEnabled(true);
+        }
         set_history();
     }
 
@@ -4570,7 +4575,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         String pur = model.getValueAt(selectedIndex, 3).toString();
                         switch (pur) {
                             case "exchanging":
-                        id = get_id_inv_by_id_inv_man_from_db(id);
+                                id = get_id_inv_by_id_inv_man_from_db(id);
                                 print_reciept(get_path() + exc_reciept_path, id);
                                 break;
                             case "double_exchanging":
@@ -4633,6 +4638,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_three_tb_historyMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        three_up.setEnabled(false);
+        next_show_his = 0;
         if (count_db_to_list_pur_and_id() < num_show_his) {
             three_down.setEnabled(false);
         } else {
