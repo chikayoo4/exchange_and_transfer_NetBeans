@@ -69,7 +69,6 @@ CREATE TABLE to_thai_invoice_tb (
     sender_money VARCHAR(40) NOT NULL,
     servise_money VARCHAR(40) NOT NULL,
     total_money VARCHAR(40) NOT NULL,
-    invoice_date DATETIME NOT NULL,
     id_sender INTEGER NOT NULL,
 	CONSTRAINT FK_to_thai_id_sender FOREIGN KEY (id_sender) REFERENCES to_thai_sender_tb (id_sender),
     id_acc INTEGER NOT NULL,

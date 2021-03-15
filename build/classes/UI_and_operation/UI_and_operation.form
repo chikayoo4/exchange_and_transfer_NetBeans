@@ -2,48 +2,11 @@
 
 <Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Container class="javax.swing.JPanel" name="jPanel3">
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="658" max="32767" attributes="0"/>
-                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="394" max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="265" max="-2" attributes="0"/>
-                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="320" max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel6">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jLabel6"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Component class="javax.swing.JTextField" name="jTextField4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jTextField4"/>
-      </Properties>
+    <Component class="javax.swing.ButtonGroup" name="bg_to_pro">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    <Component class="javax.swing.ButtonGroup" name="bg_from_pro">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
-    </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup3">
-    </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup4">
+    <Component class="javax.swing.ButtonGroup" name="bg_add_m">
     </Component>
     <Component class="com.toedter.calendar.JCalendar" name="jCalendar1">
     </Component>
@@ -170,7 +133,7 @@
                                                   <Group type="102" attributes="0">
                                                       <Component id="one_lb_customer_money" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb" pref="221" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb" pref="238" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Component id="one_tf_customer_money" max="32767" attributes="0"/>
                                               </Group>
@@ -188,7 +151,7 @@
                                           <Group type="102" attributes="0">
                                               <Component id="one_lb_exchange_rate" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="one_rate_type_lb" pref="219" max="32767" attributes="0"/>
+                                              <Component id="one_rate_type_lb" pref="234" max="32767" attributes="0"/>
                                           </Group>
                                           <Component id="one_tf_exchange_rate" max="32767" attributes="0"/>
                                       </Group>
@@ -207,7 +170,7 @@
                                           <Group type="102" attributes="0">
                                               <Component id="one_lb_customer_result" min="-2" pref="218" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="one_money_type_result_lb" pref="222" max="32767" attributes="0"/>
+                                              <Component id="one_money_type_result_lb" pref="237" max="32767" attributes="0"/>
                                           </Group>
                                           <Component id="one_tf_customer_result" max="32767" attributes="0"/>
                                       </Group>
@@ -540,9 +503,9 @@
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="one_lb_customer_money2" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb3_" pref="233" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb3_" pref="254" max="32767" attributes="0"/>
                                                   </Group>
-                                                  <Component id="one_tf_customer_money2" alignment="0" pref="447" max="32767" attributes="0"/>
+                                                  <Component id="one_tf_customer_money2" alignment="0" pref="468" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="one_lb_operator2" min="-2" pref="38" max="-2" attributes="0"/>
@@ -553,7 +516,7 @@
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="one_lb_customer_money1" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb1" pref="228" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb1" pref="249" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Component id="one_tf_customer_money1" max="32767" attributes="0"/>
                                               </Group>
@@ -601,7 +564,7 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="one_lb_customer_result1" min="-2" pref="218" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="one_money_type_lb4" pref="204" max="32767" attributes="0"/>
+                                              <Component id="one_money_type_lb4" pref="230" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="one_lb_customer_result2" min="-2" pref="218" max="-2" attributes="0"/>
@@ -1034,7 +997,6 @@
                                       <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="two_three_sender_money_tf" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="two_three_balance_money_tf" alignment="0" max="32767" attributes="0"/>
                                           <Component id="two_one_total_money_tf" alignment="1" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="1" attributes="0">
@@ -1051,13 +1013,14 @@
                                                   <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="69" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="two_three_service_money_tf" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="two_one_edit_bn" min="-2" pref="138" max="-2" attributes="0"/>
                                           </Group>
+                                          <Component id="two_three_balance_money_tf" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -1088,11 +1051,11 @@
                               <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="two_one_total_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="two_three_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jButton13" max="32767" attributes="0"/>
                                   <Component id="two_three_bn_finish" min="-2" pref="75" max="-2" attributes="0"/>
@@ -1220,7 +1183,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_three_dollar_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup2"/>
+                          <ComponentRef name="bg_to_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1234,7 +1197,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_three_rial_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup2"/>
+                          <ComponentRef name="bg_to_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1251,7 +1214,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_three_bart_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup2"/>
+                          <ComponentRef name="bg_to_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1562,7 +1525,7 @@
                                                       <Component id="two_four_bart_money_rb" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace min="0" pref="156" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="65" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -1596,7 +1559,7 @@
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="two_four_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace pref="82" max="32767" attributes="0"/>
+                              <EmptySpace pref="83" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton15" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                                   <Component id="two_four_bn_finish" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
@@ -1708,7 +1671,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_four_rial_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup3"/>
+                          <ComponentRef name="bg_from_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1726,7 +1689,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_four_dollar_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup3"/>
+                          <ComponentRef name="bg_from_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1741,7 +1704,7 @@
                     <Component class="javax.swing.JRadioButton" name="two_four_bart_money_rb">
                       <Properties>
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                          <ComponentRef name="buttonGroup3"/>
+                          <ComponentRef name="bg_from_pro"/>
                         </Property>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="36" style="0"/>
@@ -1925,8 +1888,8 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="two_one_tf_total_money" alignment="0" pref="557" max="32767" attributes="0"/>
-                                          <Component id="two_one_tf_service_money" alignment="1" pref="557" max="32767" attributes="0"/>
+                                          <Component id="two_one_tf_total_money" alignment="0" pref="466" max="32767" attributes="0"/>
+                                          <Component id="two_one_tf_service_money" alignment="1" pref="466" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -1952,7 +1915,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="two_one_tf_cus_money" min="-2" pref="75" max="-2" attributes="0"/>
@@ -1972,8 +1935,8 @@
                               <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel13" pref="712" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                              <Component id="jPanel13" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -1995,7 +1958,10 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="two_one_tf_cus_moneyCaretUpdate"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="two_one_tf_cus_moneyActionPerformed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_cus_moneyKeyReleased"/>
+                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_cus_moneyKeyTyped"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel11">
@@ -2012,6 +1978,10 @@
                           <Font name="Tahoma" size="40" style="0"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_service_moneyKeyReleased"/>
+                        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_service_moneyKeyTyped"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel12">
                       <Properties>
@@ -2023,9 +1993,11 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="two_one_tf_total_money">
                       <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="40" style="0"/>
                         </Property>
+                        <Property name="focusable" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton9">
@@ -2085,21 +2057,6 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="two_one_tf_cus_name">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="40" style="0"/>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_cus_nameKeyReleased"/>
-                          </Events>
-                          <Constraints>
-                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                              <AbsoluteConstraints x="20" y="210" width="700" height="70"/>
-                            </Constraint>
-                          </Constraints>
-                        </Component>
                         <Component class="javax.swing.JButton" name="two_three_bank_info_his_bn">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -2120,7 +2077,7 @@
                         <Container class="javax.swing.JLayeredPane" name="two_three_to_thai_bank_id_layer_pane">
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                              <AbsoluteConstraints x="20" y="150" width="580" height="-1"/>
+                              <AbsoluteConstraints x="20" y="150" width="580" height="220"/>
                             </Constraint>
                           </Constraints>
 
@@ -2134,7 +2091,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="two_three_to_thai_bank_id_list" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="247" max="32767" attributes="0"/>
+                                      <EmptySpace pref="220" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2336,6 +2293,21 @@
                             </Constraint>
                           </Constraints>
                         </Component>
+                        <Component class="javax.swing.JTextField" name="two_one_tf_cus_name">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="40" style="0"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="two_one_tf_cus_nameKeyReleased"/>
+                          </Events>
+                          <Constraints>
+                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                              <AbsoluteConstraints x="20" y="210" width="700" height="70"/>
+                            </Constraint>
+                          </Constraints>
+                        </Component>
                       </SubComponents>
                     </Container>
                   </SubComponents>
@@ -2364,7 +2336,7 @@
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="two_two_service_money_tf" alignment="0" max="32767" attributes="0"/>
                                           <Component id="two_two_reveiver_money_tf" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="two_two_reveiver_ph_no_tf" alignment="0" pref="697" max="32767" attributes="0"/>
+                                          <Component id="two_two_reveiver_ph_no_tf" alignment="0" pref="606" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="1" attributes="0">
                                                   <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -2589,7 +2561,7 @@
                                               <Component id="three_chb_m_detail" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="235" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="282" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -2808,7 +2780,7 @@
             <Component class="javax.swing.JRadioButton" name="three_rial_rb">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup4"/>
+                  <ComponentRef name="bg_add_m"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="24" style="0"/>
@@ -2822,7 +2794,7 @@
             <Component class="javax.swing.JRadioButton" name="three_dollar_rb">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup4"/>
+                  <ComponentRef name="bg_add_m"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="24" style="0"/>
@@ -2836,7 +2808,7 @@
             <Component class="javax.swing.JRadioButton" name="three_bart_rb">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="buttonGroup4"/>
+                  <ComponentRef name="bg_add_m"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="24" style="0"/>
@@ -3031,7 +3003,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="237" max="32767" attributes="0"/>
+                      <EmptySpace pref="261" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jLabel36" alignment="1" min="-2" pref="835" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
@@ -3136,7 +3108,7 @@
                               <EmptySpace min="-2" pref="277" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="500" max="32767" attributes="0"/>
+                      <EmptySpace pref="523" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -3706,11 +3678,11 @@
                               <Component id="five_wifi_host_user_name_tf" min="-2" pref="377" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="314" max="32767" attributes="0"/>
+                      <EmptySpace pref="338" max="32767" attributes="0"/>
                       <Component id="five_dev_permission_tf" min="-2" pref="223" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="five_dev_permission_bn" min="-2" pref="99" max="-2" attributes="0"/>
-                      <EmptySpace pref="368" max="32767" attributes="0"/>
+                      <EmptySpace pref="391" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

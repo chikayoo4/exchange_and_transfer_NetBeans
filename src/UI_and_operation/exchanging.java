@@ -773,7 +773,7 @@ public class exchanging {
             }
             one_tf_customer_money.setText(result);
             exchanging exchanging_obj = new exchanging(
-                    one_tf_customer_money.getText(),
+                     cut_the_lastest_point(one_tf_customer_money.getText()),
                     one_tf_customer_result.getText(),
                     one_tf_exchange_rate.getText(),
                     current_date(),

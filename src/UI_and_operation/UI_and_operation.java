@@ -94,6 +94,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private int next_show_his = 0;
     private int num_show_his = 10;
     private int idx_transfer_pt = 0;
+    private Boolean is_change_pro = false;
     public static String set_admin_password = "";
     private Boolean two_one_is_off_edit = true;
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
@@ -112,7 +113,12 @@ public class UI_and_operation extends javax.swing.JFrame {
         return idx_transfer_pt;
     }
 
-    public void hide_or_show_column_his(javax.swing.JCheckBox chb, int idx_col, int set_col_size, int set_max_col_size, int set_min_col_size) {
+    public void set_is_change_pro_true() {
+        is_change_pro = true;
+    }
+
+    public void hide_or_show_column_his(javax.swing.JCheckBox chb,
+            int idx_col, int set_col_size, int set_max_col_size, int set_min_col_size) {
         if (chb.isSelected()) {
             three_tb_history.getColumnModel().getColumn(idx_col).setMaxWidth(set_max_col_size);
             three_tb_history.getColumnModel().getColumn(idx_col).setMinWidth(set_min_col_size);
@@ -877,21 +883,29 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
     }
-    
-    void add_listener_pt_change_on_transfer() {
 
-        zero_tp.addChangeListener(new ChangeListener() {
+    public void add_listener_pt_change_on_transfer() {
+
+        sub_tran_pt.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-//            System.out.println("Tab: " + zero_tp.getSelectedIndex());
-                if (zero_tp.getSelectedIndex() == 2 && is_change_his) {
-                    set_history();
-                    is_change_his = false;
+//            System.out.println("Tab: " + sub_tran_pt.getSelectedIndex());
+                idx_transfer_pt = sub_tran_pt.getSelectedIndex();
+                if (sub_tran_pt.getSelectedIndex() == 0 && is_change_pro) {
+                    set_cb(two_one_pro_name_cb, "transfer_province", "province_name_history_tb");
+                    is_change_pro = false;
+                } else if (sub_tran_pt.getSelectedIndex() == 1 && is_change_pro) {
+                    set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
+                    is_change_pro = false;
+                } else if (sub_tran_pt.getSelectedIndex() == 2) {
+                    set_cb(two_three_bank_thai_cb, "bank", "to_thai_bank_name_history_tb");
                 }
             }
         });
     }
-    
 
+//    private void set_color_exc(Boolean s_r_bn, Boolean r_s_bn, ){
+//        
+//    }
     //-----------------------------------------------------class call--------------------------------------------------
     exchange_rate_show exe_rate_show = new exchange_rate_show();
 
@@ -927,8 +941,10 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         set_cb(two_one_pro_name_cb, "transfer_province", "province_name_history_tb");
         set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
+        set_cb(two_three_bank_thai_cb, "bank", "to_thai_bank_name_history_tb");
 
-        one_tf_customer_money.requestFocus();
+        one_bn_S_to_R.requestFocus();
+        one_bn_S_to_R.setBackground(new Color(204, 255, 255));
 
         three_up.setEnabled(false);
 
@@ -941,6 +957,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         add_listener_calendar_three();
 
         add_listener_pt_change_on_his();
+
+        add_listener_pt_change_on_transfer();
     }
 
     /**
@@ -952,13 +970,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel3 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
-        buttonGroup3 = new javax.swing.ButtonGroup();
-        buttonGroup4 = new javax.swing.ButtonGroup();
+        bg_to_pro = new javax.swing.ButtonGroup();
+        bg_from_pro = new javax.swing.ButtonGroup();
+        bg_add_m = new javax.swing.ButtonGroup();
         jCalendar1 = new com.toedter.calendar.JCalendar();
         zero_tp = new javax.swing.JTabbedPane();
         exc_pt = new javax.swing.JPanel();
@@ -1075,7 +1089,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel13 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         two_one_tf_cus_no = new javax.swing.JTextField();
-        two_one_tf_cus_name = new javax.swing.JTextField();
         two_three_bank_info_his_bn = new javax.swing.JButton();
         two_three_to_thai_bank_id_layer_pane = new javax.swing.JLayeredPane();
         two_three_to_thai_bank_id_list = new javax.swing.JList<>();
@@ -1089,6 +1102,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_bank_thai_cb = new javax.swing.JComboBox<>();
         two_three_bank_his_bn = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
+        two_one_tf_cus_name = new javax.swing.JTextField();
         from_thai_pn = new javax.swing.JPanel();
         print = new javax.swing.JButton();
         two_two_bn_finish = new javax.swing.JButton();
@@ -1184,27 +1198,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel55 = new javax.swing.JLabel();
         five_dev_permission_tf = new javax.swing.JTextField();
         five_dev_permission_bn = new javax.swing.JButton();
-
-        jLabel6.setText("jLabel6");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(658, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(394, 394, 394))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(265, 265, 265)
-                .addComponent(jLabel6)
-                .addContainerGap(320, Short.MAX_VALUE))
-        );
-
-        jTextField4.setText("jTextField4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1422,7 +1415,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addGroup(exc_pnLayout.createSequentialGroup()
                                         .addComponent(one_lb_customer_money)
                                         .addGap(18, 18, 18)
-                                        .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+                                        .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
                                     .addComponent(one_tf_customer_money))
                                 .addGap(5, 5, 5)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1434,7 +1427,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_exchange_rate)
                                 .addGap(18, 18, 18)
-                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
                             .addComponent(one_tf_exchange_rate))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(one_lb_equal))
@@ -1449,7 +1442,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
                             .addComponent(one_tf_customer_result))
                         .addGap(50, 50, 50)))
                 .addContainerGap())
@@ -1708,8 +1701,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addGroup(double_exc_pnLayout.createSequentialGroup()
                                         .addComponent(one_lb_customer_money2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
-                                    .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
+                                        .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+                                    .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addComponent(one_lb_operator2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(17, 17, 17))
@@ -1718,7 +1711,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, double_exc_pnLayout.createSequentialGroup()
                                         .addComponent(one_lb_customer_money1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                                        .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE))
                                     .addComponent(one_tf_customer_money1))
                                 .addGap(18, 18, 18)
                                 .addComponent(one_lb_operator1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1752,7 +1745,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(double_exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                                .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                             .addGroup(double_exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1940,7 +1933,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup2.add(two_three_dollar_money_rb);
+        bg_to_pro.add(two_three_dollar_money_rb);
         two_three_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_dollar_money_rb.setText("$");
         two_three_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
@@ -1949,7 +1942,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup2.add(two_three_rial_money_rb);
+        bg_to_pro.add(two_three_rial_money_rb);
         two_three_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_rial_money_rb.setText("៛");
         two_three_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
@@ -1959,7 +1952,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup2.add(two_three_bart_money_rb);
+        bg_to_pro.add(two_three_bart_money_rb);
         two_three_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_bart_money_rb.setText("฿");
         two_three_bart_money_rb.addActionListener(new java.awt.event.ActionListener() {
@@ -2164,7 +2157,6 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addGap(150, 150, 150)
                         .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_one_total_money_tf)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                 .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2179,11 +2171,12 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 69, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                 .addComponent(two_three_service_money_tf)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_one_edit_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(two_one_edit_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addGap(122, 122, 122))
         );
         to_pro_pnLayout.setVerticalGroup(
@@ -2207,11 +2200,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_one_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2303,7 +2296,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup3.add(two_four_rial_money_rb);
+        bg_from_pro.add(two_four_rial_money_rb);
         two_four_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_rial_money_rb.setText("៛");
         two_four_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
@@ -2318,7 +2311,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup3.add(two_four_dollar_money_rb);
+        bg_from_pro.add(two_four_dollar_money_rb);
         two_four_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_dollar_money_rb.setText("$");
         two_four_dollar_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2332,7 +2325,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup3.add(two_four_bart_money_rb);
+        bg_from_pro.add(two_four_bart_money_rb);
         two_four_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_bart_money_rb.setText("฿");
         two_four_bart_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2474,7 +2467,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(two_four_dollar_money_rb)
                                         .addGap(41, 41, 41)
                                         .addComponent(two_four_bart_money_rb)))
-                                .addGap(0, 156, Short.MAX_VALUE)))))
+                                .addGap(0, 65, Short.MAX_VALUE)))))
                 .addGap(100, 100, 100))
         );
         from_pro_pnLayout.setVerticalGroup(
@@ -2499,7 +2492,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel28)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                 .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -2516,9 +2509,22 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel10.setText("ចំនួនទឹកប្រាក់");
 
         two_one_tf_cus_money.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_cus_money.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                two_one_tf_cus_moneyCaretUpdate(evt);
+            }
+        });
         two_one_tf_cus_money.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_one_tf_cus_moneyActionPerformed(evt);
+            }
+        });
+        two_one_tf_cus_money.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_moneyKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_moneyKeyTyped(evt);
             }
         });
 
@@ -2526,11 +2532,21 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel11.setText("ថ្លៃសេវា");
 
         two_one_tf_service_money.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_service_money.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_one_tf_service_moneyKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                two_one_tf_service_moneyKeyTyped(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel12.setText("ទឹកប្រាក់ទទួល");
 
+        two_one_tf_total_money.setEditable(false);
         two_one_tf_total_money.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_total_money.setFocusable(false);
 
         jButton9.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         jButton9.setText("ព្រីនវិក្កិយបត្រ");
@@ -2566,14 +2582,6 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         jPanel13.add(two_one_tf_cus_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 700, 78));
-
-        two_one_tf_cus_name.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_one_tf_cus_name.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                two_one_tf_cus_nameKeyReleased(evt);
-            }
-        });
-        jPanel13.add(two_one_tf_cus_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 700, 70));
 
         two_three_bank_info_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_three_bank_info_his_bn.setText("view history");
@@ -2613,10 +2621,10 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_three_to_thai_bank_id_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(two_three_to_thai_bank_id_layer_paneLayout.createSequentialGroup()
                 .addComponent(two_three_to_thai_bank_id_list)
-                .addContainerGap(247, Short.MAX_VALUE))
+                .addContainerGap(220, Short.MAX_VALUE))
         );
 
-        jPanel13.add(two_three_to_thai_bank_id_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 580, -1));
+        jPanel13.add(two_three_to_thai_bank_id_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 580, 220));
 
         jLabel19.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel19.setText("ឈ្មោះ");
@@ -2714,6 +2722,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel29.setText("ធនាគារ");
         jPanel13.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, -1, -1));
 
+        two_one_tf_cus_name.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_cus_name.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_nameKeyReleased(evt);
+            }
+        });
+        jPanel13.add(two_one_tf_cus_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 700, 70));
+
         javax.swing.GroupLayout to_thai_pnLayout = new javax.swing.GroupLayout(to_thai_pn);
         to_thai_pn.setLayout(to_thai_pnLayout);
         to_thai_pnLayout.setHorizontalGroup(
@@ -2725,8 +2741,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(to_thai_pnLayout.createSequentialGroup()
                         .addGap(96, 96, 96)
                         .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
-                            .addComponent(two_one_tf_service_money, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
+                            .addComponent(two_one_tf_service_money, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                             .addGroup(to_thai_pnLayout.createSequentialGroup()
                                 .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10)
@@ -2744,7 +2760,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         to_thai_pnLayout.setVerticalGroup(
             to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(to_thai_pnLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addGap(61, 61, 61)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_one_tf_cus_money, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2762,8 +2778,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(74, 74, 74))
             .addGroup(to_thai_pnLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
+                .addGap(46, 46, 46)
+                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2828,7 +2844,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(two_two_service_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_two_reveiver_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+                            .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, from_thai_pnLayout.createSequentialGroup()
                                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
@@ -2964,7 +2980,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup4.add(three_rial_rb);
+        bg_add_m.add(three_rial_rb);
         three_rial_rb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         three_rial_rb.setText("៛");
         three_rial_rb.addActionListener(new java.awt.event.ActionListener() {
@@ -2973,7 +2989,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup4.add(three_dollar_rb);
+        bg_add_m.add(three_dollar_rb);
         three_dollar_rb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         three_dollar_rb.setText("$");
         three_dollar_rb.addActionListener(new java.awt.event.ActionListener() {
@@ -2982,7 +2998,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup4.add(three_bart_rb);
+        bg_add_m.add(three_bart_rb);
         three_bart_rb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         three_bart_rb.setText("฿");
         three_bart_rb.addActionListener(new java.awt.event.ActionListener() {
@@ -3159,7 +3175,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(three_chb_m_b_bank)
                                         .addGap(34, 34, 34)
                                         .addComponent(three_chb_m_detail)))
-                                .addGap(0, 235, Short.MAX_VALUE))
+                                .addGap(0, 282, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, his_ptLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 1046, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -3591,7 +3607,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         rate_ptLayout.setHorizontalGroup(
             rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rate_ptLayout.createSequentialGroup()
-                .addContainerGap(237, Short.MAX_VALUE)
+                .addContainerGap(261, Short.MAX_VALUE)
                 .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(rate_ptLayout.createSequentialGroup()
@@ -3674,7 +3690,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(rate_ptLayout.createSequentialGroup()
                         .addComponent(four_bn_edit_exchange_rate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(277, 277, 277)))
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addContainerGap(523, Short.MAX_VALUE))
         );
         rate_ptLayout.setVerticalGroup(
             rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3874,11 +3890,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
                 .addComponent(five_dev_permission_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(five_dev_permission_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(368, Short.MAX_VALUE))
+                .addContainerGap(391, Short.MAX_VALUE))
         );
         db_con_ptLayout.setVerticalGroup(
             db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3949,7 +3965,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(zero_tp, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE)
+                .addComponent(zero_tp, javax.swing.GroupLayout.PREFERRED_SIZE, 909, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -4445,7 +4461,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     System.err.println(ex);
                 }
                 three_add_tf.setText("");
-                buttonGroup4.clearSelection();
+                bg_add_m.clearSelection();
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
             }
@@ -5095,7 +5111,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 //set value to ? in query
                 pst.setString(1, two_four_balance_money_tf.getText());
-                pst.setString(2, two_four_reciece_money_tf.getText());
+                pst.setString(2, cut_the_lastest_point(two_four_reciece_money_tf.getText()));
                 pst.setString(3, two_four_total_money_tf.getText());
                 pst.setString(4, two_four_receiver_phone_no_tf.getText().trim());
                 pst.setInt(5, get_id_money_type_from_db(selected_money_type_from_pro));
@@ -5158,7 +5174,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_two_pro_name_cb.getModel().setSelectedItem("none");
             two_four_reciece_money_tf.setText("");
             two_four_total_money_tf.setText("");
-            buttonGroup3.clearSelection();
+            bg_from_pro.clearSelection();
             remove_all_in_list(two_two_ph_recieve_list);
 //            set_history();
             set_is_change_true();
@@ -5199,12 +5215,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_dollar_money_rbActionPerformed
 
     private void two_three_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bn_finishActionPerformed
-
         set_to_pro_to_db(two_three_sender_phone_no_tf, two_three_receiver_phone_no_tf,
                 two_one_total_money_tf, two_three_sender_money_tf, two_three_balance_money_tf,
                 two_three_service_money_tf, two_one_pro_name_cb,
                 two_three_rial_money_rb, two_three_dollar_money_rb,
-                two_three_bart_money_rb, selected_money_type_to_pro, buttonGroup2, this);
+                two_three_bart_money_rb, selected_money_type_to_pro, bg_to_pro, this);
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
     }//GEN-LAST:event_two_three_bn_finishActionPerformed
@@ -5226,7 +5241,137 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_sender_phone_no_tfActionPerformed
 
     private void two_one_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_bn_finishActionPerformed
+        if (!two_one_tf_cus_no.getText().isEmpty() && !two_one_tf_cus_name.getText().isEmpty()
+                && !two_three_tf_cus_ph_no.getText().isEmpty() && !two_three_bank_thai_cb.getSelectedItem().equals("none")
+                && !two_one_tf_cus_money.getText().isEmpty() && !two_one_tf_service_money.getText().isEmpty()) {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            try {
+                con = DriverManager.getConnection(
+                        getLocal_host(),
+                        getLocal_host_user_name(),
+                        getLocal_host_password()
+                );
+                int id_to_thai_bank_name = -1;
+                pst = con.prepareStatement("SELECT id_bank "
+                        + "FROM to_thai_bank_tb "
+                        + "WHERE bank_name = ?;");
+                pst.setString(1, two_three_bank_thai_cb.getSelectedItem().toString());
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id_to_thai_bank_name = rs.getInt("id_bank");
+                }
+                if (id_to_thai_bank_name == -1) {
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into to_thai_bank_tb(bank_name)"
+                            + "values(?);", Statement.RETURN_GENERATED_KEYS);
+                    //set value to ? in query
+                    pst.setString(1, two_three_bank_thai_cb.getSelectedItem().toString());
+                    pst.executeUpdate();
+                    ResultSet generatekey = pst.getGeneratedKeys();
+                    if (generatekey.next()) {
+                        id_to_thai_bank_name = generatekey.getInt(1);
+                    }
+                }
 
+                int id_to_thai_sender = -1;
+                pst = con.prepareStatement("SELECT id_sender "
+                        + "FROM to_thai_sender_tb "
+                        + "WHERE sender_name = ? "
+                        + "AND sender_num_acc = ? "
+                        + "AND id_bank = ?;");
+                pst.setString(1, two_one_tf_cus_name.getText().trim());
+                pst.setString(2, two_one_tf_cus_no.getText().trim());
+                pst.setInt(3, id_to_thai_bank_name);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id_to_thai_sender = rs.getInt("id_sender");
+                }
+                if (id_to_thai_sender == -1) {
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into to_thai_sender_tb(sender_name, sender_num_acc, id_bank)"
+                            + "values(?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+                    //set value to ? in query
+                    pst.setString(1, two_one_tf_cus_name.getText().trim());
+                    pst.setString(2, two_one_tf_cus_no.getText().trim());
+                    pst.setInt(3, id_to_thai_bank_name);
+                    pst.executeUpdate();
+                    ResultSet generatekey = pst.getGeneratedKeys();
+                    if (generatekey.next()) {
+                        id_to_thai_sender = generatekey.getInt(1);
+                    }
+                }
+                int id_to_thai_sender_ph = -1;
+                pst = con.prepareStatement("SELECT id_sender_ph_no "
+                        + "FROM to_thai_sender_ph_no_tb "
+                        + "WHERE sender_ph_no = ? "
+                        + "AND id_sender = ?;");
+                pst.setString(1, two_three_tf_cus_ph_no.getText().trim());
+                pst.setInt(2, id_to_thai_sender);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id_to_thai_sender_ph = rs.getInt("id_sender_ph_no");
+                }
+                if (id_to_thai_sender_ph == -1) {
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into to_thai_sender_ph_no_tb(sender_ph_no, id_sender) "
+                            + "values(?, ?);");
+                    //set value to ? in query
+                    pst.setString(1, two_three_tf_cus_ph_no.getText().trim());
+                    pst.setInt(2, id_to_thai_sender);
+                    pst.executeUpdate();
+                }
+
+                int id_to_thai_bank_inf_his = -1;
+                pst = con.prepareStatement("SELECT id_to_thai "
+                        + "FROM to_thai_history_tb "
+                        + "WHERE bank = ? "
+                        + "AND bank_id = ? "
+                        + "AND name = ? "
+                        + "AND phone_no = ?;");
+                pst.setString(1, two_three_bank_thai_cb.getSelectedItem().toString());
+                pst.setString(2, two_one_tf_cus_no.getText().trim());
+                pst.setString(3, two_one_tf_cus_name.getText().trim());
+                pst.setString(4, two_three_tf_cus_ph_no.getText().trim());
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id_to_thai_bank_inf_his = rs.getInt("id_to_thai");
+                }
+                if (id_to_thai_bank_inf_his == -1) {
+                    //write sql query to access
+                    pst = con.prepareStatement("insert into to_thai_history_tb(bank, bank_id, name, phone_no) "
+                            + "values(?, ?, ?, ?);");
+                    //set value to ? in query
+                    pst.setString(1, two_three_bank_thai_cb.getSelectedItem().toString());
+                    pst.setString(2, two_one_tf_cus_no.getText().trim());
+                    pst.setString(3, two_one_tf_cus_name.getText().trim());
+                    pst.setString(4, two_three_tf_cus_ph_no.getText().trim());
+                    pst.executeUpdate();
+                }
+
+                //write sql query to access
+                pst = con.prepareStatement("insert into to_thai_invoice_tb(sender_money, servise_money, total_money, id_sender, id_acc, id_pur) "
+                        + "values(?, ?, ?, ?, ?, ?);");
+                //set value to ? in query
+                pst.setString(1, cut_the_lastest_point(two_one_tf_cus_money.getText()));
+                pst.setString(2, cut_the_lastest_point(two_one_tf_service_money.getText()));
+                pst.setString(3, two_one_tf_total_money.getText());
+                pst.setInt(4, id_to_thai_sender);
+                pst.setInt(5, get_acc_id());
+                pst.setInt(6, get_id_pur_from_db(purpose_type.to_thai));
+                pst.executeUpdate();
+
+                two_one_tf_cus_no.setText("");
+                two_one_tf_cus_name.setText("");
+                two_three_tf_cus_ph_no.setText("");
+                two_three_bank_thai_cb.getModel().setSelectedItem("none");
+                two_one_tf_cus_money.setText("");
+                two_one_tf_service_money.setText("");
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
     }//GEN-LAST:event_two_one_bn_finishActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -5565,7 +5710,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_four_total_money_tfKeyTyped
 
     private void two_four_reciece_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfCaretUpdate
-
         two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
                 two_four_total_money_tf, two_four_balance_money_tf,
                 two_four_rial_money_rb, two_four_dollar_money_rb,
@@ -5573,7 +5717,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_four_reciece_money_tfCaretUpdate
 
     private void two_four_total_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_four_total_money_tfCaretUpdate
-
         two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
                 two_four_total_money_tf, two_four_balance_money_tf,
                 two_four_rial_money_rb, two_four_dollar_money_rb,
@@ -5598,7 +5741,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_two_pro_name_cbMouseClicked
 
     private void two_four_reciece_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfMouseClicked
-
         remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_reciece_money_tfMouseClicked
 
@@ -5857,11 +5999,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         this.setEnabled(false);
     }//GEN-LAST:event_two_three_bank_his_bnActionPerformed
 
-    private void two_one_tf_cus_nameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameKeyReleased
-        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(),
-                "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
-    }//GEN-LAST:event_two_one_tf_cus_nameKeyReleased
-
     private void two_three_tf_cus_ph_noKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noKeyReleased
         search_engine_bank_thai(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no.getText().trim(),
                 "phone_no", "bank_id", "name", "bank", "to_thai_history_tb");
@@ -5870,6 +6007,35 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_two_pro_name_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_two_two_pro_name_cbActionPerformed
+
+    private void two_one_tf_cus_moneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyKeyReleased
+        validate_KeyReleased_money(evt, two_one_tf_cus_money);
+    }//GEN-LAST:event_two_one_tf_cus_moneyKeyReleased
+
+    private void two_one_tf_service_moneyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyKeyReleased
+        validate_KeyReleased_money(evt, two_one_tf_service_money);
+    }//GEN-LAST:event_two_one_tf_service_moneyKeyReleased
+
+    private void two_one_tf_cus_moneyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyKeyTyped
+        validate_KeyTyped_money(evt, two_one_tf_cus_money);
+    }//GEN-LAST:event_two_one_tf_cus_moneyKeyTyped
+
+    private void two_one_tf_service_moneyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyKeyTyped
+        validate_KeyTyped_money(evt, two_one_tf_service_money);
+    }//GEN-LAST:event_two_one_tf_service_moneyKeyTyped
+
+    private void two_one_tf_cus_moneyCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyCaretUpdate
+        if (!two_one_tf_cus_money.getText().isEmpty() && !two_one_tf_service_money.getText().isEmpty()) {
+            String money = String.valueOf(Double.parseDouble(clear_cvot(two_one_tf_cus_money.getText())) - Double.parseDouble(clear_cvot(two_one_tf_service_money.getText())));
+            two_one_tf_total_money.setText(money_S_B_R_validate(type_of_money.Bart, money, true));
+        } else {
+            two_one_tf_total_money.setText("");
+        }
+    }//GEN-LAST:event_two_one_tf_cus_moneyCaretUpdate
+
+    private void two_one_tf_cus_nameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameKeyReleased
+        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(), "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
+    }//GEN-LAST:event_two_one_tf_cus_nameKeyReleased
 
     /**
      * @param args the command line arguments
@@ -5916,10 +6082,9 @@ public class UI_and_operation extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.ButtonGroup buttonGroup3;
-    private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.ButtonGroup bg_add_m;
+    private javax.swing.ButtonGroup bg_from_pro;
+    private javax.swing.ButtonGroup bg_to_pro;
     private javax.swing.JLabel date_history_lb;
     private javax.swing.JPanel db_con_pt;
     private javax.swing.JPanel double_exc_pn;
@@ -6016,15 +6181,12 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JButton one_bn_B_to_R;
     private javax.swing.JButton one_bn_B_to_S;
     private javax.swing.JButton one_bn_R_to_B;

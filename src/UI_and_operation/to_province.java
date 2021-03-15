@@ -25,6 +25,7 @@ import static UI_and_operation.invoice_man.update_inv_man_money;
 import static UI_and_operation.purpose.get_id_pur_from_db;
 import static UI_and_operation.validate_value.bart_validation;
 import static UI_and_operation.validate_value.clear_cvot;
+import static UI_and_operation.validate_value.cut_the_lastest_point;
 import static UI_and_operation.validate_value.dollar_validation;
 import static UI_and_operation.validate_value.money_S_B_R_validate;
 import static UI_and_operation.validate_value.rial_validation;
@@ -93,9 +94,9 @@ public class to_province {
                         Statement.RETURN_GENERATED_KEYS);
 
                 //set value to ? in query
-                pst.setString(1, two_three_service_money_tf.getText());
+                pst.setString(1, cut_the_lastest_point(two_three_service_money_tf.getText()));
                 pst.setString(2, two_three_balance_money_tf.getText());
-                pst.setString(3, two_three_sender_money_tf.getText());
+                pst.setString(3, cut_the_lastest_point(two_three_sender_money_tf.getText()));
                 pst.setString(4, two_one_total_money_tf.getText());
                 pst.setString(5, two_three_sender_phone_no_tf.getText().trim());
                 pst.setString(6, two_three_receiver_phone_no_tf.getText().trim());

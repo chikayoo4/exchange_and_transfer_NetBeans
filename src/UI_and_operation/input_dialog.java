@@ -189,21 +189,9 @@ public class input_dialog extends javax.swing.JFrame
                         } else {
                             set_history_list_db(input_tf.getText().trim(), col_sql, tb_sql);
                         }
-                        
-                        set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
-                        
-                        set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
-                        
-                        set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
-                        
-                        view_his_obj.set_history();
-                        view_his_obj.setEnabled(true);
-                        this.setVisible(false);
-                        this.dispose();
                     }
                     break;
                 case Edit:
-
                     if (is_input_pass) {
                         if (input_pass_dia_for_to_pro()) {
                             pst = con.prepareStatement("UPDATE " + tb_sql + " "
@@ -217,21 +205,23 @@ public class input_dialog extends javax.swing.JFrame
                                 + "where " + col_sql + " = '" + default_edit_value + "'");
                         pst.executeUpdate();
                     }
-                    
-                    set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
-                    
-                    set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
-                    
-                    set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
-                    
-                    view_his_obj.set_history();
-                    view_his_obj.setEnabled(true);
-                    this.setVisible(false);
-                    this.dispose();
                     break;
                 default:
                     System.out.println("Eorror");
             }
+            if (ui_and_ope_obj.get_idx_transfer_pt() == 0) {
+                set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                ui_and_ope_obj.set_is_change_pro_true();
+            } else if (ui_and_ope_obj.get_idx_transfer_pt() == 1) {
+                set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                ui_and_ope_obj.set_is_change_pro_true();
+            } else {
+                set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
+            }
+            view_his_obj.set_history();
+            view_his_obj.setEnabled(true);
+            this.setVisible(false);
+            this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex);

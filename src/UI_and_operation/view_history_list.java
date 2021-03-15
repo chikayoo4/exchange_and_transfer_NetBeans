@@ -8,6 +8,7 @@ package UI_and_operation;
 import UI_and_operation.UI_and_operation.dialog_choose_e_d_c;
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.set_admin_password;
+import static UI_and_operation.UI_and_operation.set_cb;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
@@ -43,7 +44,6 @@ public class view_history_list extends javax.swing.JFrame
     private Boolean is_allow_validate;
     private Boolean is_validate_ph;
     private Boolean is_input_pass;
- 
 
     public void set_history() {
 
@@ -249,6 +249,15 @@ public class view_history_list extends javax.swing.JFrame
                         } catch (SQLException ex) {
                             Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
                             JOptionPane.showMessageDialog(this, ex);
+                        }
+                        if (ui_and_ope_obj.get_idx_transfer_pt() == 0) {
+                            set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                            ui_and_ope_obj.set_is_change_pro_true();
+                        } else if (ui_and_ope_obj.get_idx_transfer_pt() == 1) {
+                            set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                            ui_and_ope_obj.set_is_change_pro_true();
+                        } else {
+                            set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
                         }
                         set_history();
                     }
