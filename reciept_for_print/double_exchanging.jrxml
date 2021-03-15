@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="226" pageHeight="566" columnWidth="210" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="e8ba0723-52e6-4219-b857-e87047bd1f13">
-	<property name="ireport.zoom" value="4.098080732190428"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="264"/>
+	<property name="ireport.zoom" value="7.260000000000011"/>
+	<property name="ireport.x" value="95"/>
+	<property name="ireport.y" value="1073"/>
 	<parameter name="invoice_id" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -55,7 +55,7 @@ AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
 			</staticText>
 			<image>
 				<reportElement x="69" y="48" width="73" height="27" uuid="4f20d5f7-61ff-4167-ab2d-c933e581d0be"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\exc_litle.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\exc_litle.JPG"]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="0" y="47" width="210" height="1" uuid="b1adf0fd-b783-485b-b428-14f48f985bc3"/>
@@ -65,11 +65,11 @@ AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
 			</line>
 			<image>
 				<reportElement x="1" y="73" width="31" height="20" uuid="cd1fe519-fa0a-4ad6-854f-d03c16023fc2"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\exc_changing.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\exc_changing.JPG"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="32" y="0" width="150" height="47" uuid="68d7c6a1-1b5c-4305-9eea-2d13c550c03c"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\logo.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\logo.JPG"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -90,15 +90,15 @@ AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
 			</line>
 			<image>
 				<reportElement x="2" y="61" width="67" height="19" uuid="33883f32-e46a-409f-ab29-fd36ef020392"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="1" y="82" width="77" height="16" uuid="a267615d-fca0-4013-901e-f86a5f4c2743"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\result.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\result.JPG"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="0" y="100" width="57" height="20" uuid="ab16d0b3-7bf1-46a9-8444-51033145612f"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="77" y="58" width="12" height="20" uuid="8bcf7df8-0ccd-4dfe-94b8-6b36ae81c66d"/>
@@ -172,11 +172,11 @@ AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
 			</textField>
 			<image>
 				<reportElement x="0" y="183" width="83" height="56" uuid="0b42657e-dc6a-4647-879a-57caf67a64ce"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\acc.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\acc.JPG"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="2" y="146" width="78" height="16" uuid="eb832556-b093-483f-8bae-db7b14ed4896"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\result.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\result.JPG"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="77" y="142" width="12" height="20" uuid="a6aed4bc-7add-4214-8b53-2e4c430ca4cf"/>
@@ -196,7 +196,7 @@ AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
 			</textField>
 			<image>
 				<reportElement x="1" y="162" width="57" height="20" uuid="755d6e87-7248-4351-9d34-1f4bc8f425c1"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="76" y="161" width="12" height="20" uuid="4567f61c-34ea-4b44-83e9-df5252c815c7"/>
@@ -248,7 +248,7 @@ $F{exc_two_rate} + " = " + $F{exc_result_money_two} +
 			</textField>
 			<image>
 				<reportElement x="2" y="128" width="67" height="19" uuid="fa251d37-0b44-4dc2-9270-b86c137e8203"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="78" y="126" width="12" height="20" uuid="c2587bee-0172-4468-8cf6-bd498a13ef15"/>
@@ -293,18 +293,18 @@ $F{exc_two_rate} + " = " + $F{exc_result_money_two} +
 			</line>
 			<image>
 				<reportElement x="0" y="23" width="151" height="16" uuid="f7bd4248-ae3f-46cd-8f60-0b815f9e8a18"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\id_line.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\id_line.JPG"]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="0" y="41" width="210" height="1" uuid="2586032f-5988-43c0-9f30-4f50a903528d"/>
 			</line>
 			<image>
 				<reportElement x="2" y="43" width="208" height="25" uuid="64a87984-75a6-413f-82c2-250ccd88cc18"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\fb.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\fb.JPG"]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="true" isLazy="true">
 				<reportElement x="2" y="4" width="182" height="13" uuid="9d9593e1-43a9-4089-a24e-2756de159962"/>
-				<imageExpression><![CDATA["C:\\Users\\Chhann_chikay\\Desktop\\my_documents\\project\\java_project\\exchange_and_tranfer_money\\exchange_and_transfer_money_netbean\\exchange_and_transfer\\logo_and_icon\\ph_no.JPG"]]></imageExpression>
+				<imageExpression><![CDATA[$F{path} + "\\logo_and_icon\\ph_no.JPG"]]></imageExpression>
 			</image>
 		</band>
 	</summary>

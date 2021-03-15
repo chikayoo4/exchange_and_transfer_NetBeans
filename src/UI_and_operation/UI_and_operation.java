@@ -56,6 +56,8 @@ import static UI_and_operation.to_province.set_to_pro_to_db;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -89,17 +91,27 @@ public class UI_and_operation extends javax.swing.JFrame {
         Edit, Add
     };
 
-    int next_show_his = 0;
-    int num_show_his = 10;
+    private int next_show_his = 0;
+    private int num_show_his = 10;
+    private int idx_transfer_pt = 0;
     public static String set_admin_password = "";
     private Boolean two_one_is_off_edit = true;
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
-    type_of_exchange selected_exchange_rate = type_of_exchange.not_select;
-    type_of_money selected_money_type_exe;
-    type_of_money selected_money_type_to_pro;
-    type_of_money selected_money_type_from_pro;
+    private type_of_exchange selected_exchange_rate = type_of_exchange.not_select;
+    private type_of_money selected_money_type_exe;
+    private type_of_money selected_money_type_to_pro;
+    private type_of_money selected_money_type_from_pro;
+    private static Boolean is_change_his = false;
 
     //------------------------------------------------------my function------------------------------------------------------
+    public static void set_is_change_true() {
+        is_change_his = true;
+    }
+
+    public int get_idx_transfer_pt() {
+        return idx_transfer_pt;
+    }
+
     public void hide_or_show_column_his(javax.swing.JCheckBox chb, int idx_col, int set_col_size, int set_max_col_size, int set_min_col_size) {
         if (chb.isSelected()) {
             three_tb_history.getColumnModel().getColumn(idx_col).setMaxWidth(set_max_col_size);
@@ -123,13 +135,17 @@ public class UI_and_operation extends javax.swing.JFrame {
         return two_two_pro_name_cb;
     }
 
+    public javax.swing.JComboBox<String> get_from_bank_thai_cb_from_ui_oper() {
+        return two_three_bank_thai_cb;
+    }
+
     private void remove_all_in_list(javax.swing.JList<String> list) {
         DefaultListModel mode = new DefaultListModel();
         list.setModel(mode);
         mode.removeAllElements();
     }
 
-    public static void get_result_search_e(javax.swing.JList<String> list, javax.swing.JTextField set_on_tf) {
+    public static void get_pro_result_search_db(javax.swing.JList<String> list, javax.swing.JTextField set_on_tf) {
         if (!list.isSelectionEmpty()) {
             DefaultListModel mode = new DefaultListModel();
             String ph_no = (String) list.getSelectedValue();
@@ -231,7 +247,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         return time;
     }
 
-    public void search_engine(javax.swing.JList<String> two_one_ph_list,
+    public void search_engine_pro(javax.swing.JList<String> two_one_ph_list,
             String value, String col, String tb) {
         DefaultListModel two_one_mode = new DefaultListModel();
         two_one_ph_list.setModel(two_one_mode);
@@ -255,6 +271,69 @@ public class UI_and_operation extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
+        }
+    }
+
+    public void search_engine_bank_thai(javax.swing.JList<String> bank_list,
+            String value, String col_target, String col_1, String col_2, String col_3, String tb) {
+
+        DefaultListModel two_one_mode = new DefaultListModel();
+        bank_list.setModel(two_one_mode);
+        two_one_mode.removeAllElements();
+        String two_one_ph_senter_str = value.trim();
+        if (!two_one_ph_senter_str.equals("")) {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            try {
+                con = DriverManager.getConnection(
+                        getLocal_host(),
+                        getLocal_host_user_name(),
+                        getLocal_host_password()
+                );
+                pst = con.prepareStatement("SELECT " + col_target + ", " + col_1 + ", " + col_2 + ", " + col_3
+                        + " FROM " + tb
+                        + " WHERE " + col_target + " LIKE '%" + value + "%';");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    two_one_mode.addElement(rs.getString(col_target) + " | " + rs.getString(col_1) + " | " + rs.getString(col_2) + " | " + rs.getString(col_3));
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex);
+            }
+        }
+    }
+
+    public static void get_bank_thai_result_search_db(javax.swing.JList<String> list, javax.swing.JTextField set_on_tf1,
+            javax.swing.JTextField set_on_tf2, javax.swing.JTextField set_on_tf3, javax.swing.JComboBox<String> set_on_cb4) {
+        if (!list.isSelectionEmpty()) {
+            DefaultListModel mode = new DefaultListModel();
+            String set_val = (String) list.getSelectedValue();
+            for (int i = 1; i < set_val.length() - 1; i++) {
+                if (set_val.charAt(i - 1) == ' ' && set_val.charAt(i) == '|' && set_val.charAt(i + 1) == ' ') {
+                    set_on_tf1.setText(set_val.substring(0, i - 1));
+
+                    for (int j = i + 2; j < set_val.length() - 1; j++) {
+//                        System.out.println("set_val.charAt(j - 1) : " + set_val.charAt(j - 1));
+                        if (set_val.charAt(j - 1) == ' ' && set_val.charAt(j) == '|' && set_val.charAt(j + 1) == ' ') {
+                            set_on_tf2.setText(set_val.substring(i + 2, j - 1));
+
+                            for (int k = j + 2; k < set_val.length() - 1; k++) {
+//                        System.out.println("set_val.charAt(j - 1) : " + set_val.charAt(j - 1));
+                                if (set_val.charAt(k - 1) == ' ' && set_val.charAt(k) == '|' && set_val.charAt(k + 1) == ' ') {
+                                    set_on_tf3.setText(set_val.substring(j + 2, k - 1));
+                                    set_on_cb4.getModel().setSelectedItem(set_val.substring(k + 2, set_val.length()));
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            list.setModel(mode);
+            mode.removeAllElements();
         }
     }
 
@@ -588,6 +667,35 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
+    public static void update_thai_history_db(
+            String col_bank, String val_bank,
+            String col_id_bank, String val_id_bank,
+            String col_name, String val_name,
+            String col_ph_no, String val_ph_no,
+            String tb, String id_to_thai, int id) {
+
+        Connection con;
+        PreparedStatement pst;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            //write sql query to access
+            pst = con.prepareStatement("UPDATE " + tb
+                    + " SET " + col_bank + " = '" + val_bank + "', "
+                    + col_id_bank + " = '" + val_id_bank + "', "
+                    + col_name + " = '" + val_name + "', "
+                    + col_ph_no + " = '" + val_ph_no + "' "
+                    + "WHERE " + id_to_thai + " = " + id + ";");
+            pst.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("error: two_three_bn_finish\n" + ex);
+        }
+    }
+
     public static void set_history_list_db(String value, String col, String tb) {
 
         Connection con;
@@ -739,8 +847,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         setWifi_host_password(wifi_password_tf);
     }
 
-    private void add_listener_calendar_three(){
-        
+    private void add_listener_calendar_three() {
+
         three_calendar_cld.getDateEditor().addPropertyChangeListener(
                 new PropertyChangeListener() {
             @Override
@@ -756,7 +864,34 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
     }
+
+    void add_listener_pt_change_on_his() {
+
+        zero_tp.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+//            System.out.println("Tab: " + zero_tp.getSelectedIndex());
+                if (zero_tp.getSelectedIndex() == 2 && is_change_his) {
+                    set_history();
+                    is_change_his = false;
+                }
+            }
+        });
+    }
     
+    void add_listener_pt_change_on_transfer() {
+
+        zero_tp.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+//            System.out.println("Tab: " + zero_tp.getSelectedIndex());
+                if (zero_tp.getSelectedIndex() == 2 && is_change_his) {
+                    set_history();
+                    is_change_his = false;
+                }
+            }
+        });
+    }
+    
+
     //-----------------------------------------------------class call--------------------------------------------------
     exchange_rate_show exe_rate_show = new exchange_rate_show();
 
@@ -802,11 +937,12 @@ public class UI_and_operation extends javax.swing.JFrame {
         custom_three_tb_his_default();
 
         set_history();
-        
+
         add_listener_calendar_three();
 
+        add_listener_pt_change_on_his();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -824,10 +960,10 @@ public class UI_and_operation extends javax.swing.JFrame {
         buttonGroup3 = new javax.swing.ButtonGroup();
         buttonGroup4 = new javax.swing.ButtonGroup();
         jCalendar1 = new com.toedter.calendar.JCalendar();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel14 = new javax.swing.JPanel();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
+        zero_tp = new javax.swing.JTabbedPane();
+        exc_pt = new javax.swing.JPanel();
+        sub_exc_pt = new javax.swing.JTabbedPane();
+        exc_pn = new javax.swing.JPanel();
         one_bn_S_to_R = new javax.swing.JButton();
         one_bn_S_to_B = new javax.swing.JButton();
         one_bn_B_to_R = new javax.swing.JButton();
@@ -847,7 +983,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_rate_type_lb = new javax.swing.JLabel();
         one_money_type_result_lb = new javax.swing.JLabel();
         one_tf_customer_money = new javax.swing.JTextField();
-        jPanel15 = new javax.swing.JPanel();
+        double_exc_pn = new javax.swing.JPanel();
         one_lb_customer_money1 = new javax.swing.JLabel();
         one_tf_customer_money1 = new javax.swing.JTextField();
         one_lb_customer_result1 = new javax.swing.JLabel();
@@ -874,9 +1010,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_money_type_lb2 = new javax.swing.JLabel();
         one_money_type_lb3_ = new javax.swing.JLabel();
         one_money_type_lb4 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel7 = new javax.swing.JPanel();
+        tran_pt = new javax.swing.JPanel();
+        sub_tran_pt = new javax.swing.JTabbedPane();
+        to_pro_pn = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         two_three_sender_money_tf = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
@@ -905,7 +1041,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_one_reciever_his_bn = new javax.swing.JButton();
         two_one_pro_name_cb = new javax.swing.JComboBox<>();
         two_one_edit_bn = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
+        from_pro_pn = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jLabel23 = new javax.swing.JLabel();
         two_four_reciece_money_tf = new javax.swing.JTextField();
@@ -927,7 +1063,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_one_pro_his_bn1 = new javax.swing.JButton();
         two_two_ph_recieve_layer_pane = new javax.swing.JLayeredPane();
         two_two_ph_recieve_list = new javax.swing.JList<>();
-        jPanel4 = new javax.swing.JPanel();
+        to_thai_pn = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         two_one_tf_cus_money = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -937,18 +1073,23 @@ public class UI_and_operation extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         two_one_bn_finish = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        two_one_tf_bank = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         two_one_tf_cus_no = new javax.swing.JTextField();
-        jLabel33 = new javax.swing.JLabel();
-        two_one_tf_cus_ph_no = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         two_one_tf_cus_name = new javax.swing.JTextField();
-        two_three_to_thai_bank_layer_pane = new javax.swing.JLayeredPane();
-        two_three_to_thai_bank_list = new javax.swing.JList<>();
-        two_one_sender_his_bn3 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
+        two_three_bank_info_his_bn = new javax.swing.JButton();
+        two_three_to_thai_bank_id_layer_pane = new javax.swing.JLayeredPane();
+        two_three_to_thai_bank_id_list = new javax.swing.JList<>();
+        jLabel19 = new javax.swing.JLabel();
+        two_three_to_thai_name_layer_pane = new javax.swing.JLayeredPane();
+        two_three_to_thai_name_list = new javax.swing.JList<>();
+        jLabel57 = new javax.swing.JLabel();
+        two_three_tf_cus_ph_no = new javax.swing.JTextField();
+        two_three_to_thai_ph_no_layer_pane = new javax.swing.JLayeredPane();
+        two_three_to_thai_ph_no_list = new javax.swing.JList<>();
+        two_three_bank_thai_cb = new javax.swing.JComboBox<>();
+        two_three_bank_his_bn = new javax.swing.JButton();
+        jLabel29 = new javax.swing.JLabel();
+        from_thai_pn = new javax.swing.JPanel();
         print = new javax.swing.JButton();
         two_two_bn_finish = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
@@ -960,7 +1101,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_two_result_money_tf = new javax.swing.JTextField();
         jLabel34 = new javax.swing.JLabel();
         two_two_reveiver_ph_no_tf = new javax.swing.JTextField();
-        jPanel8 = new javax.swing.JPanel();
+        his_pt = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         three_tb_total_money = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -985,7 +1126,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_chb_m_b = new javax.swing.JCheckBox();
         three_chb_m_b_bank = new javax.swing.JCheckBox();
         three_chb_m_detail = new javax.swing.JCheckBox();
-        jPanel9 = new javax.swing.JPanel();
+        rate_pt = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
         jLabel40 = new javax.swing.JLabel();
@@ -1022,7 +1163,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel44 = new javax.swing.JLabel();
         jLabel45 = new javax.swing.JLabel();
         jLabel46 = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
+        db_con_pt = new javax.swing.JPanel();
         five_user_name_tf = new javax.swing.JTextField();
         five_password_tf = new javax.swing.JTextField();
         five_local_host_server_name_tf = new javax.swing.JTextField();
@@ -1067,9 +1208,9 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
+        zero_tp.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
 
-        jTabbedPane3.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
+        sub_exc_pt.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
 
         one_bn_S_to_R.setFont(new java.awt.Font("Tahoma", 0, 90)); // NOI18N
         one_bn_S_to_R.setText("$ → ៛");
@@ -1259,105 +1400,102 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout exc_pnLayout = new javax.swing.GroupLayout(exc_pn);
+        exc_pn.setLayout(exc_pnLayout);
+        exc_pnLayout.setHorizontalGroup(
+            exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(exc_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(one_bn_R_to_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(one_bn_S_to_R, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, exc_pnLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(one_lb_customer_money)
-                                .addGap(18, 18, 18)
-                                .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
-                            .addComponent(one_tf_customer_money))
-                        .addGap(5, 5, 5)))
+                        .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(exc_pnLayout.createSequentialGroup()
+                                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(exc_pnLayout.createSequentialGroup()
+                                        .addComponent(one_lb_customer_money)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+                                    .addComponent(one_tf_customer_money))
+                                .addGap(5, 5, 5)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(exc_pnLayout.createSequentialGroup()
                         .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_exchange_rate)
                                 .addGap(18, 18, 18)
-                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
                             .addComponent(one_tf_exchange_rate))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(one_lb_equal))
                     .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(one_bn_S_to_B, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(one_bn_B_to_R, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(one_bn_R_to_B, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(exc_pnLayout.createSequentialGroup()
+                        .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
                             .addComponent(one_tf_customer_result))
                         .addGap(50, 50, 50)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        exc_pnLayout.setVerticalGroup(
+            exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(exc_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(one_bn_B_to_R, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_bn_S_to_B, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_bn_S_to_R, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(one_bn_R_to_S, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_bn_R_to_B, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(0, 29, Short.MAX_VALUE)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_lb_customer_money)
                         .addComponent(one_money_type_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(one_lb_exchange_rate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_lb_customer_result)
                         .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(one_tf_exchange_rate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(one_tf_customer_result, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(one_lb_equal)
-                                .addGap(8, 8, 8)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(one_tf_customer_money, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(one_tf_exchange_rate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(one_tf_customer_result, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_pnLayout.createSequentialGroup()
+                            .addComponent(one_lb_equal)
+                            .addGap(8, 8, 8)))
+                    .addComponent(one_tf_customer_money, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(145, 145, 145))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("ប្តូរប្រាក់មួយមុខ", jPanel2);
+        sub_exc_pt.addTab("ប្តូរប្រាក់មួយមុខ", exc_pn);
 
         one_lb_customer_money1.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_lb_customer_money1.setText("ទឹកប្រាក់ទទួល");
@@ -1547,156 +1685,157 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_money_type_lb4.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
 
-        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
-        jPanel15.setLayout(jPanel15Layout);
-        jPanel15Layout.setHorizontalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(one_bn_print1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(jPanel15Layout.createSequentialGroup()
+        javax.swing.GroupLayout double_exc_pnLayout = new javax.swing.GroupLayout(double_exc_pn);
+        double_exc_pn.setLayout(double_exc_pnLayout);
+        double_exc_pnLayout.setHorizontalGroup(
+            double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(double_exc_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addGap(24, 24, 24)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addComponent(one_lb_customer_money2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
-                            .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addComponent(one_lb_operator2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(17, 17, 17))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel15Layout.createSequentialGroup()
-                                .addComponent(one_lb_customer_money1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
-                            .addComponent(one_tf_customer_money1))
-                        .addGap(18, 18, 18)
-                        .addComponent(one_lb_operator1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22)))
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addComponent(one_lb_exchange_rate3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_two_rate_bc2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel15Layout.createSequentialGroup()
-                                        .addComponent(one_tf_exchange_rate2)
-                                        .addGap(2, 2, 2))
-                                    .addGroup(jPanel15Layout.createSequentialGroup()
-                                        .addComponent(one_tf_exchange_rate1)
-                                        .addGap(5, 5, 5)))
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(one_lb_equal1)
-                                    .addComponent(one_lb_equal2, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(one_lb_exchange_rate1)
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                        .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(one_two_rate_bc1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(138, 138, 138)))
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(one_lb_customer_result1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(one_money_type_lb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(one_tf_customer_result1)
-                    .addComponent(one_tf_customer_result2))
-                .addGap(75, 75, 75))
+                        .addComponent(one_bn_print1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                        .addComponent(one_lb_customer_money2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                                    .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(one_lb_operator2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(17, 17, 17))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, double_exc_pnLayout.createSequentialGroup()
+                                        .addComponent(one_lb_customer_money1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                                    .addComponent(one_tf_customer_money1))
+                                .addGap(18, 18, 18)
+                                .addComponent(one_lb_operator1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)))
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                        .addComponent(one_lb_exchange_rate3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(one_two_rate_bc2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
+                                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                                .addComponent(one_tf_exchange_rate2)
+                                                .addGap(2, 2, 2))
+                                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                                .addComponent(one_tf_exchange_rate1)
+                                                .addGap(5, 5, 5)))
+                                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(one_lb_equal1)
+                                            .addComponent(one_lb_equal2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_lb_exchange_rate1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_two_rate_bc1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(138, 138, 138)))
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_lb_customer_result1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_money_type_lb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(one_tf_customer_result1)
+                            .addComponent(one_tf_customer_result2))
+                        .addGap(75, 75, 75))))
         );
-        jPanel15Layout.setVerticalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
+        double_exc_pnLayout.setVerticalGroup(
+            double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(double_exc_pnLayout.createSequentialGroup()
                 .addGap(93, 93, 93)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(one_lb_customer_money1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(one_lb_customer_result1)
                             .addComponent(one_lb_exchange_rate1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(one_two_rate_bc1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(one_money_type_lb1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_money_type_lb4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(one_lb_operator1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(one_tf_customer_result1)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_lb_equal1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(one_tf_exchange_rate1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(one_tf_customer_money1))
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
                         .addGap(80, 80, 80)
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(one_lb_exchange_rate3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(one_two_rate_bc2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(89, 89, 89))
-                    .addGroup(jPanel15Layout.createSequentialGroup()
+                        .addGap(361, 361, 361))
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
                         .addGap(72, 72, 72)
-                        .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(one_lb_equal2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(one_lb_customer_money2, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(one_money_type_lb2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(one_tf_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(one_tf_exchange_rate2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(one_tf_customer_money2)
                                     .addComponent(one_lb_operator2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(one_bn_print1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(120, 120, 120))
+                        .addGap(90, 90, 90)
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(one_bn_print1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
-        jTabbedPane3.addTab("ប្តូរប្រាក់ពីរមុខ", jPanel15);
+        sub_exc_pt.addTab("ប្តូរប្រាក់ពីរមុខ", double_exc_pn);
 
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+        javax.swing.GroupLayout exc_ptLayout = new javax.swing.GroupLayout(exc_pt);
+        exc_pt.setLayout(exc_ptLayout);
+        exc_ptLayout.setHorizontalGroup(
+            exc_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_ptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane3)
+                .addComponent(sub_exc_pt)
                 .addContainerGap())
         );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
+        exc_ptLayout.setVerticalGroup(
+            exc_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_ptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane3)
+                .addComponent(sub_exc_pt)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("ប្តូរប្រាក់", jPanel14);
+        zero_tp.addTab("ប្តូរប្រាក់", exc_pt);
 
-        jTabbedPane2.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        sub_tran_pt.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel17.setText("ចំនួនទឹកប្រាក់");
@@ -2008,28 +2147,28 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        javax.swing.GroupLayout to_pro_pnLayout = new javax.swing.GroupLayout(to_pro_pn);
+        to_pro_pn.setLayout(to_pro_pnLayout);
+        to_pro_pnLayout.setHorizontalGroup(
+            to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, to_pro_pnLayout.createSequentialGroup()
                 .addGap(91, 91, 91)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 747, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(to_pro_pnLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(to_pro_pnLayout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(two_three_sender_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_one_total_money_tf)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
-                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
+                                .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                         .addComponent(jLabel17)
                                         .addGap(18, 18, 18)
                                         .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2041,17 +2180,17 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel7Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                 .addComponent(two_three_service_money_tf)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_one_edit_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(100, 100, 100))))
+                                .addComponent(two_one_edit_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(122, 122, 122))
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        to_pro_pnLayout.setVerticalGroup(
+            to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(to_pro_pnLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(two_three_dollar_money_rb)
@@ -2061,7 +2200,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(two_one_edit_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(two_three_service_money_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
@@ -2072,18 +2211,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(62, 62, 62))
-            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(to_pro_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 205, Short.MAX_VALUE))
+                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane2.addTab("ផ្ទេរប្រាក់តាមតំបន់", jPanel7);
+        sub_tran_pt.addTab("ផ្ទេរប្រាក់តាមតំបន់", to_pro_pn);
 
         jLabel23.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel23.setText("ចំនួនទឹកប្រាក់");
@@ -2248,6 +2387,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_two_pro_name_cbMouseClicked(evt);
             }
         });
+        two_two_pro_name_cb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_two_pro_name_cbActionPerformed(evt);
+            }
+        });
         jPanel12.add(two_two_pro_name_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 700, 70));
 
         two_two_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
@@ -2297,27 +2441,32 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         jPanel12.add(two_two_ph_recieve_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 270, 230));
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout from_pro_pnLayout = new javax.swing.GroupLayout(from_pro_pn);
+        from_pro_pn.setLayout(from_pro_pnLayout);
+        from_pro_pnLayout.setHorizontalGroup(
+            from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, from_pro_pnLayout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 756, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(from_pro_pnLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(from_pro_pnLayout.createSequentialGroup()
+                        .addGap(39, 39, 39)
                         .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(122, 122, 122)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_four_balance_money_tf)
                             .addComponent(two_four_total_money_tf)
                             .addComponent(two_four_reciece_money_tf)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(from_pro_pnLayout.createSequentialGroup()
+                                .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel27)
                                     .addComponent(jLabel28)
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                    .addGroup(from_pro_pnLayout.createSequentialGroup()
                                         .addComponent(jLabel23)
                                         .addGap(18, 18, 18)
                                         .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2325,50 +2474,43 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(two_four_dollar_money_rb)
                                         .addGap(41, 41, 41)
                                         .addComponent(two_four_bart_money_rb)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(118, 118, 118))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addGap(316, 316, 316)
-                        .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))))
+                                .addGap(0, 156, Short.MAX_VALUE)))))
+                .addGap(100, 100, 100))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel23)
-                                    .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(two_four_dollar_money_rb)
-                                    .addComponent(two_four_bart_money_rb))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_four_reciece_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(jLabel27)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel28)))
+        from_pro_pnLayout.setVerticalGroup(
+            from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(from_pro_pnLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(from_pro_pnLayout.createSequentialGroup()
+                        .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(two_four_dollar_money_rb)
+                            .addComponent(two_four_bart_money_rb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(two_four_reciece_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel28)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60))
+            .addGroup(from_pro_pnLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane2.addTab("ដកប្រាក់តាមតំបន់", jPanel6);
+        sub_tran_pt.addTab("ដកប្រាក់តាមតំបន់", from_pro_pn);
 
         jLabel10.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel10.setText("ចំនួនទឹកប្រាក់");
@@ -2408,21 +2550,9 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel9.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
-        jLabel9.setText("ធនាគារ");
-        jPanel13.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
-
-        two_one_tf_bank.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_one_tf_bank.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_one_tf_bankActionPerformed(evt);
-            }
-        });
-        jPanel13.add(two_one_tf_bank, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 700, 75));
-
         jLabel8.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel8.setText("លេខបញ្ជី");
-        jPanel13.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
+        jPanel13.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         two_one_tf_cus_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         two_one_tf_cus_no.addActionListener(new java.awt.event.ActionListener() {
@@ -2430,95 +2560,190 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_tf_cus_noActionPerformed(evt);
             }
         });
-        jPanel13.add(two_one_tf_cus_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 700, 78));
-
-        jLabel33.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
-        jLabel33.setText("លេខអ្នកផ្ញើរ");
-        jPanel13.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, -1));
-
-        two_one_tf_cus_ph_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        jPanel13.add(two_one_tf_cus_ph_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, 700, 75));
-
-        jLabel7.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
-        jLabel7.setText("ឈ្មោះ");
-        jPanel13.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 60, -1));
+        two_one_tf_cus_no.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_noKeyReleased(evt);
+            }
+        });
+        jPanel13.add(two_one_tf_cus_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 700, 78));
 
         two_one_tf_cus_name.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        jPanel13.add(two_one_tf_cus_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 700, 70));
-
-        two_three_to_thai_bank_list.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        two_three_to_thai_bank_list.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                two_three_to_thai_bank_listMousePressed(evt);
+        two_one_tf_cus_name.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_nameKeyReleased(evt);
             }
         });
-        two_three_to_thai_bank_list.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                two_three_to_thai_bank_listKeyPressed(evt);
-            }
-        });
+        jPanel13.add(two_one_tf_cus_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 700, 70));
 
-        two_three_to_thai_bank_layer_pane.setLayer(two_three_to_thai_bank_list, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout two_three_to_thai_bank_layer_paneLayout = new javax.swing.GroupLayout(two_three_to_thai_bank_layer_pane);
-        two_three_to_thai_bank_layer_pane.setLayout(two_three_to_thai_bank_layer_paneLayout);
-        two_three_to_thai_bank_layer_paneLayout.setHorizontalGroup(
-            two_three_to_thai_bank_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(two_three_to_thai_bank_list, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-        );
-        two_three_to_thai_bank_layer_paneLayout.setVerticalGroup(
-            two_three_to_thai_bank_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(two_three_to_thai_bank_layer_paneLayout.createSequentialGroup()
-                .addComponent(two_three_to_thai_bank_list)
-                .addContainerGap(230, Short.MAX_VALUE))
-        );
-
-        jPanel13.add(two_three_to_thai_bank_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 550, 230));
-
-        two_one_sender_his_bn3.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
-        two_one_sender_his_bn3.setText("view history");
-        two_one_sender_his_bn3.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_three_bank_info_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        two_three_bank_info_his_bn.setText("view history");
+        two_three_bank_info_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_one_sender_his_bn3MouseClicked(evt);
+                two_three_bank_info_his_bnMouseClicked(evt);
             }
         });
-        two_one_sender_his_bn3.addActionListener(new java.awt.event.ActionListener() {
+        two_three_bank_info_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_one_sender_his_bn3ActionPerformed(evt);
+                two_three_bank_info_his_bnActionPerformed(evt);
             }
         });
-        jPanel13.add(two_one_sender_his_bn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 200, 50));
+        jPanel13.add(two_three_bank_info_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 50));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(153, 153, 153)
+        two_three_to_thai_bank_id_list.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_three_to_thai_bank_id_list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                two_three_to_thai_bank_id_listMousePressed(evt);
+            }
+        });
+        two_three_to_thai_bank_id_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_to_thai_bank_id_listKeyPressed(evt);
+            }
+        });
+
+        two_three_to_thai_bank_id_layer_pane.setLayer(two_three_to_thai_bank_id_list, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout two_three_to_thai_bank_id_layer_paneLayout = new javax.swing.GroupLayout(two_three_to_thai_bank_id_layer_pane);
+        two_three_to_thai_bank_id_layer_pane.setLayout(two_three_to_thai_bank_id_layer_paneLayout);
+        two_three_to_thai_bank_id_layer_paneLayout.setHorizontalGroup(
+            two_three_to_thai_bank_id_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(two_three_to_thai_bank_id_list, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+        );
+        two_three_to_thai_bank_id_layer_paneLayout.setVerticalGroup(
+            two_three_to_thai_bank_id_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(two_three_to_thai_bank_id_layer_paneLayout.createSequentialGroup()
+                .addComponent(two_three_to_thai_bank_id_list)
+                .addContainerGap(247, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(two_three_to_thai_bank_id_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 580, -1));
+
+        jLabel19.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
+        jLabel19.setText("ឈ្មោះ");
+        jPanel13.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 90, -1));
+
+        two_three_to_thai_name_list.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_three_to_thai_name_list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                two_three_to_thai_name_listMousePressed(evt);
+            }
+        });
+        two_three_to_thai_name_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_to_thai_name_listKeyPressed(evt);
+            }
+        });
+
+        two_three_to_thai_name_layer_pane.setLayer(two_three_to_thai_name_list, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout two_three_to_thai_name_layer_paneLayout = new javax.swing.GroupLayout(two_three_to_thai_name_layer_pane);
+        two_three_to_thai_name_layer_pane.setLayout(two_three_to_thai_name_layer_paneLayout);
+        two_three_to_thai_name_layer_paneLayout.setHorizontalGroup(
+            two_three_to_thai_name_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(two_three_to_thai_name_list, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+        );
+        two_three_to_thai_name_layer_paneLayout.setVerticalGroup(
+            two_three_to_thai_name_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(two_three_to_thai_name_layer_paneLayout.createSequentialGroup()
+                .addComponent(two_three_to_thai_name_list)
+                .addContainerGap(240, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(two_three_to_thai_name_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 590, 240));
+
+        jLabel57.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
+        jLabel57.setText("លេខអ្នកផ្ញើរ");
+        jPanel13.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 150, -1));
+
+        two_three_tf_cus_ph_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_tf_cus_ph_no.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                two_three_tf_cus_ph_noKeyReleased(evt);
+            }
+        });
+        jPanel13.add(two_three_tf_cus_ph_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 700, 75));
+
+        two_three_to_thai_ph_no_list.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_three_to_thai_ph_no_list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                two_three_to_thai_ph_no_listMousePressed(evt);
+            }
+        });
+        two_three_to_thai_ph_no_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_to_thai_ph_no_listKeyPressed(evt);
+            }
+        });
+
+        two_three_to_thai_ph_no_layer_pane.setLayer(two_three_to_thai_ph_no_list, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout two_three_to_thai_ph_no_layer_paneLayout = new javax.swing.GroupLayout(two_three_to_thai_ph_no_layer_pane);
+        two_three_to_thai_ph_no_layer_pane.setLayout(two_three_to_thai_ph_no_layer_paneLayout);
+        two_three_to_thai_ph_no_layer_paneLayout.setHorizontalGroup(
+            two_three_to_thai_ph_no_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(two_three_to_thai_ph_no_list, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        two_three_to_thai_ph_no_layer_paneLayout.setVerticalGroup(
+            two_three_to_thai_ph_no_layer_paneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(two_three_to_thai_ph_no_layer_paneLayout.createSequentialGroup()
+                .addComponent(two_three_to_thai_ph_no_list)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel13.add(two_three_to_thai_ph_no_layer_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 590, 240));
+
+        two_three_bank_thai_cb.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_bank_thai_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none" }));
+        two_three_bank_thai_cb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                two_three_bank_thai_cbMouseClicked(evt);
+            }
+        });
+        jPanel13.add(two_three_bank_thai_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 700, 70));
+
+        two_three_bank_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        two_three_bank_his_bn.setText("view history");
+        two_three_bank_his_bn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                two_three_bank_his_bnActionPerformed(evt);
+            }
+        });
+        jPanel13.add(two_three_bank_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, 200, 50));
+
+        jLabel29.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
+        jLabel29.setText("ធនាគារ");
+        jPanel13.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, -1, -1));
+
+        javax.swing.GroupLayout to_thai_pnLayout = new javax.swing.GroupLayout(to_thai_pn);
+        to_thai_pn.setLayout(to_thai_pnLayout);
+        to_thai_pnLayout.setHorizontalGroup(
+            to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(to_thai_pnLayout.createSequentialGroup()
+                .addGap(141, 141, 141)
                 .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
-                            .addComponent(two_one_tf_service_money, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(to_thai_pnLayout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                            .addComponent(two_one_tf_service_money, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                            .addGroup(to_thai_pnLayout.createSequentialGroup()
+                                .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10)
                                     .addComponent(jLabel12)
                                     .addComponent(jLabel11))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(two_one_tf_cus_money, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(151, 151, 151))))
+                            .addComponent(two_one_tf_cus_money, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(to_thai_pnLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(130, 130, 130))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        to_thai_pnLayout.setVerticalGroup(
+            to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(to_thai_pnLayout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2531,18 +2756,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(116, 116, 116)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
-                    .addComponent(two_one_bn_finish, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(79, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(74, 74, 74))
+            .addGroup(to_thai_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane2.addTab("ផ្ទេរប្រាក់ទៅថៃ", jPanel4);
+        sub_tran_pt.addTab("ផ្ទេរប្រាក់ទៅថៃ", to_thai_pn);
 
         print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         print.setText("ព្រីនវិក្កិយបត្រ");
@@ -2588,41 +2813,42 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_reveiver_ph_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
+        javax.swing.GroupLayout from_thai_pnLayout = new javax.swing.GroupLayout(from_thai_pn);
+        from_thai_pn.setLayout(from_thai_pnLayout);
+        from_thai_pnLayout.setHorizontalGroup(
+            from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(from_thai_pnLayout.createSequentialGroup()
                 .addComponent(jLabel13)
                 .addGap(725, 725, 725)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(from_thai_pnLayout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, from_thai_pnLayout.createSequentialGroup()
+                        .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(two_two_service_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_two_reveiver_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, from_thai_pnLayout.createSequentialGroup()
+                                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel34, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(two_two_result_money_tf, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(130, 130, 130))))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(from_thai_pnLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        from_thai_pnLayout.setVerticalGroup(
+            from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(from_thai_pnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(jLabel34))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2639,33 +2865,33 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(two_two_result_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(38, 38, 38))
         );
 
-        jTabbedPane2.addTab("ដកប្រាក់ពីថៃ", jPanel5);
+        sub_tran_pt.addTab("ដកប្រាក់ពីថៃ", from_thai_pn);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout tran_ptLayout = new javax.swing.GroupLayout(tran_pt);
+        tran_pt.setLayout(tran_ptLayout);
+        tran_ptLayout.setHorizontalGroup(
+            tran_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tran_ptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2)
+                .addComponent(sub_tran_pt)
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        tran_ptLayout.setVerticalGroup(
+            tran_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tran_ptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 831, Short.MAX_VALUE)
+                .addComponent(sub_tran_pt)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("ផ្ទេរប្រាក់", jPanel1);
+        zero_tp.addTab("ផ្ទេរប្រាក់", tran_pt);
 
         three_tb_total_money.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         three_tb_total_money.setModel(new javax.swing.table.DefaultTableModel(
@@ -2880,32 +3106,32 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
+        javax.swing.GroupLayout his_ptLayout = new javax.swing.GroupLayout(his_pt);
+        his_pt.setLayout(his_ptLayout);
+        his_ptLayout.setHorizontalGroup(
+            his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(his_ptLayout.createSequentialGroup()
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(his_ptLayout.createSequentialGroup()
                         .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(three_up, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(three_down)))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
+                    .addGroup(his_ptLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                            .addGroup(his_ptLayout.createSequentialGroup()
+                                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(his_ptLayout.createSequentialGroup()
                                         .addComponent(jLabel35)
                                         .addGap(18, 18, 18)
                                         .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(his_ptLayout.createSequentialGroup()
+                                        .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                            .addGroup(his_ptLayout.createSequentialGroup()
                                                 .addComponent(jLabel47)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(three_rial_rb)
@@ -2915,7 +3141,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                                 .addComponent(three_bart_rb)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(three_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
+                                    .addGroup(his_ptLayout.createSequentialGroup()
                                         .addComponent(three_chb_date)
                                         .addGap(51, 51, 51)
                                         .addComponent(three_chb_id)
@@ -2933,34 +3159,34 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(three_chb_m_b_bank)
                                         .addGap(34, 34, 34)
                                         .addComponent(three_chb_m_detail)))
-                                .addGap(0, 275, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addGap(0, 235, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, his_ptLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 1046, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
+        his_ptLayout.setVerticalGroup(
+            his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(his_ptLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel47)
                     .addComponent(three_rial_rb)
                     .addComponent(three_dollar_rb)
                     .addComponent(three_bart_rb))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(three_add_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_add_bn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(39, 39, 39)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(three_chb_id, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_chb_date, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_chb_user, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2971,16 +3197,16 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(three_chb_m_b_bank, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_chb_m_detail, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(his_ptLayout.createSequentialGroup()
                         .addComponent(three_up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(three_down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(three_down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Banlance", jPanel8);
+        zero_tp.addTab("Banlance", his_pt);
 
         four_bn_edit_exchange_rate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         four_bn_edit_exchange_rate.setText("save");
@@ -3360,44 +3586,44 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel46.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel46.setText("៛ → $");
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap(257, Short.MAX_VALUE)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        javax.swing.GroupLayout rate_ptLayout = new javax.swing.GroupLayout(rate_pt);
+        rate_pt.setLayout(rate_ptLayout);
+        rate_ptLayout.setHorizontalGroup(
+            rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rate_ptLayout.createSequentialGroup()
+                .addContainerGap(237, Short.MAX_VALUE)
+                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(rate_ptLayout.createSequentialGroup()
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel39)
                             .addComponent(jLabel38)
                             .addComponent(jLabel37))
                         .addGap(22, 22, 22)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rate_ptLayout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(four_B_to_R_one_tf)
                                     .addComponent(four_S_to_B_one_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(four_B_to_R_two_tf)
                                     .addComponent(four_S_to_B_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(rate_ptLayout.createSequentialGroup()
                                         .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_S_to_B_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_S_to_B_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
+                                    .addGroup(rate_ptLayout.createSequentialGroup()
                                         .addComponent(four_B_to_R_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_B_to_R_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
+                            .addGroup(rate_ptLayout.createSequentialGroup()
                                 .addComponent(four_S_to_R_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(four_S_to_R_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3406,34 +3632,34 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(four_S_to_R_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(97, 97, 97)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(rate_ptLayout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel45)
                                     .addComponent(jLabel46))
                                 .addGap(31, 31, 31)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(rate_ptLayout.createSequentialGroup()
                                         .addComponent(four_R_to_S_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(four_R_to_S_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rate_ptLayout.createSequentialGroup()
                                         .addComponent(four_B_to_S_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_B_to_S_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, rate_ptLayout.createSequentialGroup()
                                         .addGap(12, 12, 12)
                                         .addComponent(four_R_to_S_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_R_to_S_four_tf))
-                                    .addGroup(jPanel9Layout.createSequentialGroup()
+                                    .addGroup(rate_ptLayout.createSequentialGroup()
                                         .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_B_to_S_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(four_B_to_S_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
+                            .addGroup(rate_ptLayout.createSequentialGroup()
                                 .addComponent(jLabel44)
                                 .addGap(31, 31, 31)
                                 .addComponent(four_R_to_B_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3445,82 +3671,82 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(four_R_to_B_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
+                    .addGroup(rate_ptLayout.createSequentialGroup()
                         .addComponent(four_bn_edit_exchange_rate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(277, 277, 277)))
-                .addContainerGap(520, Short.MAX_VALUE))
+                .addContainerGap(500, Short.MAX_VALUE))
         );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap(187, Short.MAX_VALUE)
+        rate_ptLayout.setVerticalGroup(
+            rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rate_ptLayout.createSequentialGroup()
+                .addContainerGap(160, Short.MAX_VALUE)
                 .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(rate_ptLayout.createSequentialGroup()
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(four_R_to_S_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_R_to_S_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_R_to_S_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_R_to_S_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel46))
                         .addGap(38, 38, 38)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(four_B_to_S_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(four_B_to_S_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(four_B_to_S_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(four_B_to_S_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel45))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
+                            .addGroup(rate_ptLayout.createSequentialGroup()
                                 .addGap(17, 17, 17)
                                 .addComponent(jLabel41))))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(rate_ptLayout.createSequentialGroup()
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(four_S_to_R_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_S_to_R_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_S_to_R_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(four_S_to_R_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel37))
                         .addGap(38, 38, 38)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(rate_ptLayout.createSequentialGroup()
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(four_S_to_B_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_S_to_B_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel38))
-                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(four_S_to_B_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_S_to_B_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel42))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
+                            .addGroup(rate_ptLayout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addComponent(jLabel40)
                                 .addGap(41, 41, 41)
-                                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(four_B_to_R_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_B_to_R_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_B_to_R_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel39))
                                     .addComponent(four_B_to_R_four_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel43, javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(four_R_to_B_four_tf, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(four_R_to_B_one_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_R_to_B_two_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(four_R_to_B_three_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel44)))))))
                 .addGap(69, 69, 69)
                 .addComponent(four_bn_edit_exchange_rate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("អត្រាប្តូរប្រាក់", jPanel9);
+        zero_tp.addTab("អត្រាប្តូរប្រាក់", rate_pt);
 
         five_user_name_tf.setEditable(false);
         five_user_name_tf.setText("chi");
@@ -3607,108 +3833,108 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
+        javax.swing.GroupLayout db_con_ptLayout = new javax.swing.GroupLayout(db_con_pt);
+        db_con_pt.setLayout(db_con_ptLayout);
+        db_con_ptLayout.setHorizontalGroup(
+            db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(db_con_ptLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(five_wifi_host_tf))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel49, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(db_con_ptLayout.createSequentialGroup()
                                 .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(five_password_tf)
                             .addComponent(five_user_name_tf)))
                     .addComponent(five_create_acc_tf)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel51, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                             .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(five_local_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 334, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 314, Short.MAX_VALUE)
                 .addComponent(five_dev_permission_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(five_dev_permission_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(388, Short.MAX_VALUE))
+                .addContainerGap(368, Short.MAX_VALUE))
         );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
+        db_con_ptLayout.setVerticalGroup(
+            db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(db_con_ptLayout.createSequentialGroup()
                 .addGap(61, 61, 61)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel49, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addComponent(five_create_acc_tf))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(five_dev_permission_bn, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                             .addComponent(five_dev_permission_tf))))
                 .addGap(27, 27, 27)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(five_local_host_user_name_tf)
                         .addGap(2, 2, 2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)))
                 .addGap(31, 31, 31)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_wifi_host_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)))
-                .addGap(224, 224, 224))
+                .addGap(298, 298, 298))
         );
 
-        jTabbedPane1.addTab("connection", jPanel10);
+        zero_tp.addTab("connection", db_con_pt);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -3716,18 +3942,18 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(zero_tp)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(zero_tp, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
+        zero_tp.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -4934,7 +5160,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_four_total_money_tf.setText("");
             buttonGroup3.clearSelection();
             remove_all_in_list(two_two_ph_recieve_list);
-            set_history();
+//            set_history();
+            set_is_change_true();
         }
     }//GEN-LAST:event_two_four_bn_finishActionPerformed
 
@@ -5011,7 +5238,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_tf_cus_moneyActionPerformed
 
     private void two_three_sender_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfKeyReleased
-        search_engine(two_one_ph_senter_list, two_three_sender_phone_no_tf.getText().trim(),
+        search_engine_pro(two_one_ph_senter_list, two_three_sender_phone_no_tf.getText().trim(),
                 "sender_phone_no", "to_pro_sender_ph_no_history_tb");
     }//GEN-LAST:event_two_three_sender_phone_no_tfKeyReleased
 
@@ -5097,7 +5324,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_sender_phone_no_tfCaretUpdate
 
     private void two_three_receiver_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfKeyReleased
-        search_engine(two_one_ph_reciever_list, two_three_receiver_phone_no_tf.getText().trim(),
+        search_engine_pro(two_one_ph_reciever_list, two_three_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "to_pro_receiver_ph_no_history_tb");
     }//GEN-LAST:event_two_three_receiver_phone_no_tfKeyReleased
 
@@ -5169,8 +5396,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_edit_bnActionPerformed
 
     private void two_one_ph_senter_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_ph_senter_listMousePressed
-
-        get_result_search_e(two_one_ph_senter_list, two_three_sender_phone_no_tf);
+        get_pro_result_search_db(two_one_ph_senter_list, two_three_sender_phone_no_tf);
     }//GEN-LAST:event_two_one_ph_senter_listMousePressed
 
     private void two_three_sender_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfKeyPressed
@@ -5188,7 +5414,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                get_result_search_e(two_one_ph_senter_list, two_three_sender_phone_no_tf);
+                get_pro_result_search_db(two_one_ph_senter_list, two_three_sender_phone_no_tf);
                 break;
         }
     }//GEN-LAST:event_two_one_ph_senter_listKeyPressed
@@ -5208,15 +5434,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                get_result_search_e(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
+                get_pro_result_search_db(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
                 break;
         }
 
     }//GEN-LAST:event_two_one_ph_reciever_listKeyPressed
 
     private void two_one_ph_reciever_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_ph_reciever_listMousePressed
-
-        get_result_search_e(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
+        get_pro_result_search_db(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
     }//GEN-LAST:event_two_one_ph_reciever_listMousePressed
 
     private void two_two_reciever_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnActionPerformed
@@ -5267,14 +5492,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_ph_recieve_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listMousePressed
 
-        get_result_search_e(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
+        get_pro_result_search_db(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
     }//GEN-LAST:event_two_two_ph_recieve_listMousePressed
 
     private void two_two_ph_recieve_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                get_result_search_e(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
+                get_pro_result_search_db(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
                 break;
         }
     }//GEN-LAST:event_two_two_ph_recieve_listKeyPressed
@@ -5295,7 +5520,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_four_receiver_phone_no_tfKeyPressed
 
     private void two_four_receiver_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfKeyReleased
-        search_engine(two_two_ph_recieve_list, two_four_receiver_phone_no_tf.getText().trim(),
+        search_engine_pro(two_two_ph_recieve_list, two_four_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
     }//GEN-LAST:event_two_four_receiver_phone_no_tfKeyReleased
 
@@ -5340,13 +5565,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_four_total_money_tfKeyTyped
 
     private void two_four_reciece_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfCaretUpdate
-//       if ((!two_four_sender_money_tf.getText().isEmpty() && !two_four_total_money_tf.getText().isEmpty())
-//                && (two_four_rial_money_rb.isSelected() || two_four_dollar_money_rb.isSelected()
-//                || two_four_bart_money_rb.isSelected())) {
-//            two_four_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_from_pro,
-//                    String.valueOf(Double.parseDouble(clear_cvot(two_four_sender_money_tf.getText()))
-//                            - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText())))));
-//        }
+
         two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
                 two_four_total_money_tf, two_four_balance_money_tf,
                 two_four_rial_money_rb, two_four_dollar_money_rb,
@@ -5411,27 +5630,15 @@ public class UI_and_operation extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_two_one_tf_cus_noActionPerformed
 
-    private void two_one_tf_bankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_bankActionPerformed
+    private void two_three_bank_info_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_tf_bankActionPerformed
+    }//GEN-LAST:event_two_three_bank_info_his_bnMouseClicked
 
-    private void two_one_sender_his_bn3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_sender_his_bn3MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_sender_his_bn3MouseClicked
-
-    private void two_one_sender_his_bn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_sender_his_bn3ActionPerformed
+    private void two_three_bank_info_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnActionPerformed
         view_history_thai view_his_thai_obj = new view_history_thai(this);
         view_his_thai_obj.setVisible(true);
         this.setEnabled(false);
-    }//GEN-LAST:event_two_one_sender_his_bn3ActionPerformed
-
-    private void two_three_to_thai_bank_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_listKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_to_thai_bank_listKeyPressed
-
-    private void two_three_to_thai_bank_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_listMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_two_three_to_thai_bank_listMousePressed
+    }//GEN-LAST:event_two_three_bank_info_his_bnActionPerformed
 
     private void one_tf_customer_money1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_one_tf_customer_money1CaretUpdate
         caret_one_two(one_tf_customer_money1, one_two_rate_bc1,
@@ -5605,6 +5812,65 @@ public class UI_and_operation extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton13ActionPerformed
 
+    private void two_three_to_thai_bank_id_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_id_listMousePressed
+        get_bank_thai_result_search_db(two_three_to_thai_bank_id_list, two_one_tf_cus_no,
+                two_one_tf_cus_name, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+    }//GEN-LAST:event_two_three_to_thai_bank_id_listMousePressed
+
+    private void two_three_to_thai_bank_id_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_id_listKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_to_thai_bank_id_listKeyPressed
+
+    private void two_one_tf_cus_noKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noKeyReleased
+        search_engine_bank_thai(two_three_to_thai_bank_id_list, two_one_tf_cus_no.getText().trim(),
+                "bank_id", "name", "phone_no", "bank", "to_thai_history_tb");
+    }//GEN-LAST:event_two_one_tf_cus_noKeyReleased
+
+    private void two_three_to_thai_name_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_name_listMousePressed
+        get_bank_thai_result_search_db(two_three_to_thai_name_list, two_one_tf_cus_name,
+                two_one_tf_cus_no, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+    }//GEN-LAST:event_two_three_to_thai_name_listMousePressed
+
+    private void two_three_to_thai_name_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_name_listKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_to_thai_name_listKeyPressed
+
+    private void two_three_to_thai_ph_no_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_ph_no_listMousePressed
+        get_bank_thai_result_search_db(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no,
+                two_one_tf_cus_no, two_one_tf_cus_name, two_three_bank_thai_cb);
+    }//GEN-LAST:event_two_three_to_thai_ph_no_listMousePressed
+
+    private void two_three_to_thai_ph_no_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_ph_no_listKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_three_to_thai_ph_no_listKeyPressed
+
+    private void two_three_bank_thai_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bank_thai_cbMouseClicked
+
+    }//GEN-LAST:event_two_three_bank_thai_cbMouseClicked
+
+    private void two_three_bank_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnActionPerformed
+        view_history_list view_his_obj = new view_history_list(
+                this, "bank", "to_thai_bank_name_history_tb",
+                "view thai bank", "thai bank", "Edit bank name",
+                "Add new bank name", "edit bank name", "add bank name", false, false, true);
+        view_his_obj.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_two_three_bank_his_bnActionPerformed
+
+    private void two_one_tf_cus_nameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameKeyReleased
+        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(),
+                "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
+    }//GEN-LAST:event_two_one_tf_cus_nameKeyReleased
+
+    private void two_three_tf_cus_ph_noKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noKeyReleased
+        search_engine_bank_thai(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no.getText().trim(),
+                "phone_no", "bank_id", "name", "bank", "to_thai_history_tb");
+    }//GEN-LAST:event_two_three_tf_cus_ph_noKeyReleased
+
+    private void two_two_pro_name_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_two_two_pro_name_cbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5655,6 +5921,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.JLabel date_history_lb;
+    private javax.swing.JPanel db_con_pt;
+    private javax.swing.JPanel double_exc_pn;
+    private javax.swing.JPanel exc_pn;
+    private javax.swing.JPanel exc_pt;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton five_create_acc_tf;
     private javax.swing.JButton five_dev_permission_bn;
@@ -5693,6 +5963,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField four_S_to_R_three_tf;
     private javax.swing.JTextField four_S_to_R_two_tf;
     private javax.swing.JButton four_bn_edit_exchange_rate;
+    private javax.swing.JPanel from_pro_pn;
+    private javax.swing.JPanel from_thai_pn;
+    private javax.swing.JPanel his_pt;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton9;
@@ -5707,6 +5980,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -5716,7 +5990,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
@@ -5740,31 +6014,16 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JButton one_bn_B_to_R;
     private javax.swing.JButton one_bn_B_to_S;
@@ -5810,6 +6069,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> one_two_rate_bc1;
     private javax.swing.JComboBox<String> one_two_rate_bc2;
     private javax.swing.JButton print;
+    private javax.swing.JPanel rate_pt;
+    private javax.swing.JTabbedPane sub_exc_pt;
+    private javax.swing.JTabbedPane sub_tran_pt;
     private javax.swing.JButton three_add_bn;
     private javax.swing.JTextField three_add_tf;
     private javax.swing.JRadioButton three_bart_rb;
@@ -5829,6 +6091,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTable three_tb_history;
     private javax.swing.JTable three_tb_total_money;
     private javax.swing.JButton three_up;
+    private javax.swing.JPanel to_pro_pn;
+    private javax.swing.JPanel to_thai_pn;
+    private javax.swing.JPanel tran_pt;
     private javax.swing.JTextField two_four_balance_money_tf;
     private javax.swing.JRadioButton two_four_bart_money_rb;
     private javax.swing.JButton two_four_bn_finish;
@@ -5848,16 +6113,16 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> two_one_pro_name_cb;
     private javax.swing.JButton two_one_reciever_his_bn;
     private javax.swing.JButton two_one_sender_his_bn;
-    private javax.swing.JButton two_one_sender_his_bn3;
-    private javax.swing.JTextField two_one_tf_bank;
     private javax.swing.JTextField two_one_tf_cus_money;
     private javax.swing.JTextField two_one_tf_cus_name;
     private javax.swing.JTextField two_one_tf_cus_no;
-    private javax.swing.JTextField two_one_tf_cus_ph_no;
     private javax.swing.JTextField two_one_tf_service_money;
     private javax.swing.JTextField two_one_tf_total_money;
     private javax.swing.JTextField two_one_total_money_tf;
     private javax.swing.JTextField two_three_balance_money_tf;
+    private javax.swing.JButton two_three_bank_his_bn;
+    private javax.swing.JButton two_three_bank_info_his_bn;
+    private javax.swing.JComboBox<String> two_three_bank_thai_cb;
     private javax.swing.JRadioButton two_three_bart_money_rb;
     private javax.swing.JButton two_three_bn_finish;
     private javax.swing.JRadioButton two_three_dollar_money_rb;
@@ -5866,8 +6131,13 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField two_three_sender_money_tf;
     private javax.swing.JTextField two_three_sender_phone_no_tf;
     private javax.swing.JTextField two_three_service_money_tf;
-    private javax.swing.JLayeredPane two_three_to_thai_bank_layer_pane;
-    private javax.swing.JList<String> two_three_to_thai_bank_list;
+    private javax.swing.JTextField two_three_tf_cus_ph_no;
+    private javax.swing.JLayeredPane two_three_to_thai_bank_id_layer_pane;
+    private javax.swing.JList<String> two_three_to_thai_bank_id_list;
+    private javax.swing.JLayeredPane two_three_to_thai_name_layer_pane;
+    private javax.swing.JList<String> two_three_to_thai_name_list;
+    private javax.swing.JLayeredPane two_three_to_thai_ph_no_layer_pane;
+    private javax.swing.JList<String> two_three_to_thai_ph_no_list;
     private javax.swing.JButton two_two_bn_finish;
     private javax.swing.JLayeredPane two_two_ph_recieve_layer_pane;
     private javax.swing.JList<String> two_two_ph_recieve_list;
@@ -5877,6 +6147,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField two_two_reveiver_money_tf;
     private javax.swing.JTextField two_two_reveiver_ph_no_tf;
     private javax.swing.JTextField two_two_service_money_tf;
+    private javax.swing.JTabbedPane zero_tp;
     // End of variables declaration//GEN-END:variables
 
 }

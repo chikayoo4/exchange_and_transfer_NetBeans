@@ -7,6 +7,7 @@ package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.set_thai_history_db;
+import static UI_and_operation.UI_and_operation.update_thai_history_db;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
@@ -27,11 +28,12 @@ import javax.swing.JFrame;
 public class to_thai_info extends javax.swing.JFrame
         implements WindowListener {
 
-    dialog_type_for_db_e_a dialog_type;
-    view_history_thai view_his_thai_obj;
+    private int id;
+    private dialog_type_for_db_e_a dialog_type;
+    private view_history_thai view_his_thai_obj;
 
     public void set_tf_from_sql(int id) {
-
+        this.id = id;
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -50,10 +52,10 @@ public class to_thai_info extends javax.swing.JFrame
             
                 while (rs.next()) {
                     //set to v2 all data only 1 row
-                    tf_bank.setText(rs.getString("bank"));
                     tf_cus_no.setText(rs.getString("bank_id"));
                     tf_cus_name.setText(rs.getString("name"));
                     tf_cus_ph_no.setText(rs.getString("phone_no"));
+                    tf_bank.setText(rs.getString("bank"));
 
                 }
 
@@ -61,39 +63,7 @@ public class to_thai_info extends javax.swing.JFrame
             System.err.println("error: two_three_bn_finish\n" + ex);
         }
     }
-
     
-    public void update_tf_from_sql(int id) {
-
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-            pst = con.prepareStatement("SELECT bank, bank_id, name, phone_no "
-                    + "FROM to_thai_history_tb "
-                    + "where id_to_thai = "+ id +";");
-            
-//            pst.setInt(1, id);
-            rs = pst.executeQuery();
-            
-                while (rs.next()) {
-                    //set to v2 all data only 1 row
-                    tf_bank.setText(rs.getString("bank"));
-                    tf_cus_no.setText(rs.getString("bank_id"));
-                    tf_cus_name.setText(rs.getString("name"));
-                    tf_cus_ph_no.setText(rs.getString("phone_no"));
-
-                }
-
-        } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finishsssssssssssssssssssssssssssss\n" + ex);
-        }
-    }
     /**
      * Creates new form to_thai_info
      */
@@ -201,34 +171,43 @@ public class to_thai_info extends javax.swing.JFrame
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tf_cus_ph_no)
-                    .addComponent(tf_cus_name)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tf_bank)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
-                    .addComponent(tf_cus_no, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(36, 36, 36))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(agree_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(cancel_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tf_bank))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE))
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tf_cus_name, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tf_cus_ph_no))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tf_cus_no))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tf_bank, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -241,11 +220,15 @@ public class to_thai_info extends javax.swing.JFrame
                 .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tf_cus_ph_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tf_bank, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(agree_bn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                     .addComponent(cancel_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -270,7 +253,11 @@ public class to_thai_info extends javax.swing.JFrame
                             "to_thai_history_tb");
                     break;
                 case Edit:
-                        
+                        update_thai_history_db("bank", tf_bank.getText().trim(),
+                            "bank_id", tf_cus_no.getText().trim(),
+                            "name", tf_cus_name.getText().trim(),
+                            "phone_no", tf_cus_ph_no.getText().trim(),
+                            "to_thai_history_tb", "id_to_thai", id);
                     break;
                 default:
                     System.out.println("Eorror");

@@ -57,10 +57,10 @@ public class view_history_thai extends javax.swing.JFrame
 
                     //set to v2 all data only 1 row
                     v3.add(rs.getString("id_to_thai"));
-                    v3.add(rs.getString("bank"));
                     v3.add(rs.getString("bank_id"));
                     v3.add(rs.getString("name"));
                     v3.add(rs.getString("phone_no"));
+                    v3.add(rs.getString("bank"));
 
                     //set data to table history row
                     dft.addRow(v3);
@@ -131,7 +131,7 @@ public class view_history_thai extends javax.swing.JFrame
 
             },
             new String [] {
-                "id", "bank", "code", "name", "phone number"
+                "id", "code", "name", "phone number", "bank"
             }
         ) {
             Class[] types = new Class [] {

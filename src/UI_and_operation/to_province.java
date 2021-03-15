@@ -13,6 +13,7 @@ import static UI_and_operation.UI_and_operation.is_has_history_list_db;
 import UI_and_operation.UI_and_operation.purpose_type;
 import static UI_and_operation.UI_and_operation.set_history_list_db;
 import static UI_and_operation.UI_and_operation.set_invoice_man_db;
+import static UI_and_operation.UI_and_operation.set_is_change_true;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
@@ -161,7 +162,9 @@ public class to_province {
             two_three_sender_money_tf.setText("");
             two_three_service_money_tf.setText("");
             buttonGroup2.clearSelection();
-            ui_ope.set_history();
+//            ui_ope.set_history();
+
+                set_is_change_true();
         }
     }
 

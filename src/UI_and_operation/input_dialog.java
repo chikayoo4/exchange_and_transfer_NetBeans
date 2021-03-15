@@ -189,8 +189,13 @@ public class input_dialog extends javax.swing.JFrame
                         } else {
                             set_history_list_db(input_tf.getText().trim(), col_sql, tb_sql);
                         }
+                        
                         set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                        
                         set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                        
+                        set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
+                        
                         view_his_obj.set_history();
                         view_his_obj.setEnabled(true);
                         this.setVisible(false);
@@ -212,9 +217,15 @@ public class input_dialog extends javax.swing.JFrame
                                 + "where " + col_sql + " = '" + default_edit_value + "'");
                         pst.executeUpdate();
                     }
-                        set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                    
+                    set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                    
+                    set_cb(ui_and_ope_obj.get_from_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
+                    
+                    set_cb(ui_and_ope_obj.get_from_bank_thai_cb_from_ui_oper(), "bank", "to_thai_bank_name_history_tb");
+                    
                     view_his_obj.set_history();
-                        view_his_obj.setEnabled(true);
+                    view_his_obj.setEnabled(true);
                     this.setVisible(false);
                     this.dispose();
                     break;
@@ -231,7 +242,7 @@ public class input_dialog extends javax.swing.JFrame
         if (!input_tf.getText().isEmpty()) {
             if (input_tf.getText().length() >= 9 || !is_validate_ph) {
                 agree_bn_fn();
-                
+
             }
         }
     }//GEN-LAST:event_agree_bnActionPerformed

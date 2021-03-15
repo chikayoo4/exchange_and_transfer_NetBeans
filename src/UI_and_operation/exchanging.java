@@ -8,6 +8,7 @@ package UI_and_operation;
 import static UI_and_operation.UI_and_operation.current_date;
 import UI_and_operation.UI_and_operation.purpose_type;
 import static UI_and_operation.UI_and_operation.set_invoice_man_db;
+import static UI_and_operation.UI_and_operation.set_is_change_true;
 import UI_and_operation.UI_and_operation.type_of_exchange;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
@@ -417,7 +418,8 @@ public class exchanging {
                 one_tf_customer_money2.setText("");
                 one_two_rate_bc1.getModel().setSelectedItem("none");
                 one_two_rate_bc2.getModel().setSelectedItem("none");
-                ui_ope.set_history();
+//                ui_ope.set_history();
+                set_is_change_true();
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -795,7 +797,8 @@ public class exchanging {
             one_bn_B_to_S.setEnabled(true);
             one_bn_R_to_B.setEnabled(true);
             one_lb_operator.setText("");
-            ui_ope.set_history();
+//            ui_ope.set_history();
+            set_is_change_true();
         }
 
     }
@@ -805,10 +808,13 @@ public class exchanging {
             javax.swing.JTextField one_tf_exchange_rate1, javax.swing.JTextField one_tf_customer_result1,
             javax.swing.JTextField one_tf_exchange_rate2, javax.swing.JTextField one_tf_customer_result2, Boolean is_print, UI_and_operation ui_ope) {
         if (is_print) {
+             if (!one_tf_customer_money1.getText().isEmpty() && !one_tf_customer_money2.getText().isEmpty()
+                && !one_two_rate_bc1.getSelectedItem().equals("none") && !one_two_rate_bc2.getSelectedItem().equals("none")) {
             print_reciept(get_path() + double_exc_reciept_path,
                     insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
                             one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
                             one_tf_exchange_rate2, one_tf_customer_result2, ui_ope));
+             }
         } else {
             insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
                     one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
