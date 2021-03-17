@@ -34,7 +34,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="zero_tp" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -75,7 +75,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sub_exc_pt" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -84,9 +84,9 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sub_exc_pt" max="32767" attributes="0"/>
+                      <Component id="sub_exc_pt" pref="781" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -133,7 +133,7 @@
                                                   <Group type="102" attributes="0">
                                                       <Component id="one_lb_customer_money" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb" pref="238" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb" pref="246" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Component id="one_tf_customer_money" max="32767" attributes="0"/>
                                               </Group>
@@ -151,7 +151,7 @@
                                           <Group type="102" attributes="0">
                                               <Component id="one_lb_exchange_rate" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="one_rate_type_lb" pref="234" max="32767" attributes="0"/>
+                                              <Component id="one_rate_type_lb" pref="240" max="32767" attributes="0"/>
                                           </Group>
                                           <Component id="one_tf_exchange_rate" max="32767" attributes="0"/>
                                       </Group>
@@ -170,7 +170,7 @@
                                           <Group type="102" attributes="0">
                                               <Component id="one_lb_customer_result" min="-2" pref="218" max="-2" attributes="0"/>
                                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="one_money_type_result_lb" pref="237" max="32767" attributes="0"/>
+                                              <Component id="one_money_type_result_lb" pref="245" max="32767" attributes="0"/>
                                           </Group>
                                           <Component id="one_tf_customer_result" max="32767" attributes="0"/>
                                       </Group>
@@ -198,7 +198,7 @@
                                       <Component id="one_bn_B_to_S" alignment="3" min="-2" pref="150" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="0" pref="29" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                                       <Component id="one_lb_customer_money" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -229,7 +229,7 @@
                                   <Component id="one_bn_finished" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                                   <Component id="one_bn_print" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="118" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -249,6 +249,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_S_to_RMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_S_to_RActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_S_to_RKeyPressed"/>
                       </Events>
@@ -267,6 +268,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_S_to_BMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_S_to_BActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_S_to_BKeyPressed"/>
                       </Events>
@@ -285,6 +287,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_B_to_RMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_B_to_RActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_B_to_RKeyPressed"/>
                       </Events>
@@ -303,6 +306,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_R_to_SMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_R_to_SActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_R_to_SKeyPressed"/>
                       </Events>
@@ -321,6 +325,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_B_to_SMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_B_to_SActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_B_to_SKeyPressed"/>
                       </Events>
@@ -339,6 +344,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_bn_R_to_BMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_R_to_BActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_R_to_BKeyPressed"/>
                       </Events>
@@ -462,6 +468,7 @@
                       </Properties>
                       <Events>
                         <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="one_tf_customer_moneyCaretUpdate"/>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_tf_customer_moneyMouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_tf_customer_moneyActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_moneyKeyPressed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_moneyKeyReleased"/>
@@ -493,7 +500,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="one_two_bn_finished" min="-2" pref="165" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="one_bn_print1" min="-2" pref="165" max="-2" attributes="0"/>
+                                      <Component id="one_two_bn_print" min="-2" pref="165" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
@@ -503,9 +510,9 @@
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="one_lb_customer_money2" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb3_" pref="254" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb3_" pref="258" max="32767" attributes="0"/>
                                                   </Group>
-                                                  <Component id="one_tf_customer_money2" alignment="0" pref="468" max="32767" attributes="0"/>
+                                                  <Component id="one_tf_customer_money2" alignment="0" pref="472" max="32767" attributes="0"/>
                                               </Group>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="one_lb_operator2" min="-2" pref="38" max="-2" attributes="0"/>
@@ -516,7 +523,7 @@
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="one_lb_customer_money1" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="one_money_type_lb1" pref="249" max="32767" attributes="0"/>
+                                                      <Component id="one_money_type_lb1" pref="253" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Component id="one_tf_customer_money1" max="32767" attributes="0"/>
                                               </Group>
@@ -564,7 +571,7 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="one_lb_customer_result1" min="-2" pref="218" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="one_money_type_lb4" pref="230" max="32767" attributes="0"/>
+                                              <Component id="one_money_type_lb4" pref="246" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="one_lb_customer_result2" min="-2" pref="218" max="-2" attributes="0"/>
@@ -640,7 +647,7 @@
                                       <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="one_two_bn_finished" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
-                                          <Component id="one_bn_print1" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
+                                          <Component id="one_two_bn_print" alignment="3" min="-2" pref="75" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                   </Group>
@@ -666,6 +673,7 @@
                       </Properties>
                       <Events>
                         <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="one_tf_customer_money1CaretUpdate"/>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_tf_customer_money1MouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_tf_customer_money1ActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_money1KeyPressed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_money1KeyReleased"/>
@@ -719,7 +727,9 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_two_rate_bc1MouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_two_rate_bc1ActionPerformed"/>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_two_rate_bc1KeyPressed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -752,7 +762,7 @@
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_two_bn_finishedKeyPressed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="one_bn_print1">
+                    <Component class="javax.swing.JButton" name="one_two_bn_print">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Khmer OS Siemreap" size="24" style="0"/>
@@ -760,8 +770,8 @@
                         <Property name="text" type="java.lang.String" value="&#x1796;&#x17d2;&#x179a;&#x17b8;&#x1793;&#x179c;&#x17b7;&#x1780;&#x17d2;&#x1780;&#x17b7;&#x1799;&#x1794;&#x178f;&#x17d2;&#x179a;"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_bn_print1ActionPerformed"/>
-                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_bn_print1KeyPressed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_two_bn_printActionPerformed"/>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_two_bn_printKeyPressed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="one_lb_customer_money2">
@@ -780,6 +790,7 @@
                       </Properties>
                       <Events>
                         <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="one_tf_customer_money2CaretUpdate"/>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_tf_customer_money2MouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_tf_customer_money2ActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_money2KeyPressed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_tf_customer_money2KeyReleased"/>
@@ -871,7 +882,9 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="one_two_rate_bc2MouseClicked"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="one_two_rate_bc2ActionPerformed"/>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="one_two_rate_bc2KeyPressed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -944,7 +957,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sub_tran_pt" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -954,7 +967,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="sub_tran_pt" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1004,16 +1017,16 @@
                                                       <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                                       <Component id="two_three_rial_money_rb" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                                                       <Component id="two_three_dollar_money_rb" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                                                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                       <Component id="two_three_bart_money_rb" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Component id="jLabel18" alignment="0" min="-2" pref="134" max="-2" attributes="0"/>
                                                   <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace min="0" pref="69" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="two_three_service_money_tf" max="32767" attributes="0"/>
@@ -1024,48 +1037,51 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="two_three_rial_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="two_three_dollar_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="two_three_bart_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="two_three_sender_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="two_one_edit_bn" max="32767" attributes="0"/>
-                                  <Component id="two_three_service_money_tf" pref="75" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="two_one_total_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="two_three_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jButton13" max="32767" attributes="0"/>
-                                  <Component id="two_three_bn_finish" min="-2" pref="75" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="two_three_rial_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="two_three_dollar_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="two_three_bart_money_rb" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="two_three_sender_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="two_one_edit_bn" max="32767" attributes="0"/>
+                                          <Component id="two_three_service_money_tf" pref="75" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="two_one_total_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="two_three_balance_money_tf" min="-2" pref="75" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jButton13" max="32767" attributes="0"/>
+                                          <Component id="two_three_bn_finish" min="-2" pref="75" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jPanel11" min="-2" pref="684" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel11" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1525,7 +1541,7 @@
                                                       <Component id="two_four_bart_money_rb" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
-                                              <EmptySpace min="0" pref="65" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -1888,8 +1904,8 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="two_one_tf_total_money" alignment="0" pref="466" max="32767" attributes="0"/>
-                                          <Component id="two_one_tf_service_money" alignment="1" pref="466" max="32767" attributes="0"/>
+                                          <Component id="two_one_tf_total_money" alignment="0" pref="488" max="32767" attributes="0"/>
+                                          <Component id="two_one_tf_service_money" alignment="1" pref="488" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -2336,7 +2352,7 @@
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="two_two_service_money_tf" alignment="0" max="32767" attributes="0"/>
                                           <Component id="two_two_reveiver_money_tf" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="two_two_reveiver_ph_no_tf" alignment="0" pref="606" max="32767" attributes="0"/>
+                                          <Component id="two_two_reveiver_ph_no_tf" alignment="0" pref="628" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="1" attributes="0">
                                                   <Component id="jLabel16" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -2561,7 +2577,7 @@
                                               <Component id="three_chb_m_detail" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="282" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="304" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -3003,7 +3019,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="261" max="32767" attributes="0"/>
+                      <EmptySpace pref="273" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jLabel36" alignment="1" min="-2" pref="835" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
@@ -3108,7 +3124,7 @@
                               <EmptySpace min="-2" pref="277" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="523" max="32767" attributes="0"/>
+                      <EmptySpace pref="533" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -3678,11 +3694,11 @@
                               <Component id="five_wifi_host_user_name_tf" min="-2" pref="377" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="338" max="32767" attributes="0"/>
+                      <EmptySpace pref="350" max="32767" attributes="0"/>
                       <Component id="five_dev_permission_tf" min="-2" pref="223" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="five_dev_permission_bn" min="-2" pref="99" max="-2" attributes="0"/>
-                      <EmptySpace pref="391" max="32767" attributes="0"/>
+                      <EmptySpace pref="401" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
