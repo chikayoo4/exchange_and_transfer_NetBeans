@@ -91,6 +91,10 @@ public class view_history_thai extends javax.swing.JFrame
         histroy_lb.setText("thai bank information");
         addWindowListener(this);
         set_history();
+
+        history_tb.getColumnModel().getColumn(0).setMaxWidth(0);
+        history_tb.getColumnModel().getColumn(0).setMinWidth(0);
+        history_tb.getColumnModel().getColumn(0).setPreferredWidth(0);
     }
 
     public view_history_thai() {
@@ -217,7 +221,7 @@ public class view_history_thai extends javax.swing.JFrame
 
 //System.out.println("choose_from_dialog : " + choose_from_dialog);
                 switch (choose_from_dialog) {
-                    case Edit:        
+                    case Edit:
                         to_thai_info to_thai_info_obj = new to_thai_info("Save", dialog_type_for_db_e_a.Edit, this);
                         to_thai_info_obj.set_tf_from_sql(Integer.parseInt(id));
                         to_thai_info_obj.setVisible(true);

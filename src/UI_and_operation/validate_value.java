@@ -7,6 +7,9 @@ package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.type_of_money;
 import com.sun.glass.events.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JTextField;
 
 /**
  *
@@ -239,5 +242,16 @@ public class validate_value {
         if (!((Character.isDigit(c) || (c == KeyEvent.VK_BACKSPACE) || (c == KeyEvent.VK_DELETE)) || (c == '.' && !is_has_double_points(input_tf.getText())))) {
             evt.consume();
         }
+    }
+
+    public static Boolean validate_dc(com.toedter.calendar.JDateChooser dc) {
+        Boolean is_valid = true;
+        try {
+            String sDate1 = ((JTextField) dc.getDateEditor().getUiComponent()).getText();
+            Date date1 = new SimpleDateFormat("dd-MM-yyyy").parse(sDate1);
+        } catch (Exception e) {
+            is_valid = false;
+        }
+        return is_valid;
     }
 }

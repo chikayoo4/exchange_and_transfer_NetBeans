@@ -88,16 +88,14 @@ CREATE TABLE from_thai_invoice_tb (
     receiver_money VARCHAR(40) NOT NULL,
     servise_money VARCHAR(40) NOT NULL,
     total_money VARCHAR(40) NOT NULL,
-    invoice_date DATETIME NOT NULL,
-    year_receiving INT NOT NULL,
-    month_receiving INT NOT NULL,
-    day_receiving INT NOT NULL,
-    hour_receiving INT NOT NULL,
-    minute_receiving INT NOT NULL,
+    date_from_thai DATETIME NOT NULL,
     id_acc INTEGER NOT NULL,
 	CONSTRAINT FK_from_thai_id_acc FOREIGN KEY (id_acc) REFERENCES account_tb (id_acc),
     id_pur INTEGER NOT NULL,
 	CONSTRAINT FK_from_thai_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
+);
+CREATE TABLE from_thai_reciever_ph_no_his_tb (
+   reciever_phone_no VARCHAR(50) NOT NULL
 );
 CREATE TABLE money_type_tb (
     id_type_of_money int IDENTITY(1,1) PRIMARY KEY,

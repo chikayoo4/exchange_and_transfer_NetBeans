@@ -822,7 +822,7 @@ public class exchanging {
         }
 
     }
-
+ 
     public static void get_from_pro_db_set_to_tb_double_exc(int id_invoice, ArrayList<Vector> v2) {
         Connection con;
         PreparedStatement pst;
