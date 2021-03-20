@@ -44,9 +44,14 @@ public class view_history_list extends javax.swing.JFrame
     private Boolean is_allow_validate;
     private Boolean is_validate_ph;
     private Boolean is_input_pass;
+    private final int num_show_his = 10;
+    private int next_show_his = num_show_his;
+    private int row_num = num_show_his;
 
     public void set_history() {
-
+        bn_1_col.setEnabled(true);
+        next_show_his = num_show_his;
+        row_num = num_show_his;
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -62,7 +67,7 @@ public class view_history_list extends javax.swing.JFrame
             if (rs.next()) {
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
-                pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + " ORDER BY " + col_sql + ";");
+                pst = con.prepareStatement("SELECT TOP " + num_show_his + " " + col_sql + " FROM " + tb_sql + " ORDER BY " + col_sql + ";");
                 rs = pst.executeQuery();
                 while (rs.next()) {
 
@@ -74,7 +79,17 @@ public class view_history_list extends javax.swing.JFrame
                     //set data to table history row
                     dft.addRow(v3);
                 }
+                pst = con.prepareStatement("SELECT " + col_sql + " "
+                        + "FROM " + tb_sql + " "
+                        + "ORDER BY " + col_sql + " "
+                        + "OFFSET " + next_show_his + " ROWS "
+                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                rs = pst.executeQuery();
+                if (!rs.next()) {
+                    bn_1_col.setEnabled(false);
+                } 
             } else {
+                    bn_1_col.setEnabled(false);
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
             }
@@ -111,6 +126,40 @@ public class view_history_list extends javax.swing.JFrame
         histroy_lb.setText(his_title);
         addWindowListener(this);
         set_history();
+        
+        
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + ";");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+
+                pst = con.prepareStatement("SELECT " + col_sql + " "
+                        + "FROM " + tb_sql + " "
+                        + "ORDER BY " + col_sql + " "
+                        + "OFFSET " + next_show_his + " ROWS "
+                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                rs = pst.executeQuery();
+                if (!rs.next()) {
+                    bn_1_col.setEnabled(false);
+                } 
+            }
+            else{
+                    bn_1_col.setEnabled(false);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+        
     }
 
     public view_history_list() {
@@ -130,6 +179,7 @@ public class view_history_list extends javax.swing.JFrame
         histroy_lb = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         history_tb = new javax.swing.JTable();
+        bn_1_col = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,16 +219,25 @@ public class view_history_list extends javax.swing.JFrame
         });
         jScrollPane2.setViewportView(history_tb);
 
+        bn_1_col.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        bn_1_col.setText("see more...");
+        bn_1_col.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bn_1_colActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(histroy_lb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(history_add_bn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(histroy_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(history_add_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+                    .addComponent(bn_1_col, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -189,7 +248,9 @@ public class view_history_list extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(history_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bn_1_col, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -273,6 +334,67 @@ public class view_history_list extends javax.swing.JFrame
         this.setEnabled(false);
     }//GEN-LAST:event_history_add_bnActionPerformed
 
+    private void bn_1_colActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bn_1_colActionPerformed
+        DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + ";");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+
+                pst = con.prepareStatement("SELECT " + col_sql + " "
+                        + "FROM " + tb_sql + " "
+                        + "ORDER BY " + col_sql + " "
+                        + "OFFSET " + next_show_his + " ROWS "
+                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    pst = con.prepareStatement("SELECT " + col_sql + " "
+                            + "FROM " + tb_sql + " "
+                            + "ORDER BY " + col_sql + " "
+                            + "OFFSET " + next_show_his + " ROWS "
+                            + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        dft.setRowCount(row_num);
+                        row_num++;
+                        Vector v3 = new Vector();
+                        //set to v2 all data only 1 row
+                        v3.add(rs.getString(col_sql));
+                        //set data to table history row
+                        dft.addRow(v3);
+                    }
+                    next_show_his = next_show_his + num_show_his;
+                    
+                pst = con.prepareStatement("SELECT " + col_sql + " "
+                        + "FROM " + tb_sql + " "
+                        + "ORDER BY " + col_sql + " "
+                        + "OFFSET " + next_show_his + " ROWS "
+                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                rs = pst.executeQuery();
+                if (!rs.next()) {
+                    bn_1_col.setEnabled(false);
+                } 
+                } else {
+                    bn_1_col.setEnabled(false);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+
+    }//GEN-LAST:event_bn_1_colActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -310,6 +432,7 @@ public class view_history_list extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bn_1_col;
     private javax.swing.JButton history_add_bn;
     private javax.swing.JTable history_tb;
     private javax.swing.JLabel histroy_lb;

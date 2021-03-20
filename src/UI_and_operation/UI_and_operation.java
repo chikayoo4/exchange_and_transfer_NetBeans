@@ -109,7 +109,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     Color silivor_c = new Color(200, 200, 200);
     Color white_c = new Color(255, 255, 255);
     private int next_show_his = 0;
-    private int num_show_his = 10;
+    private final int num_show_his = 10;
     private int idx_transfer_pt = 0;
     private Boolean is_change_pro = false;
     public static String set_admin_password = "";
@@ -120,6 +120,9 @@ public class UI_and_operation extends javax.swing.JFrame {
     private type_of_money selected_money_type_to_pro;
     private type_of_money selected_money_type_from_pro;
     private static Boolean is_change_his = false;
+
+    //-----------------------------------------------------class call--------------------------------------------------
+    exchange_rate_show exe_rate_show = new exchange_rate_show();
 
     //------------------------------------------------------my function------------------------------------------------------
     public static void set_is_change_true() {
@@ -286,7 +289,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         getLocal_host_user_name(),
                         getLocal_host_password()
                 );
-                pst = con.prepareStatement("SELECT " + col + " FROM " + tb + " WHERE " + col + " LIKE '%" + value + "%';");
+                pst = con.prepareStatement("SELECT TOP 6 " + col + " FROM " + tb + " WHERE " + col + " LIKE '%" + value + "%';");
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     two_one_mode.addElement(rs.getString(col));
@@ -314,7 +317,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         getLocal_host_user_name(),
                         getLocal_host_password()
                 );
-                pst = con.prepareStatement("SELECT " + col_target + ", " + col_1 + ", " + col_2 + ", " + col_3
+                pst = con.prepareStatement("SELECT TOP 7 " + col_target + ", " + col_1 + ", " + col_2 + ", " + col_3
                         + " FROM " + tb
                         + " WHERE " + col_target + " LIKE '%" + value + "%';");
                 rs = pst.executeQuery();
@@ -598,6 +601,10 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
         if (three_calendar_cld.getDate() != null) {
             three_calendar_cld.setBackground(Color.lightGray);
+            if (is_delete_last_7d()) {
+                delete_not_cur_to_last_7_d_from_db();
+            }
+
             list_pur_and_id list_pur_id_obj = new list_pur_and_id();
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
                 get_from_db_set_total_in_tb();
@@ -606,7 +613,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_to_tb("0", "0", "0", "0");
             }
 
-            ArrayList<Vector> v2 = new ArrayList<Vector>();
+            ArrayList<Vector> v2 = new ArrayList<>();
             DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
             dft.setRowCount(0);
             for (int i = 0; i < list_pur_id_obj.id_invoice.size(); i++) {
@@ -635,7 +642,6 @@ public class UI_and_operation extends javax.swing.JFrame {
                     default:
                         System.out.println("error");
                 }
-
             }
             if (v2.size() != 0) {
                 for (int i = 0; i < v2.size(); i++) {
@@ -884,7 +890,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             public void propertyChange(PropertyChangeEvent e) {
                 three_up.setEnabled(false);
                 next_show_his = 0;
-                if (count_db_to_list_pur_and_id() < num_show_his) {
+                if (count_db_to_list_pur_and_id() <= num_show_his) {
                     three_down.setEnabled(false);
                 } else {
                     three_down.setEnabled(true);
@@ -901,6 +907,13 @@ public class UI_and_operation extends javax.swing.JFrame {
 //            System.out.println("Tab: " + zero_tp.getSelectedIndex());
 
                 if (zero_tp.getSelectedIndex() == 2 && is_change_his) {
+                    three_up.setEnabled(false);
+                    next_show_his = 0;
+                    if (count_db_to_list_pur_and_id() <= num_show_his) {
+                        three_down.setEnabled(false);
+                    } else {
+                        three_down.setEnabled(true);
+                    }
                     set_history();
                     is_change_his = false;
                 }
@@ -1039,7 +1052,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
-    private void set_listener_cb_on_click(javax.swing.JComboBox<String> bc){
+    private void set_listener_cb_on_click(javax.swing.JComboBox<String> bc) {
         bc.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -1047,8 +1060,160 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
     }
-    //-----------------------------------------------------class call--------------------------------------------------
-    exchange_rate_show exe_rate_show = new exchange_rate_show();
+
+//    class num_count_each_d_perform_from_db{
+//        public ArrayList<String> Date_str = new ArrayList<>();
+//        public ArrayList<Integer> num_count = new ArrayList<>();
+//    }
+    private void delete_not_cur_to_last_7_d_from_db() {
+
+//        num_count_each_d_perform_from_db obj = new num_count_each_d_perform_from_db();
+        Calendar start_cal = three_calendar_cld.getCalendar();
+        Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        start_cal.add(Calendar.DAY_OF_MONTH, 1);
+        String start_date = sdf.format(start_cal.getTime());
+        pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
+        String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            pst = con.prepareStatement("SELECT id_invoice, id_acc, id_pur "
+                    + "FROM invoice_management_tb "
+                    + "WHERE NOT invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+                    + "AND invoice_man_date <= '" + start_date + "';");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id_invoice");
+                String acc = get_acc_by_id(rs.getInt("id_acc"));
+                String pur = get_pur_by_id_from_db(rs.getInt("id_pur"));
+                switch (pur) {
+                    case "exchanging":
+                        delete_exe_from_db(id, acc, pur, false);
+                        break;
+                    case "add_total_money":
+                        detele_add_total_to_db(id, acc, pur, false);
+                        break;
+                    case "to_province":
+                        detele_to_pro_to_db(id, acc, pur, false);
+                        break;
+                    case "from_province":
+                        detele_from_pro_to_db(id, acc, pur, false);
+                        break;
+                    case "double_exchanging":
+                        delete_double_exe_from_db(id, acc, pur, false);
+                        break;
+                    case "to_thai":
+                        detele_to_thai_to_db(id, acc, pur, false);
+                        break;
+                    case "from_thai":
+                        detele_from_thai_to_db(id, acc, pur, false);
+                        break;
+                    default:
+                        System.out.println("error");
+                }
+
+            }
+//            pst = con.prepareStatement("DELETE FROM invoice_management_tb "
+//                    + "WHERE NOT invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+//                    + "AND invoice_man_date <= '" + start_date + "';");
+//            pst.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println("error: two_three_bn_finish\n" + ex);
+        }
+    }
+
+    private int count_cur_to_last_7_d_from_db() {
+
+        int count = 0;
+//        num_count_each_d_perform_from_db obj = new num_count_each_d_perform_from_db();
+        Calendar start_cal = three_calendar_cld.getCalendar();
+        Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        start_cal.add(Calendar.DAY_OF_MONTH, 1);
+        String start_date = sdf.format(start_cal.getTime());
+        pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
+        String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            pst = con.prepareStatement("select COUNT(*) as count_each_day, dbo.fnFormatDate (invoice_man_date, 'YYYY-MM-DD') as Y_M_D "
+                    + "FROM invoice_management_tb "
+                    + "WHERE invoice_man_date >= '" + pre_7_day_from_start_date + "' "
+                    + "AND invoice_man_date <= '" + start_date + "' "
+                    + "GROUP BY dbo.fnFormatDate (invoice_man_date, 'YYYY-MM-DD');");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+//                obj.Date_str.add(rs.getString("Y_M_D"));
+                count = count + rs.getInt("count_each_day");
+            }
+        } catch (SQLException ex) {
+            System.err.println("error: two_three_bn_finish\n" + ex);
+        }
+        return count;
+    }
+
+    private Boolean is_delete_last_7d() {
+        Boolean is_delete = false;
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT is_delete FROM delete_last_7d_tb;");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                if (rs.getInt("is_delete") == 1) {
+                    is_delete = true;
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return is_delete;
+    }
+
+    private void set_delete_last_7d(Boolean set_delete) {
+        Connection con;
+        PreparedStatement pst;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("UPDATE delete_last_7d_tb "
+                    + "SET is_delete = ?;");
+            if (set_delete) {
+                pst.setInt(1, 1);
+            } else {
+                pst.setInt(1, 0);
+            }
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+    }
 
     /**
      * Creates new form UI_and_operation
@@ -1060,6 +1225,8 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        this.setResizable(true);
 //        this.setVisible(true);
         initComponents();
+            end_task_ppt();
+            open_exc_rate_ppt();
 
         Toolkit a = Toolkit.getDefaultToolkit();
         int xSize = (int) a.getScreenSize().getWidth();
@@ -1088,13 +1255,9 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        one_bn_S_to_R.setBackground(new Color(204, 255, 255));
         set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
 
-        three_up.setEnabled(false);
-
         custom_four_rate_default();
 
         custom_three_tb_his_default();
-
-        set_history();
 
         add_listener_calendar_three();
 
@@ -1105,8 +1268,21 @@ public class UI_and_operation extends javax.swing.JFrame {
         add_listener_pt_change_on_exc();
 
         set_listener_cb_on_click(one_two_rate_bc1);
-        
+
         set_listener_cb_on_click(one_two_rate_bc2);
+
+        three_up.setEnabled(false);
+        next_show_his = 0;
+        if (count_db_to_list_pur_and_id() <= num_show_his) {
+            three_down.setEnabled(false);
+        } else {
+            three_down.setEnabled(true);
+        }
+
+        del_last_7d_cb.setSelected(is_delete_last_7d());
+
+        set_history();
+
     }
 
     /**
@@ -1300,6 +1476,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_chb_m_b = new javax.swing.JCheckBox();
         three_chb_m_b_bank = new javax.swing.JCheckBox();
         three_chb_m_detail = new javax.swing.JCheckBox();
+        del_last_7d_cb = new javax.swing.JCheckBox();
         rate_pt = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -1528,7 +1705,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_lb_customer_result.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_lb_customer_result.setText("ទឹកប្រាក់ប្រគល់");
 
-        one_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        one_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
         one_bn_finished.setText("រួចរាល់");
         one_bn_finished.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1546,7 +1723,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        one_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        one_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_bn_print.setText("ព្រីនវិក្កិយបត្រ");
         one_bn_print.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1611,18 +1788,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(exc_pnLayout.createSequentialGroup()
-                                .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(exc_pnLayout.createSequentialGroup()
                                         .addComponent(one_lb_customer_money)
                                         .addGap(18, 18, 18)
-                                        .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                                        .addComponent(one_money_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addComponent(one_tf_customer_money))
-                                .addGap(5, 5, 5)))))
+                                .addGap(5, 5, 5))
+                            .addGroup(exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(exc_pnLayout.createSequentialGroup()
@@ -1632,7 +1809,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_exchange_rate)
                                 .addGap(18, 18, 18)
-                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+                                .addComponent(one_rate_type_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
                             .addComponent(one_tf_exchange_rate))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(one_lb_equal))
@@ -1647,7 +1824,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGroup(exc_pnLayout.createSequentialGroup()
                                 .addComponent(one_lb_customer_result, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                                .addComponent(one_money_type_result_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
                             .addComponent(one_tf_customer_result))
                         .addGap(50, 50, 50)))
                 .addContainerGap())
@@ -1666,7 +1843,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_bn_R_to_B, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(one_bn_B_to_S, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 67, Short.MAX_VALUE)
                 .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(one_lb_customer_money)
@@ -1686,11 +1863,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addGap(8, 8, 8)))
                     .addComponent(one_tf_customer_money, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(one_lb_operator, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59)
-                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(one_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(one_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addGroup(exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(one_bn_print, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(one_bn_finished, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         sub_exc_pt.addTab("ប្តូរប្រាក់មួយមុខ", exc_pn);
@@ -1765,7 +1942,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_lb_operator1.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
 
-        one_two_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        one_two_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
         one_two_bn_finished.setText("រួចរាល់");
         one_two_bn_finished.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1783,7 +1960,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        one_two_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        one_two_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_two_bn_print.setText("ព្រីនវិក្កិយបត្រ");
         one_two_bn_print.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1934,70 +2111,68 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(24, 24, 24)
                 .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(double_exc_pnLayout.createSequentialGroup()
-                        .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, double_exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_lb_customer_money1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+                            .addComponent(one_tf_customer_money1))
+                        .addGap(18, 18, 18)
+                        .addComponent(one_lb_operator1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, double_exc_pnLayout.createSequentialGroup()
+                                .addComponent(one_lb_customer_money2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                            .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(one_lb_operator2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
+                        .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(one_two_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(one_two_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(double_exc_pnLayout.createSequentialGroup()
                         .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                        .addComponent(one_lb_customer_money2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(one_money_type_lb3_, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
-                                    .addComponent(one_tf_customer_money2, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(one_lb_operator2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(17, 17, 17))
+                                .addComponent(one_lb_exchange_rate3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(one_two_rate_bc2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
-                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, double_exc_pnLayout.createSequentialGroup()
-                                        .addComponent(one_lb_customer_money1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(one_money_type_lb1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
-                                    .addComponent(one_tf_customer_money1))
-                                .addGap(18, 18, 18)
-                                .addComponent(one_lb_operator1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(22, 22, 22)))
-                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(double_exc_pnLayout.createSequentialGroup()
                                 .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                        .addComponent(one_lb_exchange_rate3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(one_two_rate_bc2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, double_exc_pnLayout.createSequentialGroup()
-                                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                                .addComponent(one_tf_exchange_rate2)
-                                                .addGap(2, 2, 2))
-                                            .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                                .addComponent(one_tf_exchange_rate1)
-                                                .addGap(5, 5, 5)))
-                                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(one_lb_equal1)
-                                            .addComponent(one_lb_equal2, javax.swing.GroupLayout.Alignment.TRAILING))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                .addComponent(one_lb_exchange_rate1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_two_rate_bc1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(138, 138, 138)))
-                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                .addComponent(one_lb_customer_result1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
-                            .addGroup(double_exc_pnLayout.createSequentialGroup()
-                                .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(one_money_type_lb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(one_tf_customer_result1)
-                            .addComponent(one_tf_customer_result2))
-                        .addGap(75, 75, 75))))
+                                        .addComponent(one_tf_exchange_rate2)
+                                        .addGap(2, 2, 2))
+                                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                                        .addComponent(one_tf_exchange_rate1)
+                                        .addGap(5, 5, 5)))
+                                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(one_lb_equal1)
+                                    .addComponent(one_lb_equal2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                        .addComponent(one_lb_exchange_rate1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(one_two_rate_bc1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(138, 138, 138)))
+                .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                        .addComponent(one_lb_customer_result1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(one_money_type_lb4, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                    .addGroup(double_exc_pnLayout.createSequentialGroup()
+                        .addComponent(one_lb_customer_result2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(one_money_type_lb2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(one_tf_customer_result1)
+                    .addComponent(one_tf_customer_result2))
+                .addGap(75, 75, 75))
         );
         double_exc_pnLayout.setVerticalGroup(
             double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2046,9 +2221,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(one_tf_customer_money2)
                                     .addComponent(one_lb_operator2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(90, 90, 90)
-                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(one_two_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(double_exc_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(one_two_bn_finished, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(one_two_bn_print, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -3331,13 +3506,13 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel3.setText("date      dd-mm-yyyy");
+        jLabel3.setText("dd-mm-yyyy");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel4.setText("hour");
+        jLabel4.setText("hh");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel5.setText("minute");
+        jLabel5.setText("mm    ");
 
         two_four_sn_hour.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_sn_hour.setModel(new javax.swing.SpinnerNumberModel(0, 0, 12, 1));
@@ -3441,7 +3616,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, from_thai_pnLayout.createSequentialGroup()
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(from_thai_pnLayout.createSequentialGroup()
-                                .addGap(0, 218, Short.MAX_VALUE)
+                                .addGap(0, 212, Short.MAX_VALUE)
                                 .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -3453,7 +3628,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(161, 161, 161))))
+                        .addGap(167, 167, 167))))
         );
         from_thai_pnLayout.setVerticalGroup(
             from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3525,6 +3700,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         zero_tp.addTab("ផ្ទេរប្រាក់", tran_pt);
 
+        three_tb_total_money.getTableHeader().setReorderingAllowed(false);
         three_tb_total_money.setFont(new java.awt.Font("Serif", 0, 36)); // NOI18N
         three_tb_total_money.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -3547,13 +3723,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_tb_total_money.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(three_tb_total_money);
 
+        three_tb_history.getTableHeader().setReorderingAllowed(false);
         three_tb_history.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 18)); // NOI18N
         three_tb_history.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "លុយ R", "លុយ S", "លុយ B", "លុយ B ក្នុងកុង", "detail"
+                "ថ្ងៃទី", "លេខប័ណ្ណ", "ចេញប័ណ្ណដោយ", "បំណង", "លុយ R", "លុយ S", "លុយ B", "លុយ B ក្នុងកុង", "សម្រាយ"
             }
         ) {
             Class[] types = new Class [] {
@@ -3623,7 +3800,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        three_add_bn.setText("ADD");
+        three_add_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 13)); // NOI18N
+        three_add_bn.setText("បន្ថែម");
         three_add_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 three_add_bnActionPerformed(evt);
@@ -3743,6 +3921,15 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
+        del_last_7d_cb.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
+        del_last_7d_cb.setSelected(true);
+        del_last_7d_cb.setText("លុបទិន្ន័យ៧ថ្ងៃចុងក្រោយ");
+        del_last_7d_cb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                del_last_7d_cbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout his_ptLayout = new javax.swing.GroupLayout(his_pt);
         his_pt.setLayout(his_ptLayout);
         his_ptLayout.setHorizontalGroup(
@@ -3761,10 +3948,6 @@ public class UI_and_operation extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(his_ptLayout.createSequentialGroup()
                                 .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(his_ptLayout.createSequentialGroup()
-                                        .addComponent(jLabel35)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(his_ptLayout.createSequentialGroup()
                                         .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(three_add_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3797,9 +3980,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addGap(34, 34, 34)
                                         .addComponent(three_chb_m_detail)))
                                 .addGap(0, 217, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, his_ptLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 1046, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(his_ptLayout.createSequentialGroup()
+                                .addComponent(jLabel35)
+                                .addGap(18, 18, 18)
+                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(90, 90, 90)
+                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         his_ptLayout.setVerticalGroup(
@@ -3819,10 +4007,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(del_last_7d_cb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(39, 39, 39)
+                .addGap(27, 27, 27)
                 .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(three_chb_id, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(three_chb_date, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3839,7 +4028,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(three_up, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(three_down, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -4316,7 +4505,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         rate_ptLayout.setVerticalGroup(
             rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rate_ptLayout.createSequentialGroup()
-                .addContainerGap(160, Short.MAX_VALUE)
+                .addContainerGap(159, Short.MAX_VALUE)
                 .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(rate_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4380,7 +4569,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(jLabel44)))))))
                 .addGap(69, 69, 69)
                 .addComponent(four_bn_edit_exchange_rate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         zero_tp.addTab("អត្រាប្តូរប្រាក់", rate_pt);
@@ -5129,6 +5318,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                         default:
                             System.out.println("Error");
                     }
+                    three_up.setEnabled(false);
+                    next_show_his = 0;
+                    if (count_db_to_list_pur_and_id() <= num_show_his) {
+                        three_down.setEnabled(false);
+                    } else {
+                        three_down.setEnabled(true);
+                    }
+                    set_history();
                     set_history();
                 } catch (SQLException ex) {
                     System.err.println(ex);
@@ -5691,28 +5888,35 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 if (get_count_id_invoice_man_from_db(id, acc, pur) <= 10000) {
                                     switch (pur) {
                                         case "exchanging":
-                                            delete_exe_from_db(id, acc, pur);
+                                            delete_exe_from_db(id, acc, pur, true);
                                             break;
                                         case "add_total_money":
-                                            detele_add_total_to_db(id, acc, pur);
+                                            detele_add_total_to_db(id, acc, pur, true);
                                             break;
                                         case "to_province":
-                                            detele_to_pro_to_db(id, acc, pur);
+                                            detele_to_pro_to_db(id, acc, pur, true);
                                             break;
                                         case "from_province":
-                                            detele_from_pro_to_db(id, acc, pur);
+                                            detele_from_pro_to_db(id, acc, pur, true);
                                             break;
                                         case "double_exchanging":
-                                            delete_double_exe_from_db(id, acc, pur);
+                                            delete_double_exe_from_db(id, acc, pur, true);
                                             break;
                                         case "to_thai":
-                                            detele_to_thai_to_db(id, acc, pur);
+                                            detele_to_thai_to_db(id, acc, pur, true);
                                             break;
                                         case "from_thai":
-                                            detele_from_thai_to_db(id, acc, pur);
+                                            detele_from_thai_to_db(id, acc, pur, true);
                                             break;
                                         default:
                                             System.out.println("error");
+                                    }
+                                    if (count_db_to_list_pur_and_id() <= num_show_his) {
+                                        three_up.setEnabled(false);
+                                        next_show_his = 0;
+                                        three_down.setEnabled(false);
+                                    } else {
+                                        three_down.setEnabled(true);
                                     }
                                     set_history();
                                 } else {
@@ -5803,8 +6007,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     lastinsert_id_invoice = generatekey.getInt(1);
                 }
 
-                if (!is_has_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "to_pro_receiver_ph_no_history_tb")) {
-                    set_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "to_pro_receiver_ph_no_history_tb");
+                if (!is_has_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb")) {
+                    set_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
                 }
 
                 invoice_man in_man = new invoice_man();
@@ -6063,6 +6267,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_bank_thai_cb.getModel().setSelectedItem("none");
                 two_one_tf_cus_money.setText("");
                 two_one_tf_service_money.setText("");
+                set_is_change_true();
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -6303,7 +6508,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_pro_his_bn1ActionPerformed
 
     private void two_three_receiver_phone_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfMouseClicked
-        remove_all_in_list(two_one_ph_senter_list);        
+        remove_all_in_list(two_one_ph_senter_list);
         search_engine_pro(two_one_ph_reciever_list, two_three_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "to_pro_receiver_ph_no_history_tb");
     }//GEN-LAST:event_two_three_receiver_phone_no_tfMouseClicked
@@ -6458,7 +6663,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     timestamp = new java.sql.Timestamp(Date_time.getTime());
                 } catch (Exception e) {
                     //this generic but you can control another types of exception
-                    // look the origin of excption 
+                    // look the origin of excption
                 }
 
                 //write sql query to access
@@ -6518,13 +6723,12 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_two_reveiver_money_tf.setText("");
             two_two_service_money_tf.setText("");
             remove_all_in_list(two_four_ph_recieve_list);
-            set_history();
             set_is_change_true();
         }
     }//GEN-LAST:event_two_two_bn_finishActionPerformed
 
     private void two_two_pro_name_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbMouseClicked
-remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_two_pro_name_cbMouseClicked
 
     private void two_four_reciece_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfMouseClicked
@@ -6532,19 +6736,19 @@ remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_reciece_money_tfMouseClicked
 
     private void two_four_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_rial_money_rbMouseClicked
-remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_rial_money_rbMouseClicked
 
     private void two_four_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbMouseClicked
-remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_dollar_money_rbMouseClicked
 
     private void two_four_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_bart_money_rbMouseClicked
-remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_bart_money_rbMouseClicked
 
     private void two_four_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_total_money_tfMouseClicked
-remove_all_in_list(two_two_ph_recieve_list);
+        remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_four_total_money_tfMouseClicked
 
     private void two_three_sender_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfActionPerformed
@@ -6724,12 +6928,40 @@ remove_all_in_list(two_two_ph_recieve_list);
         set_to_exc_two_cb(one_two_rate_bc1, one_tf_exchange_rate1, one_money_type_lb1, one_money_type_lb4);
         caret_one_two(one_tf_customer_money1, one_two_rate_bc1,
                 one_tf_customer_result1, one_tf_exchange_rate1);
+        switch (one_two_rate_bc1.getSelectedItem().toString()) {
+            case "$ → ៛":
+            case "$ → ฿":
+            case "฿ → ៛":
+                one_lb_operator1.setText("X");
+                break;
+            case "៛ → $":
+            case "฿ → $":
+            case "៛ → ฿":
+                one_lb_operator1.setText("/");
+                break;
+            default:
+                System.out.println("error");
+        }
     }//GEN-LAST:event_one_two_rate_bc1ActionPerformed
 
     private void one_two_rate_bc2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_two_rate_bc2ActionPerformed
         set_to_exc_two_cb(one_two_rate_bc2, one_tf_exchange_rate2, one_money_type_lb3_, one_money_type_lb2);
         caret_one_two(one_tf_customer_money2, one_two_rate_bc2,
                 one_tf_customer_result2, one_tf_exchange_rate2);
+        switch (one_two_rate_bc2.getSelectedItem().toString()) {
+            case "$ → ៛":
+            case "$ → ฿":
+            case "฿ → ៛":
+                one_lb_operator2.setText("X");
+                break;
+            case "៛ → $":
+            case "฿ → $":
+            case "៛ → ฿":
+                one_lb_operator2.setText("/");
+                break;
+            default:
+                System.out.println("error");
+        }
     }//GEN-LAST:event_one_two_rate_bc2ActionPerformed
 
     private void two_one_pro_name_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbActionPerformed
@@ -6737,6 +6969,7 @@ remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_one_pro_name_cbActionPerformed
 
     private void three_upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_upActionPerformed
+
         if ((next_show_his - num_show_his) >= 0) {
             next_show_his = next_show_his - num_show_his;
             three_down.setEnabled(true);
@@ -6898,7 +7131,7 @@ remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_two_one_tf_cus_moneyCaretUpdate
 
     private void two_one_tf_cus_nameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameKeyReleased
-        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(), 
+        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(),
                 "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
     }//GEN-LAST:event_two_one_tf_cus_nameKeyReleased
 
@@ -7116,22 +7349,22 @@ remove_all_in_list(two_two_ph_recieve_list);
 
     private void two_one_tf_cus_noMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noMouseClicked
         remove_all_in_list(two_three_to_thai_name_list);
-        remove_all_in_list(two_three_to_thai_ph_no_list);        
+        remove_all_in_list(two_three_to_thai_ph_no_list);
         search_engine_bank_thai(two_three_to_thai_bank_id_list, two_one_tf_cus_no.getText().trim(),
                 "bank_id", "name", "phone_no", "bank", "to_thai_history_tb");
     }//GEN-LAST:event_two_one_tf_cus_noMouseClicked
 
     private void two_one_tf_cus_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
-        remove_all_in_list(two_three_to_thai_ph_no_list);        
-        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(), 
+        remove_all_in_list(two_three_to_thai_ph_no_list);
+        search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(),
                 "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
     }//GEN-LAST:event_two_one_tf_cus_nameMouseClicked
 
     private void two_three_tf_cus_ph_noMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
-                search_engine_bank_thai(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no.getText().trim(),
+        search_engine_bank_thai(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no.getText().trim(),
                 "phone_no", "bank_id", "name", "bank", "to_thai_history_tb");
     }//GEN-LAST:event_two_three_tf_cus_ph_noMouseClicked
 
@@ -7223,47 +7456,47 @@ remove_all_in_list(two_two_ph_recieve_list);
     }//GEN-LAST:event_jButton15MouseClicked
 
     private void two_four_dateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_dateMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_dateMouseClicked
 
     private void two_four_sn_hourMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_sn_hourMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_sn_hourMouseClicked
 
     private void two_four_sn_minuteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_sn_minuteMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_sn_minuteMouseClicked
 
     private void two_four_amMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_amMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_amMouseClicked
 
     private void two_four_pmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_pmMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_pmMouseClicked
 
     private void two_four_reciever_ph_no_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_four_reciever_ph_no_his_bnMouseClicked
 
     private void two_two_reveiver_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_two_reveiver_money_tfMouseClicked
 
     private void two_two_service_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_service_money_tfMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_two_service_money_tfMouseClicked
 
     private void two_two_bn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bn_finishMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_two_two_bn_finishMouseClicked
 
     private void printMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseClicked
-remove_all_in_list(two_four_ph_recieve_list);
+        remove_all_in_list(two_four_ph_recieve_list);
     }//GEN-LAST:event_printMouseClicked
 
     private void two_two_reveiver_ph_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfMouseClicked
-          search_engine_pro(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf.getText().trim(),
+        search_engine_pro(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf.getText().trim(),
                 "reciever_phone_no", "from_thai_reciever_ph_no_his_tb");
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfMouseClicked
 
@@ -7289,7 +7522,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 two_four_bn_finish.doClick();
+                two_four_bn_finish.doClick();
                 break;
         }
     }//GEN-LAST:event_two_four_bn_finishKeyPressed
@@ -7298,7 +7531,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 jButton15.doClick();
+                jButton15.doClick();
                 break;
         }
     }//GEN-LAST:event_jButton15KeyPressed
@@ -7307,7 +7540,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 two_one_bn_finish.doClick();
+                two_one_bn_finish.doClick();
                 break;
         }
     }//GEN-LAST:event_two_one_bn_finishKeyPressed
@@ -7316,7 +7549,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 jButton9.doClick();
+                jButton9.doClick();
                 break;
         }
     }//GEN-LAST:event_jButton9KeyPressed
@@ -7325,7 +7558,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 two_two_bn_finish.doClick();
+                two_two_bn_finish.doClick();
                 break;
         }
     }//GEN-LAST:event_two_two_bn_finishKeyPressed
@@ -7334,7 +7567,7 @@ remove_all_in_list(two_four_ph_recieve_list);
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                 print.doClick();
+                print.doClick();
                 break;
         }
     }//GEN-LAST:event_printKeyPressed
@@ -7354,6 +7587,15 @@ remove_all_in_list(two_four_ph_recieve_list);
     private void one_two_bn_printMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_one_two_bn_printMouseClicked
         set_color_with_focus_double_exc(false, false, false, false, false, true);
     }//GEN-LAST:event_one_two_bn_printMouseClicked
+
+    private void del_last_7d_cbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_del_last_7d_cbActionPerformed
+        if (del_last_7d_cb.isSelected()) {
+            set_delete_last_7d(true);
+            set_history();
+        } else {
+            set_delete_last_7d(false);
+        }
+    }//GEN-LAST:event_del_last_7d_cbActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7406,6 +7648,7 @@ remove_all_in_list(two_four_ph_recieve_list);
     private javax.swing.ButtonGroup bg_to_pro;
     private javax.swing.JLabel date_history_lb;
     private javax.swing.JPanel db_con_pt;
+    private javax.swing.JCheckBox del_last_7d_cb;
     private javax.swing.JPanel double_exc_pn;
     private javax.swing.JPanel exc_pn;
     private javax.swing.JPanel exc_pt;

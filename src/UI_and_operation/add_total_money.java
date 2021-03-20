@@ -92,7 +92,7 @@ String add_type_of_money = rs.getString("type_of_money");
         }
     }
 
-    public static void detele_add_total_to_db(int id, String acc, String pur)  {
+    public static void detele_add_total_to_db(int id, String acc, String pur, Boolean is_update_inv_man)  {
 
         Connection con;
         PreparedStatement pst;
@@ -103,6 +103,8 @@ String add_type_of_money = rs.getString("type_of_money");
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
+            
+            if(is_update_inv_man){
             String add_money = "";
             String money_type = "";
 
@@ -133,6 +135,7 @@ String add_type_of_money = rs.getString("type_of_money");
                     break;
                 default:
                     System.out.println("Error");
+            }
             }
             //update sql query to access
             pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");

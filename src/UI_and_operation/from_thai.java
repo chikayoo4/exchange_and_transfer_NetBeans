@@ -100,7 +100,7 @@ public class from_thai {
         }
     }
 
-    public static void detele_from_thai_to_db(int id, String acc, String pur) {
+    public static void detele_from_thai_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -111,24 +111,25 @@ public class from_thai {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            String money = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT total_money "
-                    + "FROM from_thai_invoice_tb "
-                    + "where id_invoice = ? "
-                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                money = clear_cvot(rs.getString("total_money"));
+            if (is_update_inv_man) {
+                
+                String money = "";
+                //query to access
+                pst = con.prepareStatement("SELECT total_money "
+                        + "FROM from_thai_invoice_tb "
+                        + "where id_invoice = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    money = clear_cvot(rs.getString("total_money"));
+                }
+                update_inv_man_money("0", "0", "0", money, id, acc, pur);
             }
-
-            update_inv_man_money("0", "0", "0", money, id, acc, pur);
-            
             //update sql query to access
             pst = con.prepareStatement("delete from from_thai_invoice_tb "
                     + "where id_invoice = ? "

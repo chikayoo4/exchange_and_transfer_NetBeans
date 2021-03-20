@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class to_thai {
 
-    public static void detele_to_thai_to_db(int id, String acc, String pur) {
+    public static void detele_to_thai_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -46,24 +46,24 @@ public class to_thai {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            String money = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT total_money "
-                    + "FROM to_thai_invoice_tb "
-                    + "where id_invoice = ? "
-                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                money = clear_cvot(rs.getString("total_money"));
+            if (is_update_inv_man) {
+                String money = "";
+                //query to access
+                pst = con.prepareStatement("SELECT total_money "
+                        + "FROM to_thai_invoice_tb "
+                        + "where id_invoice = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?);");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    money = clear_cvot(rs.getString("total_money"));
+                }
+                update_inv_man_money("0", "0", "0", "-" + money, id, acc, pur);
             }
-
-                    update_inv_man_money("0", "0", "0", "-" + money, id, acc, pur);
-                    
             //update sql query to access
             pst = con.prepareStatement("delete from to_thai_invoice_tb "
                     + "where id_invoice = ? "
@@ -83,7 +83,7 @@ public class to_thai {
             System.err.println(ex);
         }
     }
-    
+
     public static void get_to_thai_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
 
         Connection con;
@@ -112,7 +112,7 @@ public class to_thai {
                         + "FROM (to_thai_invoice_tb INNER JOIN to_thai_sender_tb "
                         + "ON to_thai_invoice_tb.id_sender = to_thai_sender_tb.id_sender) "
                         + "WHERE id_invoice = ?");
-                
+
                 pst.setInt(1, id_invoice);
                 pst.setInt(2, id_invoice);
                 pst.setInt(3, id_invoice);
@@ -138,8 +138,8 @@ public class to_thai {
                     v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBank_Bart(), true));
                     v3.add("លុយផ្ញើរ: " + rs.getString("sender_money") + " ฿"
                             + " | លុយសរុប: " + rs.getString("total_money") + " ฿"
-                    + " | bank: " + rs.getString("bank_name") + " | user: " + rs.getString("sender_name")
-                    + " | id: " + rs.getString("sender_num_acc"));
+                            + " | bank: " + rs.getString("bank_name") + " | user: " + rs.getString("sender_name")
+                            + " | id: " + rs.getString("sender_num_acc"));
 //                                    System.out.println(v3);
                     v2.add(v3);
                 }

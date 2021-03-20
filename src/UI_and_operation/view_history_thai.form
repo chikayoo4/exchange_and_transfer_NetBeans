@@ -126,6 +126,9 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="history_tbMouseClicked"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="history_tb.getTableHeader().setReorderingAllowed(false);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

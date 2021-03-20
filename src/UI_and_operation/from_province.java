@@ -100,7 +100,7 @@ public class from_province {
     }
 
     
-    public static void detele_from_pro_to_db(int id, String acc, String pur) {
+    public static void detele_from_pro_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -111,6 +111,8 @@ public class from_province {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
+            
+            if(is_update_inv_man){
             String money = "";
             String money_type = "";
 
@@ -143,6 +145,7 @@ public class from_province {
                 default:
                     System.out.println("Error");
             }
+        }
             //update sql query to access
             pst = con.prepareStatement("delete from from_province_invoice_tb "
                     + "where id_invoice = ? "

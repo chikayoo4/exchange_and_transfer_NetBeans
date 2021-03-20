@@ -129,6 +129,7 @@ public class view_history_thai extends javax.swing.JFrame
             }
         });
 
+        history_tb.getTableHeader().setReorderingAllowed(false);
         history_tb.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         history_tb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

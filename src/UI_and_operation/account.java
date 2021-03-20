@@ -44,6 +44,30 @@ public class account {
         account.password = password;
     }
 
+    public static String get_acc_by_id(int id_acc) {
+        String user_n = "";
+        try {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            //query to access
+            pst = con.prepareStatement("SELECT user_name FROM account_tb WHERE id_acc = " + id_acc + ";");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                user_n = rs.getString("user_name");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return user_n;
+    }
+    
     public static int get_acc_id() {
         int id = -1;
         try {

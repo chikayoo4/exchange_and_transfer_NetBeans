@@ -452,7 +452,7 @@ public class exchanging {
         return id;
     }
 
-    public static void delete_double_exe_from_db(int id, String acc, String pur) {
+    public static void delete_double_exe_from_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -463,78 +463,82 @@ public class exchanging {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            String exchanging_money_one = "";
-            String result_exchanging_money_one = "";
-            String type_of_exchanging_one = "";
-            String exchanging_money_two = "";
-            String result_exchanging_money_two = "";
-            String type_of_exchanging_two = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT exchanging_money_one, result_exchanging_money_one, "
-                    + "exchanging_money_two, result_exchanging_money_two, "
-                    + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_one) AS exchange_type_one, "
-                    + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_two) AS exchange_type_two "
-                    + "FROM exc_invoice_two_operator_tb "
-                    + "where id_invoice = ? "
-                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                exchanging_money_one = clear_cvot(rs.getString("exchanging_money_one"));
-                result_exchanging_money_one = clear_cvot(rs.getString("result_exchanging_money_one"));
-                type_of_exchanging_one = rs.getString("exchange_type_one");
-                exchanging_money_two = clear_cvot(rs.getString("exchanging_money_two"));
-                result_exchanging_money_two = clear_cvot(rs.getString("result_exchanging_money_two"));
-                type_of_exchanging_two = rs.getString("exchange_type_two");
-            }
+            if (is_update_inv_man) {
 
-            switch (type_of_exchanging_one) {
-                case "S_to_R":
-                    update_inv_man_money(result_exchanging_money_one, "-" + exchanging_money_one, "0", "0", id, acc, pur);
-                    break;
-                case "S_to_B":
-                    update_inv_man_money("0", "-" + exchanging_money_one, result_exchanging_money_one, "0", id, acc, pur);
-                    break;
-                case "B_to_R":
-                    update_inv_man_money(result_exchanging_money_one, "0", "-" + exchanging_money_one, "0", id, acc, pur);
-                    break;
-                case "R_to_S":
-                    update_inv_man_money("-" + exchanging_money_one, result_exchanging_money_one, "0", "0", id, acc, pur);
-                    break;
-                case "B_to_S":
-                    update_inv_man_money("0", result_exchanging_money_one, "-" + exchanging_money_one, "0", id, acc, pur);
-                    break;
-                case "R_to_B":
-                    update_inv_man_money("-" + exchanging_money_one, "0", result_exchanging_money_one, "0", id, acc, pur);
-                    break;
-                default:
-                    System.out.println("Error");
-            }
-            switch (type_of_exchanging_two) {
-                case "S_to_R":
-                    update_inv_man_money(result_exchanging_money_two, "-" + exchanging_money_two, "0", "0", id, acc, pur);
-                    break;
-                case "S_to_B":
-                    update_inv_man_money("0", "-" + exchanging_money_two, result_exchanging_money_two, "0", id, acc, pur);
-                    break;
-                case "B_to_R":
-                    update_inv_man_money(result_exchanging_money_two, "0", "-" + exchanging_money_two, "0", id, acc, pur);
-                    break;
-                case "R_to_S":
-                    update_inv_man_money("-" + exchanging_money_two, result_exchanging_money_two, "0", "0", id, acc, pur);
-                    break;
-                case "B_to_S":
-                    update_inv_man_money("0", result_exchanging_money_two, "-" + exchanging_money_two, "0", id, acc, pur);
-                    break;
-                case "R_to_B":
-                    update_inv_man_money("-" + exchanging_money_two, "0", result_exchanging_money_two, "0", id, acc, pur);
-                    break;
-                default:
-                    System.out.println("Error");
+                String exchanging_money_one = "";
+                String result_exchanging_money_one = "";
+                String type_of_exchanging_one = "";
+                String exchanging_money_two = "";
+                String result_exchanging_money_two = "";
+                String type_of_exchanging_two = "";
+
+                //query to access
+                pst = con.prepareStatement("SELECT exchanging_money_one, result_exchanging_money_one, "
+                        + "exchanging_money_two, result_exchanging_money_two, "
+                        + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_one) AS exchange_type_one, "
+                        + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_two) AS exchange_type_two "
+                        + "FROM exc_invoice_two_operator_tb "
+                        + "where id_invoice = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    exchanging_money_one = clear_cvot(rs.getString("exchanging_money_one"));
+                    result_exchanging_money_one = clear_cvot(rs.getString("result_exchanging_money_one"));
+                    type_of_exchanging_one = rs.getString("exchange_type_one");
+                    exchanging_money_two = clear_cvot(rs.getString("exchanging_money_two"));
+                    result_exchanging_money_two = clear_cvot(rs.getString("result_exchanging_money_two"));
+                    type_of_exchanging_two = rs.getString("exchange_type_two");
+                }
+
+                switch (type_of_exchanging_one) {
+                    case "S_to_R":
+                        update_inv_man_money(result_exchanging_money_one, "-" + exchanging_money_one, "0", "0", id, acc, pur);
+                        break;
+                    case "S_to_B":
+                        update_inv_man_money("0", "-" + exchanging_money_one, result_exchanging_money_one, "0", id, acc, pur);
+                        break;
+                    case "B_to_R":
+                        update_inv_man_money(result_exchanging_money_one, "0", "-" + exchanging_money_one, "0", id, acc, pur);
+                        break;
+                    case "R_to_S":
+                        update_inv_man_money("-" + exchanging_money_one, result_exchanging_money_one, "0", "0", id, acc, pur);
+                        break;
+                    case "B_to_S":
+                        update_inv_man_money("0", result_exchanging_money_one, "-" + exchanging_money_one, "0", id, acc, pur);
+                        break;
+                    case "R_to_B":
+                        update_inv_man_money("-" + exchanging_money_one, "0", result_exchanging_money_one, "0", id, acc, pur);
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
+                switch (type_of_exchanging_two) {
+                    case "S_to_R":
+                        update_inv_man_money(result_exchanging_money_two, "-" + exchanging_money_two, "0", "0", id, acc, pur);
+                        break;
+                    case "S_to_B":
+                        update_inv_man_money("0", "-" + exchanging_money_two, result_exchanging_money_two, "0", id, acc, pur);
+                        break;
+                    case "B_to_R":
+                        update_inv_man_money(result_exchanging_money_two, "0", "-" + exchanging_money_two, "0", id, acc, pur);
+                        break;
+                    case "R_to_S":
+                        update_inv_man_money("-" + exchanging_money_two, result_exchanging_money_two, "0", "0", id, acc, pur);
+                        break;
+                    case "B_to_S":
+                        update_inv_man_money("0", result_exchanging_money_two, "-" + exchanging_money_two, "0", id, acc, pur);
+                        break;
+                    case "R_to_B":
+                        update_inv_man_money("-" + exchanging_money_two, "0", result_exchanging_money_two, "0", id, acc, pur);
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
             }
             //update sql query to access
             pst = con.prepareStatement("delete from exc_invoice_two_operator_tb "
@@ -556,7 +560,7 @@ public class exchanging {
         }
     }
 
-    public static void delete_exe_from_db(int id, String acc, String pur) {
+    public static void delete_exe_from_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -567,58 +571,66 @@ public class exchanging {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            String exchanging_money = "";
-            String result_exchanging_money = "";
-            String type_of_exchanging = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
-                    + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
+            if (is_update_inv_man) {
+
+                String exchanging_money = "";
+                String result_exchanging_money = "";
+                String type_of_exchanging = "";
+
+                //query to access
+                pst = con.prepareStatement("SELECT exchanging_money, result_exchanging_money, type_of_exchanging "
+                        + "FROM exc_invoice_tb INNER JOIN exc_type_tb ON exc_invoice_tb.id_type = exc_type_tb.id_type "
+                        + "where id_invoice = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    exchanging_money = clear_cvot(rs.getString("exchanging_money"));
+                    result_exchanging_money = clear_cvot(rs.getString("result_exchanging_money"));
+                    type_of_exchanging = rs.getString("type_of_exchanging");
+                }
+
+                switch (type_of_exchanging) {
+                    case "S_to_R":
+                        update_inv_man_money(result_exchanging_money, "-" + exchanging_money, "0", "0", id, acc, pur);
+                        break;
+                    case "S_to_B":
+                        update_inv_man_money("0", "-" + exchanging_money, result_exchanging_money, "0", id, acc, pur);
+                        break;
+                    case "B_to_R":
+                        update_inv_man_money(result_exchanging_money, "0", "-" + exchanging_money, "0", id, acc, pur);
+                        break;
+                    case "R_to_S":
+                        update_inv_man_money("-" + exchanging_money, result_exchanging_money, "0", "0", id, acc, pur);
+                        break;
+                    case "B_to_S":
+                        update_inv_man_money("0", result_exchanging_money, "-" + exchanging_money, "0", id, acc, pur);
+                        break;
+                    case "R_to_B":
+                        update_inv_man_money("-" + exchanging_money, "0", result_exchanging_money, "0", id, acc, pur);
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
+            }
+
+            //update sql query to access
+            pst = con.prepareStatement("delete from exc_invoice_tb "
                     + "where id_invoice = ? "
                     + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                exchanging_money = clear_cvot(rs.getString("exchanging_money"));
-                result_exchanging_money = clear_cvot(rs.getString("result_exchanging_money"));
-                type_of_exchanging = rs.getString("type_of_exchanging");
-            }
-
-            switch (type_of_exchanging) {
-                case "S_to_R":
-                    update_inv_man_money(result_exchanging_money, "-" + exchanging_money, "0", "0", id, acc, pur);
-                    break;
-                case "S_to_B":
-                    update_inv_man_money("0", "-" + exchanging_money, result_exchanging_money, "0", id, acc, pur);
-                    break;
-                case "B_to_R":
-                    update_inv_man_money(result_exchanging_money, "0", "-" + exchanging_money, "0", id, acc, pur);
-                    break;
-                case "R_to_S":
-                    update_inv_man_money("-" + exchanging_money, result_exchanging_money, "0", "0", id, acc, pur);
-                    break;
-                case "B_to_S":
-                    update_inv_man_money("0", result_exchanging_money, "-" + exchanging_money, "0", id, acc, pur);
-                    break;
-                case "R_to_B":
-                    update_inv_man_money("-" + exchanging_money, "0", result_exchanging_money, "0", id, acc, pur);
-                    break;
-                default:
-                    System.out.println("Error");
-            }
-            //update sql query to access
-            pst = con.prepareStatement("delete from exc_invoice_tb where id_invoice = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
 
             pst.setInt(1, id);
             pst.setString(2, acc);
             pst.setString(3, pur);
             pst.executeUpdate();
+
             //dialog when added to access is success
             //                        JOptionPane.showMessageDialog(this, "records update");
-
             delete_inv_man(id, acc, pur);
 
         } catch (SQLException ex) {
@@ -773,7 +785,7 @@ public class exchanging {
             }
             one_tf_customer_money.setText(result);
             exchanging exchanging_obj = new exchanging(
-                     cut_the_lastest_point(one_tf_customer_money.getText()),
+                    cut_the_lastest_point(one_tf_customer_money.getText()),
                     one_tf_customer_result.getText(),
                     one_tf_exchange_rate.getText(),
                     current_date(),
@@ -808,13 +820,13 @@ public class exchanging {
             javax.swing.JTextField one_tf_exchange_rate1, javax.swing.JTextField one_tf_customer_result1,
             javax.swing.JTextField one_tf_exchange_rate2, javax.swing.JTextField one_tf_customer_result2, Boolean is_print, UI_and_operation ui_ope) {
         if (is_print) {
-             if (!one_tf_customer_money1.getText().isEmpty() && !one_tf_customer_money2.getText().isEmpty()
-                && !one_two_rate_bc1.getSelectedItem().equals("none") && !one_two_rate_bc2.getSelectedItem().equals("none")) {
-            print_reciept(get_path() + double_exc_reciept_path,
-                    insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
-                            one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
-                            one_tf_exchange_rate2, one_tf_customer_result2, ui_ope));
-             }
+            if (!one_tf_customer_money1.getText().isEmpty() && !one_tf_customer_money2.getText().isEmpty()
+                    && !one_two_rate_bc1.getSelectedItem().equals("none") && !one_two_rate_bc2.getSelectedItem().equals("none")) {
+                print_reciept(get_path() + double_exc_reciept_path,
+                        insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
+                                one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
+                                one_tf_exchange_rate2, one_tf_customer_result2, ui_ope));
+            }
         } else {
             insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
                     one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
@@ -822,7 +834,7 @@ public class exchanging {
         }
 
     }
- 
+
     public static void get_from_pro_db_set_to_tb_double_exc(int id_invoice, ArrayList<Vector> v2) {
         Connection con;
         PreparedStatement pst;

@@ -161,7 +161,7 @@ public class invoice_man {
             );
 
             pst = con.prepareStatement("UPDATE invoice_management_tb "
-                    + "SET dollar = dollar + " + Dollar + ", rial = rial + " + Rial + " , "
+                    + "SET dollar = CAST(dollar as DECIMAL(20,2)) + CAST(" + Dollar + " as DECIMAL(20,2)), rial = rial + " + Rial + " , "
                     + "bart = bart + " + Bart + ", bank_bart = bank_bart + " + Bart_bank + " "
                     + "WHERE id_invoice_man > (SELECT id_invoice_man "
                     + "FROM invoice_management_tb "
