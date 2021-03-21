@@ -576,6 +576,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 list_pur_id_obj.pur_type.add(rs.getString("pur_type"));
                 list_pur_id_obj.id_invoice.add(rs.getInt("id_invoice"));
             }
+//            System.out.println("id_invoice : " + list_pur_id_obj.id_invoice);
 
         } catch (SQLException ex) {
             System.err.println("error: two_three_bn_finish\n" + ex);
@@ -603,11 +604,13 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
         if (three_calendar_cld.getDate() != null) {
             three_calendar_cld.setBackground(Color.lightGray);
+            
             if (is_delete_last_7d()) {
                 delete_not_cur_to_last_7_d_from_db();
             }
-
             list_pur_and_id list_pur_id_obj = new list_pur_and_id();
+//            System.out.println("get_acc_id() : " + get_acc_id());
+//            System.out.println("!is_null_acc_id_invoice_man(get_acc_id()) : " + !is_null_acc_id_invoice_man(get_acc_id()));
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
                 get_from_db_set_total_in_tb();
                 list_pur_id_obj = set_data_db_to_list_pur_and_id();
@@ -864,24 +867,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         four_R_to_B_two_tf.setText(exc_ra.getR_to_B_two());
         four_R_to_B_three_tf.setText(exc_ra.getR_to_B_three());
         four_R_to_B_four_tf.setText(exc_ra.getR_to_B_four());
-    }
-
-    private void set_con_db() {
-
-        String local_host_server_name = five_local_host_server_name_tf.getText();
-        String local_host_db_name = five_local_host_db_name_tf.getText();
-        String local_user_name = five_local_host_user_name_tf.getText();
-        String local_password_tf = five_local_host_password_tf.getText();
-        setLocal_host(local_host_server_name, local_host_db_name);
-        setLocal_host_user_name(local_user_name);
-        setLocal_host_password(local_password_tf);
-
-        String wifi_host = five_wifi_host_tf.getText();
-        String wifi_user_name = five_wifi_host_user_name_tf.getText();
-        String wifi_password_tf = five_wifi_host_password_tf.getText();
-        setWifi_host(wifi_host);
-        setWifi_host_user_name(wifi_user_name);
-        setWifi_host_password(wifi_password_tf);
     }
 
     private void add_listener_calendar_three() {
@@ -1239,11 +1224,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_calendar_cld.setDate(current_date());
 
         //set account user to class for waiting to use
-        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
+//        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
 
-        set_con_db();
+//        set_con_db();
 
-        set_main_proj_path_to_db();
+//        set_main_proj_path_to_db();
 
         setTitle("Exchange and Transfer money");
 
@@ -1285,6 +1270,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         set_history();
 
+        five_user_name_lb.setText("user name : " + getUser_name());
     }
 
     /**
@@ -1517,26 +1503,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel45 = new javax.swing.JLabel();
         jLabel46 = new javax.swing.JLabel();
         db_con_pt = new javax.swing.JPanel();
-        five_user_name_tf = new javax.swing.JTextField();
-        five_password_tf = new javax.swing.JTextField();
-        five_local_host_server_name_tf = new javax.swing.JTextField();
-        five_local_host_user_name_tf = new javax.swing.JTextField();
-        five_local_host_password_tf = new javax.swing.JTextField();
-        five_wifi_host_tf = new javax.swing.JTextField();
-        five_wifi_host_user_name_tf = new javax.swing.JTextField();
-        five_wifi_host_password_tf = new javax.swing.JTextField();
-        five_create_acc_tf = new javax.swing.JButton();
-        five_local_host_db_name_tf = new javax.swing.JTextField();
-        jLabel48 = new javax.swing.JLabel();
-        jLabel50 = new javax.swing.JLabel();
-        jLabel51 = new javax.swing.JLabel();
-        jLabel52 = new javax.swing.JLabel();
-        jLabel53 = new javax.swing.JLabel();
-        jLabel54 = new javax.swing.JLabel();
-        jLabel55 = new javax.swing.JLabel();
-        five_dev_permission_tf = new javax.swing.JTextField();
-        five_dev_permission_bn = new javax.swing.JButton();
+        five_switch_acc_tf = new javax.swing.JButton();
         five_user_name_lb = new javax.swing.JLabel();
+        sql_lb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -4576,86 +4545,23 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         zero_tp.addTab("អត្រាប្តូរប្រាក់", rate_pt);
 
-        five_user_name_tf.setEditable(false);
-        five_user_name_tf.setText("chi");
-        five_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
+        five_switch_acc_tf.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        five_switch_acc_tf.setText("switch account");
+        five_switch_acc_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_user_name_tfActionPerformed(evt);
+                five_switch_acc_tfActionPerformed(evt);
             }
         });
 
-        five_password_tf.setEditable(false);
-        five_password_tf.setText("1234");
+        five_user_name_lb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        five_user_name_lb.setText("user name :");
 
-        five_local_host_server_name_tf.setEditable(false);
-        five_local_host_server_name_tf.setText("kay");
-        five_local_host_server_name_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_local_host_server_name_tfActionPerformed(evt);
-            }
-        });
-
-        five_local_host_user_name_tf.setEditable(false);
-        five_local_host_user_name_tf.setText("admin");
-        five_local_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_local_host_user_name_tfActionPerformed(evt);
-            }
-        });
-
-        five_local_host_password_tf.setEditable(false);
-        five_local_host_password_tf.setText("1234");
-
-        five_wifi_host_tf.setEditable(false);
-
-        five_wifi_host_user_name_tf.setEditable(false);
-        five_wifi_host_user_name_tf.setText("ChhannChikay");
-        five_wifi_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_wifi_host_user_name_tfActionPerformed(evt);
-            }
-        });
-
-        five_wifi_host_password_tf.setEditable(false);
-        five_wifi_host_password_tf.setText("1234");
-
-        five_create_acc_tf.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        five_create_acc_tf.setText("switch account");
-        five_create_acc_tf.setEnabled(false);
-        five_create_acc_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_create_acc_tfActionPerformed(evt);
-            }
-        });
-
-        five_local_host_db_name_tf.setEditable(false);
-        five_local_host_db_name_tf.setText("exchange_transfer_sm");
-
-        jLabel48.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel48.setText("user name :");
-
-        jLabel50.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel50.setText("host name");
-
-        jLabel51.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel51.setText("host user name");
-
-        jLabel52.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel52.setText("host password");
-
-        jLabel53.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel53.setText("wifi host name");
-
-        jLabel54.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel54.setText("host user name");
-
-        jLabel55.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel55.setText("host password");
-
-        five_dev_permission_bn.setText("Enter");
-        five_dev_permission_bn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_dev_permission_bnActionPerformed(evt);
+        sql_lb.setBackground(new java.awt.Color(255, 255, 255));
+        sql_lb.setForeground(new java.awt.Color(0, 0, 255));
+        sql_lb.setText("sql");
+        sql_lb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                sql_lbMouseClicked(evt);
             }
         });
 
@@ -4664,108 +4570,29 @@ public class UI_and_operation extends javax.swing.JFrame {
         db_con_ptLayout.setHorizontalGroup(
             db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(db_con_ptLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(five_wifi_host_tf))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(db_con_ptLayout.createSequentialGroup()
-                                .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, db_con_ptLayout.createSequentialGroup()
-                                .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(five_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel51, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
-                            .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(five_local_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(five_create_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
                 .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
-                        .addComponent(five_dev_permission_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(five_dev_permission_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(446, 446, 446))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(five_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sql_lb)
+                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 1299, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         db_con_ptLayout.setVerticalGroup(
             db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(db_con_ptLayout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(five_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(five_user_name_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(five_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel48, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(five_dev_permission_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(five_dev_permission_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(five_create_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(16, 16, 16)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(five_user_name_lb)
                 .addGap(18, 18, 18)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(five_local_host_user_name_tf)
-                        .addGap(2, 2, 2)))
+                .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addGap(31, 31, 31)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(five_wifi_host_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addGap(298, 298, 298))
+                .addComponent(sql_lb)
+                .addGap(680, 680, 680))
         );
 
-        zero_tp.addTab("connection", db_con_pt);
+        zero_tp.addTab("គណនេយ្យ", db_con_pt);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -4788,10 +4615,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void five_user_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_user_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_five_user_name_tfActionPerformed
 
     private void one_bn_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_bn_printActionPerformed
         exc_close_or_print(true, one_tf_customer_money, one_tf_exchange_rate, one_tf_customer_result,
@@ -4916,18 +4739,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_B_to_S.setEnabled(true);
         one_bn_R_to_B.setEnabled(true);
     }//GEN-LAST:event_one_bn_S_to_RActionPerformed
-
-    private void five_local_host_user_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_five_local_host_user_name_tfActionPerformed
-
-    private void five_wifi_host_user_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_five_wifi_host_user_name_tfActionPerformed
-
-    private void five_local_host_server_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_local_host_server_name_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_five_local_host_server_name_tfActionPerformed
 
     private void one_tf_customer_moneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyActionPerformed
         // TODO add your handling code here:
@@ -5913,31 +5724,6 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_three_tb_historyMouseClicked
-
-    private void five_dev_permission_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_dev_permission_bnActionPerformed
-        if (five_dev_permission_tf.getText().equals("Chi0123456789kay")) {
-            five_wifi_host_user_name_tf.setEditable(true);
-            five_user_name_tf.setEditable(true);
-            five_password_tf.setEditable(true);
-            five_local_host_server_name_tf.setEditable(true);
-            five_local_host_db_name_tf.setEditable(true);
-            five_local_host_user_name_tf.setEditable(true);
-            five_local_host_password_tf.setEditable(true);
-            five_wifi_host_tf.setEditable(true);
-            five_wifi_host_password_tf.setEditable(true);
-        } else {
-
-            five_wifi_host_user_name_tf.setEditable(false);
-            five_user_name_tf.setEditable(false);
-            five_password_tf.setEditable(false);
-            five_local_host_server_name_tf.setEditable(false);
-            five_local_host_db_name_tf.setEditable(false);
-            five_local_host_user_name_tf.setEditable(false);
-            five_local_host_password_tf.setEditable(false);
-            five_wifi_host_tf.setEditable(false);
-            five_wifi_host_password_tf.setEditable(false);
-        }
-    }//GEN-LAST:event_five_dev_permission_bnActionPerformed
 
     private void two_four_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbActionPerformed
         selected_money_type_from_pro = type_of_money.Dollar;
@@ -7579,28 +7365,17 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_del_last_7d_cbActionPerformed
 
-    private void five_create_acc_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_create_acc_tfActionPerformed
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        try {
-            con = DriverManager.getConnection(
-                getLocal_host(),
-                getLocal_host_user_name(),
-                getLocal_host_password()
-            );
-            //write sql query to access
-            pst = con.prepareStatement("insert into account_tb (user_name, password) "
-                + "values( ?, ?);");
+    private void five_switch_acc_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_switch_acc_tfActionPerformed
+                login login_obj = new login(this);
+        login_obj.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_five_switch_acc_tfActionPerformed
 
-            //set value to ?
-            pst.setString(1, "chi");
-            pst.setString(2, "1234");
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }
-    }//GEN-LAST:event_five_create_acc_tfActionPerformed
+    private void sql_lbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sql_lbMouseClicked
+//        sql_con sql_con_obj = new sql_con(this);
+//        sql_con_obj.setVisible(true);
+//        this.setEnabled(false);
+    }//GEN-LAST:event_sql_lbMouseClicked
 
     /**
      * @param args the command line arguments
@@ -7658,19 +7433,8 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JPanel exc_pn;
     private javax.swing.JPanel exc_pt;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.JButton five_create_acc_tf;
-    private javax.swing.JButton five_dev_permission_bn;
-    private javax.swing.JTextField five_dev_permission_tf;
-    private javax.swing.JTextField five_local_host_db_name_tf;
-    private javax.swing.JTextField five_local_host_password_tf;
-    private javax.swing.JTextField five_local_host_server_name_tf;
-    private javax.swing.JTextField five_local_host_user_name_tf;
-    private javax.swing.JTextField five_password_tf;
+    private javax.swing.JButton five_switch_acc_tf;
     private javax.swing.JLabel five_user_name_lb;
-    private javax.swing.JTextField five_user_name_tf;
-    private javax.swing.JTextField five_wifi_host_password_tf;
-    private javax.swing.JTextField five_wifi_host_tf;
-    private javax.swing.JTextField five_wifi_host_user_name_tf;
     private javax.swing.JTextField four_B_to_R_four_tf;
     private javax.swing.JTextField four_B_to_R_one_tf;
     private javax.swing.JTextField four_B_to_R_three_tf;
@@ -7739,14 +7503,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel52;
-    private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel54;
-    private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
@@ -7801,6 +7558,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> one_two_rate_bc2;
     private javax.swing.JButton print;
     private javax.swing.JPanel rate_pt;
+    private javax.swing.JLabel sql_lb;
     private javax.swing.JTabbedPane sub_exc_pt;
     private javax.swing.JTabbedPane sub_tran_pt;
     private javax.swing.JButton three_add_bn;

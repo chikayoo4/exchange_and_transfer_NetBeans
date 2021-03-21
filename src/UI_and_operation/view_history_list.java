@@ -162,7 +162,6 @@ public class view_history_list extends javax.swing.JFrame
         histroy_lb.setText(his_title);
         addWindowListener(this);
         set_history();
-
         set_see_more_bn();
     }
 

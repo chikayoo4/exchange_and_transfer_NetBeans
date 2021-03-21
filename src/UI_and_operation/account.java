@@ -67,7 +67,7 @@ public class account {
         }
         return user_n;
     }
-    
+
     public static int get_acc_id() {
         int id = -1;
         try {
@@ -92,4 +92,28 @@ public class account {
         return id;
     }
 
+    public static Boolean is_has_user_name(String user_name) {
+        Boolean is_has = false;
+        try {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT user_name "
+                    + "FROM account_tb "
+                    + "WHERE user_name = ?;");
+            pst.setString(1, user_name);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                is_has = true;
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex);
+        }
+        return is_has;
+    }
 }

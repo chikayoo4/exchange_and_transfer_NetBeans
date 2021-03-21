@@ -1,0 +1,7 @@
+kay
+exchange_transfer_sm
+admin
+1234
+1.1.1.1
+admin
+1234

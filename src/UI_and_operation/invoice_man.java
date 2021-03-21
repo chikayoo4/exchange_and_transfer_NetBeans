@@ -114,7 +114,6 @@ public class invoice_man {
                     + "WHERE id_acc = ?");
             pst.setInt(1, acc_id);
             rs = pst.executeQuery();
-
             if (rs.next()) {
                 return false;
             }

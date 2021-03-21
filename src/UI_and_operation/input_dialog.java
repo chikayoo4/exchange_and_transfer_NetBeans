@@ -307,7 +307,6 @@ public class input_dialog extends javax.swing.JFrame
     @Override
     public void windowClosing(WindowEvent e) {
         view_his_obj.setEnabled(true);
-
     }
 
     @Override
