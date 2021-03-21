@@ -34,7 +34,64 @@ import javax.swing.table.DefaultTableModel;
 public class view_history_thai extends javax.swing.JFrame
         implements WindowListener {
 
+    private UI_and_operation ui_and_ope_obj;
+    private final int num_show_his = 10;
+    private int next_show_his = num_show_his;
+    private int row_num = num_show_his;
+
+    private void set_see_more_bn() {
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT * FROM to_thai_history_tb;");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                set_sub_see_more_bn();
+            } else {
+                bn_1_col.setEnabled(false);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+
+    private void set_sub_see_more_bn() {
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT id_to_thai, bank, bank_id, name, phone_no "
+                    + "FROM to_thai_history_tb "
+                    + "ORDER BY name, bank_id, phone_no, bank "
+                    + "OFFSET " + next_show_his + " ROWS "
+                    + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+            rs = pst.executeQuery();
+            if (!rs.next()) {
+                bn_1_col.setEnabled(false);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+
     public void set_history() {
+        bn_1_col.setEnabled(true);
+        next_show_his = num_show_his;
+        row_num = num_show_his;
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -49,7 +106,9 @@ public class view_history_thai extends javax.swing.JFrame
             if (rs.next()) {
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
-                pst = con.prepareStatement("SELECT id_to_thai, bank, bank_id, name, phone_no FROM to_thai_history_tb ORDER BY name;");
+                pst = con.prepareStatement("SELECT TOP " + num_show_his + " id_to_thai, bank, bank_id, name, phone_no "
+                        + "FROM to_thai_history_tb "
+                        + "ORDER BY name, bank_id, phone_no, bank;");
                 rs = pst.executeQuery();
                 while (rs.next()) {
 
@@ -57,15 +116,17 @@ public class view_history_thai extends javax.swing.JFrame
 
                     //set to v2 all data only 1 row
                     v3.add(rs.getString("id_to_thai"));
-                    v3.add(rs.getString("bank_id"));
                     v3.add(rs.getString("name"));
+                    v3.add(rs.getString("bank_id"));
                     v3.add(rs.getString("phone_no"));
                     v3.add(rs.getString("bank"));
 
                     //set data to table history row
                     dft.addRow(v3);
                 }
+                set_sub_see_more_bn();
             } else {
+                bn_1_col.setEnabled(false);
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
             }
@@ -74,8 +135,6 @@ public class view_history_thai extends javax.swing.JFrame
             JOptionPane.showMessageDialog(this, ex);
         }
     }
-
-    private UI_and_operation ui_and_ope_obj;
 
     /**
      * Creates new form view_history_thai
@@ -91,6 +150,7 @@ public class view_history_thai extends javax.swing.JFrame
         histroy_lb.setText("thai bank information");
         addWindowListener(this);
         set_history();
+        set_see_more_bn();
 
         history_tb.getColumnModel().getColumn(0).setMaxWidth(0);
         history_tb.getColumnModel().getColumn(0).setMinWidth(0);
@@ -114,6 +174,7 @@ public class view_history_thai extends javax.swing.JFrame
         history_add_bn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         history_tb = new javax.swing.JTable();
+        bn_1_col = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,7 +197,7 @@ public class view_history_thai extends javax.swing.JFrame
 
             },
             new String [] {
-                "id", "code", "name", "phone number", "bank"
+                "id", "name", "code", "phone number", "bank"
             }
         ) {
             Class[] types = new Class [] {
@@ -161,16 +222,25 @@ public class view_history_thai extends javax.swing.JFrame
         });
         jScrollPane2.setViewportView(history_tb);
 
+        bn_1_col.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        bn_1_col.setText("see more...");
+        bn_1_col.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bn_1_colActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(histroy_lb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(history_add_bn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1347, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(histroy_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(history_add_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1347, Short.MAX_VALUE)
+                    .addComponent(bn_1_col, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -181,7 +251,9 @@ public class view_history_thai extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(history_add_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bn_1_col, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -244,6 +316,60 @@ public class view_history_thai extends javax.swing.JFrame
         }
     }//GEN-LAST:event_history_tbMouseClicked
 
+    private void bn_1_colActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bn_1_colActionPerformed
+        DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            pst = con.prepareStatement("SELECT * FROM to_thai_history_tb;");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+
+                pst = con.prepareStatement("SELECT id_to_thai, bank, bank_id, name, phone_no "
+                        + "FROM to_thai_history_tb "
+                        + "ORDER BY name, bank_id, phone_no, bank "
+                        + "OFFSET " + next_show_his + " ROWS "
+                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                rs = pst.executeQuery();
+                if (rs.next()) {
+                    pst = con.prepareStatement("SELECT id_to_thai, bank, bank_id, name, phone_no "
+                            + "FROM to_thai_history_tb "
+                            + "ORDER BY name, bank_id, phone_no, bank "
+                            + "OFFSET " + next_show_his + " ROWS "
+                            + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        dft.setRowCount(row_num);
+                        row_num++;
+                        Vector v3 = new Vector();
+                        //set to v2 all data only 1 row
+                        v3.add(rs.getString("id_to_thai"));
+                        v3.add(rs.getString("name"));
+                        v3.add(rs.getString("bank_id"));
+                        v3.add(rs.getString("phone_no"));
+                        v3.add(rs.getString("bank"));
+                        //set data to table history row
+                        dft.addRow(v3);
+                    }
+                    next_show_his = next_show_his + num_show_his;
+                    set_sub_see_more_bn();
+                } else {
+                    bn_1_col.setEnabled(false);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_bn_1_colActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -280,6 +406,7 @@ public class view_history_thai extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bn_1_col;
     private javax.swing.JButton history_add_bn;
     private javax.swing.JTable history_tb;
     private javax.swing.JLabel histroy_lb;

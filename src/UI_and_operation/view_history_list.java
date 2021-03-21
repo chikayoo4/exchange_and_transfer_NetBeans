@@ -48,6 +48,55 @@ public class view_history_list extends javax.swing.JFrame
     private int next_show_his = num_show_his;
     private int row_num = num_show_his;
 
+    private void set_see_more_bn() {
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + ";");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                set_sub_see_more_bn();
+            } else {
+                bn_1_col.setEnabled(false);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+
+    private void set_sub_see_more_bn() {
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT " + col_sql + " "
+                    + "FROM " + tb_sql + " "
+                    + "ORDER BY " + col_sql + " "
+                    + "OFFSET " + next_show_his + " ROWS "
+                    + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+            rs = pst.executeQuery();
+            if (!rs.next()) {
+                bn_1_col.setEnabled(false);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }
+
     public void set_history() {
         bn_1_col.setEnabled(true);
         next_show_his = num_show_his;
@@ -70,26 +119,13 @@ public class view_history_list extends javax.swing.JFrame
                 pst = con.prepareStatement("SELECT TOP " + num_show_his + " " + col_sql + " FROM " + tb_sql + " ORDER BY " + col_sql + ";");
                 rs = pst.executeQuery();
                 while (rs.next()) {
-
                     Vector v3 = new Vector();
-
-                    //set to v2 all data only 1 row
                     v3.add(rs.getString(col_sql));
-
-                    //set data to table history row
                     dft.addRow(v3);
                 }
-                pst = con.prepareStatement("SELECT " + col_sql + " "
-                        + "FROM " + tb_sql + " "
-                        + "ORDER BY " + col_sql + " "
-                        + "OFFSET " + next_show_his + " ROWS "
-                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
-                rs = pst.executeQuery();
-                if (!rs.next()) {
-                    bn_1_col.setEnabled(false);
-                } 
+                set_sub_see_more_bn();
             } else {
-                    bn_1_col.setEnabled(false);
+                bn_1_col.setEnabled(false);
                 DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
                 dft.setRowCount(0);
             }
@@ -126,40 +162,8 @@ public class view_history_list extends javax.swing.JFrame
         histroy_lb.setText(his_title);
         addWindowListener(this);
         set_history();
-        
-        
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
 
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-            pst = con.prepareStatement("SELECT " + col_sql + " FROM " + tb_sql + ";");
-            rs = pst.executeQuery();
-            if (rs.next()) {
-
-                pst = con.prepareStatement("SELECT " + col_sql + " "
-                        + "FROM " + tb_sql + " "
-                        + "ORDER BY " + col_sql + " "
-                        + "OFFSET " + next_show_his + " ROWS "
-                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
-                rs = pst.executeQuery();
-                if (!rs.next()) {
-                    bn_1_col.setEnabled(false);
-                } 
-            }
-            else{
-                    bn_1_col.setEnabled(false);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
-        }
-        
+        set_see_more_bn();
     }
 
     public view_history_list() {
@@ -336,11 +340,9 @@ public class view_history_list extends javax.swing.JFrame
 
     private void bn_1_colActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bn_1_colActionPerformed
         DefaultTableModel dft = (DefaultTableModel) history_tb.getModel();
-
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
-
         try {
             con = DriverManager.getConnection(
                     getLocal_host(),
@@ -374,16 +376,7 @@ public class view_history_list extends javax.swing.JFrame
                         dft.addRow(v3);
                     }
                     next_show_his = next_show_his + num_show_his;
-                    
-                pst = con.prepareStatement("SELECT " + col_sql + " "
-                        + "FROM " + tb_sql + " "
-                        + "ORDER BY " + col_sql + " "
-                        + "OFFSET " + next_show_his + " ROWS "
-                        + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
-                rs = pst.executeQuery();
-                if (!rs.next()) {
-                    bn_1_col.setEnabled(false);
-                } 
+                    set_sub_see_more_bn();
                 } else {
                     bn_1_col.setEnabled(false);
                 }
