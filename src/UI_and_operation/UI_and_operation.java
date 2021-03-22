@@ -66,6 +66,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -112,7 +113,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private final int num_show_his = 10;
     private int idx_transfer_pt = 0;
     private Boolean is_change_pro = false;
-    public static String set_admin_password = "";
+//    public static String set_admin_password = "";
     private Boolean two_one_is_off_edit = true;
     //to store which type of exchange that user performs, by defauld selected_exchange_rate = not_select
     private type_of_exchange selected_exchange_rate = type_of_exchange.not_select;
@@ -202,7 +203,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
 //        set_service_pro_name_cb.addItem();
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -223,7 +225,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 id = rs.getInt("id_invoice");
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
     }
@@ -245,7 +248,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 id = rs.getInt("id_type_of_money");
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
     }
@@ -296,7 +300,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     two_one_mode.addElement(rs.getString(col));
                 }
             } catch (SQLException ex) {
-                System.err.println(ex);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
         }
     }
@@ -327,7 +332,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     two_one_mode.addElement(rs.getString(col_target) + " | " + rs.getString(col_1) + " | " + rs.getString(col_2) + " | " + rs.getString(col_3));
                 }
             } catch (SQLException ex) {
-                System.err.println(ex);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
         }
     }
@@ -395,7 +401,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id_inv_man;
     }
@@ -420,7 +427,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 id = rs.getInt("id_province");
             }
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
     }
@@ -445,7 +453,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 id = rs.getInt("id_pro_name");
             }
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
 
@@ -489,7 +498,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                         money_S_B_R_validate(type_of_money.Bart, Bart_bank, true));
             }
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -531,7 +541,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return count;
     }
@@ -579,7 +590,8 @@ public class UI_and_operation extends javax.swing.JFrame {
 //            System.out.println("id_invoice : " + list_pur_id_obj.id_invoice);
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return list_pur_id_obj;
     }
@@ -604,7 +616,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 //        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
         if (three_calendar_cld.getDate() != null) {
             three_calendar_cld.setBackground(Color.lightGray);
-            
+
             if (is_delete_last_7d()) {
                 delete_not_cur_to_last_7_d_from_db();
             }
@@ -677,7 +689,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 return true;
             }
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return false;
     }
@@ -703,7 +716,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             pst.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -732,7 +746,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             pst.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -751,7 +766,8 @@ public class UI_and_operation extends javax.swing.JFrame {
             pst.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -828,7 +844,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 R_to_B = rs.getString("rial_to_bart");
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
 
         exc_rate exc_ra = new exc_rate();
@@ -1039,6 +1056,98 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }
 
+    private void set_color_with_focus_to_pro(Boolean two_one_sender_his, Boolean two_three_sender_phone_no,
+            Boolean two_one_reciever_his, Boolean two_three_receiver_phone_no, Boolean two_one_pro_his,
+            Boolean two_one_pro_name, Boolean two_three_rial_money, Boolean two_three_dollar_money,
+            Boolean two_three_bart_money, Boolean two_three_sender_money, Boolean two_three_service_money,
+            Boolean two_one_edit, Boolean two_three_finish, Boolean two_one_print) {
+
+        if (two_one_sender_his) {
+            two_one_sender_his_bn.requestFocus();
+            two_one_sender_his_bn.setBackground(sky_c);
+        } else {
+            two_one_sender_his_bn.setBackground(silivor_c);
+        }
+        if (two_three_sender_phone_no) {
+            two_three_sender_phone_no_tf.requestFocus();
+            two_three_sender_phone_no_tf.setBackground(sky_c);
+        } else {
+            two_three_sender_phone_no_tf.setBackground(white_c);
+        }
+        if (two_one_reciever_his) {
+            two_one_reciever_his_bn.requestFocus();
+            two_one_reciever_his_bn.setBackground(sky_c);
+        } else {
+            two_one_reciever_his_bn.setBackground(silivor_c);
+        }
+        if (two_three_receiver_phone_no) {
+            two_three_receiver_phone_no_tf.requestFocus();
+            two_three_receiver_phone_no_tf.setBackground(sky_c);
+        } else {
+            two_three_receiver_phone_no_tf.setBackground(white_c);
+        }
+        if (two_one_pro_his) {
+            two_one_pro_his_bn.requestFocus();
+            two_one_pro_his_bn.setBackground(sky_c);
+        } else {
+            two_one_pro_his_bn.setBackground(silivor_c);
+        }
+        if (two_one_pro_name) {
+            two_one_pro_name_cb.requestFocus();
+            two_one_pro_name_cb.setBackground(sky_c);
+        } else {
+            two_one_pro_name_cb.setBackground(white_c);
+        }
+        if (two_three_rial_money) {
+            two_three_rial_money_rb.requestFocus();
+            two_three_rial_money_rb.setBackground(sky_c);
+        } else {
+            two_three_rial_money_rb.setBackground(white_c);
+        }
+        if (two_three_dollar_money) {
+            two_three_dollar_money_rb.requestFocus();
+            two_three_dollar_money_rb.setBackground(sky_c);
+        } else {
+            two_three_dollar_money_rb.setBackground(white_c);
+        }
+        if (two_three_bart_money) {
+            two_three_bart_money_rb.requestFocus();
+            two_three_bart_money_rb.setBackground(sky_c);
+        } else {
+            two_three_bart_money_rb.setBackground(white_c);
+        }
+        if (two_three_sender_money) {
+            two_three_sender_money_tf.requestFocus();
+            two_three_sender_money_tf.setBackground(sky_c);
+        } else {
+            two_three_sender_money_tf.setBackground(white_c);
+        }
+        if (two_three_service_money) {
+            two_three_service_money_tf.requestFocus();
+            two_three_service_money_tf.setBackground(sky_c);
+        } else {
+            two_three_service_money_tf.setBackground(white_c);
+        }
+        if (two_one_edit) {
+            two_one_edit_bn.requestFocus();
+            two_one_edit_bn.setBackground(sky_c);
+        } else {
+            two_one_edit_bn.setBackground(silivor_c);
+        }
+        if (two_three_finish) {
+            two_three_bn_finish.requestFocus();
+            two_three_bn_finish.setBackground(sky_c);
+        } else {
+            two_three_bn_finish.setBackground(silivor_c);
+        }
+        if (two_one_print) {
+            two_one_print_bn.requestFocus();
+            two_one_print_bn.setBackground(sky_c);
+        } else {
+            two_one_print_bn.setBackground(silivor_c);
+        }
+    }
+
     private void set_listener_cb_on_click(javax.swing.JComboBox<String> bc) {
         bc.addFocusListener(new FocusAdapter() {
             @Override
@@ -1113,7 +1222,8 @@ public class UI_and_operation extends javax.swing.JFrame {
 //                    + "AND invoice_man_date <= '" + start_date + "';");
 //            pst.executeUpdate();
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -1151,7 +1261,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 count = count + rs.getInt("count_each_day");
             }
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return count;
     }
@@ -1175,7 +1286,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return is_delete;
     }
@@ -1198,8 +1310,49 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
             pst.executeUpdate();
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
+    }
+
+    public void set_lb_user_name(String user_name) {
+        five_user_name_lb.setText("user name : " + user_name);
+    }
+
+    public static String get_admin_pass_from_db() {
+        String pass = "";
+        try {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            pst = con.prepareStatement("SELECT password "
+                    + "FROM admin_pass_tb;");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                pass = rs.getString("password");
+            }
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+        return pass;
+    }
+
+    public static Boolean field_admin_pass() {
+        Boolean correct_pass = false;
+        JPasswordField pwd = new JPasswordField(10);
+        int action = JOptionPane.showConfirmDialog(null, pwd, "Enter Password", JOptionPane.OK_CANCEL_OPTION);
+        if (action == JOptionPane.OK_OPTION) {
+            correct_pass = pwd.getText().equals(get_admin_pass_from_db());
+        } else {
+//            System.out.println("User canceled / closed the dialog, action = " + action);
+        }
+        return correct_pass;
     }
 
     /**
@@ -1225,11 +1378,8 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         //set account user to class for waiting to use
 //        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
-
 //        set_con_db();
-
 //        set_main_proj_path_to_db();
-
         setTitle("Exchange and Transfer money");
 
         setIconImage(Toolkit.getDefaultToolkit().getImage("logo_and_icon\\icon\\main_logo.png"));
@@ -1270,7 +1420,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         set_history();
 
-        five_user_name_lb.setText("user name : " + getUser_name());
+        set_lb_user_name(getUser_name());
     }
 
     /**
@@ -1349,7 +1499,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_balance_money_tf = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         two_three_bn_finish = new javax.swing.JButton();
-        two_one_print = new javax.swing.JButton();
+        two_one_print_bn = new javax.swing.JButton();
         two_three_dollar_money_rb = new javax.swing.JRadioButton();
         two_three_rial_money_rb = new javax.swing.JRadioButton();
         two_three_bart_money_rb = new javax.swing.JRadioButton();
@@ -2326,21 +2476,21 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
-        two_one_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        two_one_print.setText("ព្រីនវិក្កិយបត្រ");
-        two_one_print.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_one_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_one_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_one_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_one_printMouseClicked(evt);
+                two_one_print_bnMouseClicked(evt);
             }
         });
-        two_one_print.addActionListener(new java.awt.event.ActionListener() {
+        two_one_print_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_one_printActionPerformed(evt);
+                two_one_print_bnActionPerformed(evt);
             }
         });
-        two_one_print.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_one_print_bn.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                two_one_printKeyPressed(evt);
+                two_one_print_bnKeyPressed(evt);
             }
         });
 
@@ -2538,6 +2688,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_sender_his_bnActionPerformed(evt);
             }
         });
+        two_one_sender_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_sender_his_bnKeyPressed(evt);
+            }
+        });
         jPanel11.add(two_one_sender_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 200, 50));
 
         two_one_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
@@ -2588,7 +2743,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_one_print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(two_one_print_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(to_pro_pnLayout.createSequentialGroup()
                         .addGap(150, 150, 150)
                         .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2644,7 +2799,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(two_one_print, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(two_one_print_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(to_pro_pnLayout.createSequentialGroup()
                         .addContainerGap()
@@ -4575,8 +4730,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sql_lb)
-                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sql_lb))
                         .addGap(0, 1299, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -4585,11 +4740,11 @@ public class UI_and_operation extends javax.swing.JFrame {
             .addGroup(db_con_ptLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(five_user_name_lb)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(sql_lb)
-                .addGap(680, 680, 680))
+                .addGap(691, 691, 691))
         );
 
         zero_tp.addTab("គណនេយ្យ", db_con_pt);
@@ -5013,8 +5168,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void three_add_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_three_add_bnActionPerformed
 
         if ((three_rial_rb.isSelected() || three_dollar_rb.isSelected() || three_bart_rb.isSelected()) && !three_add_tf.getText().isEmpty()) {
-            String admin_password = JOptionPane.showInputDialog(this, "Enter password");
-            if (set_admin_password.equals(admin_password)) {
+            if (field_admin_pass()) {
                 int lastinsert_id_add = -1;
                 Connection con;
                 PreparedStatement pst;
@@ -5121,7 +5275,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     set_history();
                     set_history();
                 } catch (SQLException ex) {
-                    System.err.println(ex);
+                    sql_con sql_con_obj = new sql_con(ex);
+                    sql_con_obj.setVisible(true);
                 }
                 three_add_tf.setText("");
                 bg_add_m.clearSelection();
@@ -5663,7 +5818,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 case Delete:
 
                     if (!three_tb_history.getSelectionModel().isSelectionEmpty()) {
-                        if (set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+                        if (field_admin_pass()) {
                             //table in UI
                             DefaultTableModel model = (DefaultTableModel) three_tb_history.getModel();
                             //select index of the table row
@@ -5818,7 +5973,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                         break;
                 }
             } catch (SQLException ex) {
-                System.err.println("error: two_three_bn_finish\n" + ex);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
 
             two_four_receiver_phone_no_tf.setText("");
@@ -6037,7 +6193,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_tf_service_money.setText("");
                 set_is_change_true();
             } catch (SQLException ex) {
-                System.err.println(ex);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
         }
     }//GEN-LAST:event_two_one_bn_finishActionPerformed
@@ -6179,7 +6336,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_one_edit_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_edit_bnActionPerformed
 
         if (two_one_is_off_edit) {
-            if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+            if (!field_admin_pass()) {
                 JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
             } else {
                 two_one_edit_bn.setText("on edit");
@@ -6213,13 +6370,25 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_ph_senter_listMousePressed
 
     private void two_three_sender_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfKeyPressed
-        if (two_one_ph_senter_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_one_ph_senter_list.getModel().getSize() != 0) {
                     two_one_ph_senter_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_to_pro(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+                }
+                break;
         }
     }//GEN-LAST:event_two_three_sender_phone_no_tfKeyPressed
 
@@ -6305,6 +6474,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_one_sender_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_sender_his_bnMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_sender_his_bnMouseClicked
 
     private void two_two_ph_recieve_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listMousePressed
@@ -6478,7 +6648,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                         current_date());
 
             } catch (SQLException ex) {
-                System.err.println("error: two_four_bn_finish\n" + ex);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             } catch (ParseException ex) {
                 Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -6795,9 +6966,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         hide_or_show_column_his(three_chb_date, 0, 230, 300, 10);
     }//GEN-LAST:event_three_chb_dateActionPerformed
 
-    private void two_one_printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_printActionPerformed
+    private void two_one_print_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_print_bnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_two_one_printActionPerformed
+    }//GEN-LAST:event_two_one_print_bnActionPerformed
 
     private void two_three_to_thai_bank_id_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_id_listMousePressed
         get_bank_thai_result_search_db(two_three_to_thai_bank_id_list, two_one_tf_cus_no,
@@ -7202,10 +7373,10 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_one_ph_senter_list);
     }//GEN-LAST:event_two_three_bn_finishMouseClicked
 
-    private void two_one_printMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_printMouseClicked
+    private void two_one_print_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_print_bnMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
-    }//GEN-LAST:event_two_one_printMouseClicked
+    }//GEN-LAST:event_two_one_print_bnMouseClicked
 
     private void two_two_reciever_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
@@ -7277,14 +7448,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_two_three_bn_finishKeyPressed
 
-    private void two_one_printKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_printKeyPressed
+    private void two_one_print_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_print_bnKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                two_one_print.doClick();
+                two_one_print_bn.doClick();
                 break;
         }
-    }//GEN-LAST:event_two_one_printKeyPressed
+    }//GEN-LAST:event_two_one_print_bnKeyPressed
 
     private void two_four_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_bn_finishKeyPressed
         int code = evt.getKeyCode();
@@ -7366,16 +7537,35 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_del_last_7d_cbActionPerformed
 
     private void five_switch_acc_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_switch_acc_tfActionPerformed
-                login login_obj = new login(this);
+        login login_obj = new login(this);
         login_obj.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_five_switch_acc_tfActionPerformed
 
     private void sql_lbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sql_lbMouseClicked
-//        sql_con sql_con_obj = new sql_con(this);
-//        sql_con_obj.setVisible(true);
-//        this.setEnabled(false);
+        sql_con sql_con_obj = new sql_con(this);
+        sql_con_obj.setVisible(true);
+        this.setEnabled(false);
     }//GEN-LAST:event_sql_lbMouseClicked
+
+    private void two_one_sender_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_sender_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_one_sender_his_bnKeyPressed
 
     /**
      * @param args the command line arguments
@@ -7605,7 +7795,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JList<String> two_one_ph_reciever_list;
     private javax.swing.JLayeredPane two_one_ph_senter_layer_pane;
     private javax.swing.JList<String> two_one_ph_senter_list;
-    private javax.swing.JButton two_one_print;
+    private javax.swing.JButton two_one_print_bn;
     private javax.swing.JButton two_one_pro_his_bn;
     private javax.swing.JButton two_one_pro_his_bn1;
     private javax.swing.JComboBox<String> two_one_pro_name_cb;

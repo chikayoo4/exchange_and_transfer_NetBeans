@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.login.get_from_sql_file_to_tf;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Scanner;
 import javax.swing.JFrame;
 
@@ -19,22 +21,19 @@ import javax.swing.JFrame;
  *
  * @author Chhann_chikay
  */
-public class sql_con extends javax.swing.JFrame 
+public class sql_con extends javax.swing.JFrame
         implements WindowListener {
 
-    login login_obj;
-    
-    /**
-     * Creates new form sql_con
-     */
-    public sql_con(login login_obj) {
-        this.login_obj = login_obj;
+    private login login_obj;
+    private UI_and_operation UI_ope_obj;
+
+    private void init_component() {
+
         setResizable(false);
-        initComponents();
         setTitle("SQL");
         addWindowListener(this);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
         try {
             Scanner sc_file = new Scanner(new File(login_obj.sql_con_file_name));
             five_local_host_server_name_tf.setText(sc_file.nextLine());
@@ -48,7 +47,28 @@ public class sql_con extends javax.swing.JFrame
             System.out.println("error");
         }
     }
-    
+
+    /**
+     * Creates new form sql_con
+     */
+    public sql_con(login login_obj) {
+        this.login_obj = login_obj;
+        initComponents();
+        init_component();
+    }
+
+    public sql_con(UI_and_operation UI_ope_obj) {
+        this.UI_ope_obj = UI_ope_obj;
+        initComponents();
+        init_component();
+    }
+
+    public sql_con(SQLException ex) {
+        initComponents();
+        init_component();
+        tp_error_message.setText(ex.toString());
+    }
+
     public sql_con() {
         initComponents();
     }
@@ -76,7 +96,9 @@ public class sql_con extends javax.swing.JFrame
         jLabel55 = new javax.swing.JLabel();
         five_wifi_host_password_tf = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        save_bn = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tp_error_message = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,26 +162,30 @@ public class sql_con extends javax.swing.JFrame
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SQL Connection");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jButton1.setText("save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        save_bn.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        save_bn.setText("save");
+        save_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                save_bnActionPerformed(evt);
             }
         });
+
+        jScrollPane1.setViewportView(tp_error_message);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(save_bn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel53, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
@@ -218,8 +244,10 @@ public class sql_con extends javax.swing.JFrame
                         .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)))
                 .addGap(33, 33, 33)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addComponent(save_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -241,26 +269,31 @@ public class sql_con extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_five_wifi_host_password_tfActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void save_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_bnActionPerformed
         try {
             File file = new File(login_obj.sql_con_file_name);
-                FileWriter fw = new FileWriter(file, false);
-                PrintWriter pw = new PrintWriter(fw);
-                pw.println(five_local_host_server_name_tf.getText().trim());
-                pw.println(five_local_host_db_name_tf.getText().trim());
-                pw.println(five_local_host_user_name_tf.getText().trim());
-                pw.println(five_local_host_password_tf.getText().trim());
-                pw.println(five_wifi_host_tf.getText().trim());
-                pw.println(five_wifi_host_user_name_tf.getText().trim());
-                pw.println(five_wifi_host_password_tf.getText().trim());
-                pw.close();
+            FileWriter fw = new FileWriter(file, false);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.println(five_local_host_server_name_tf.getText().trim());
+            pw.println(five_local_host_db_name_tf.getText().trim());
+            pw.println(five_local_host_user_name_tf.getText().trim());
+            pw.println(five_local_host_password_tf.getText().trim());
+            pw.println(five_wifi_host_tf.getText().trim());
+            pw.println(five_wifi_host_user_name_tf.getText().trim());
+            pw.println(five_wifi_host_password_tf.getText().trim());
+            pw.close();
         } catch (IOException e) {
             System.out.println("error");
         }
-        login_obj.setEnabled(true);
+        get_from_sql_file_to_tf();
+        if (login_obj != null) {
+            login_obj.setEnabled(true);
+        } else if (UI_ope_obj != null) {
+            UI_ope_obj.setEnabled(true);
+        }
         this.setVisible(false);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_save_bnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -305,7 +338,6 @@ public class sql_con extends javax.swing.JFrame
     private javax.swing.JTextField five_wifi_host_password_tf;
     private javax.swing.JTextField five_wifi_host_tf;
     private javax.swing.JTextField five_wifi_host_user_name_tf;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
@@ -313,6 +345,9 @@ public class sql_con extends javax.swing.JFrame
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton save_bn;
+    private javax.swing.JTextPane tp_error_message;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -321,7 +356,12 @@ public class sql_con extends javax.swing.JFrame
 
     @Override
     public void windowClosing(WindowEvent e) {
-        login_obj.setEnabled(true);
+        if (login_obj != null) {
+            login_obj.setEnabled(true);
+        }
+        if (UI_ope_obj != null) {
+            UI_ope_obj.setEnabled(true);
+        }
     }
 
     @Override

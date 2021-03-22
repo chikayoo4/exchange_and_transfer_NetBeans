@@ -116,7 +116,8 @@ public class exc_rate {
                 R_to_B = rs.getString("rial_to_bart");
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
     }
@@ -215,7 +216,8 @@ public class exc_rate {
             pst.executeUpdate();
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 

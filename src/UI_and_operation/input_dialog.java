@@ -6,8 +6,8 @@
 package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
+import static UI_and_operation.UI_and_operation.field_admin_pass;
 import static UI_and_operation.UI_and_operation.is_has_history_list_db;
-import static UI_and_operation.UI_and_operation.set_admin_password;
 import static UI_and_operation.UI_and_operation.set_history_list_db;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
@@ -44,7 +44,7 @@ public class input_dialog extends javax.swing.JFrame
 
     private Boolean input_pass_dia_for_to_pro() {
         Boolean is_correct_pass = true;
-        if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+        if (!field_admin_pass()) {
             is_correct_pass = false;
             JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
         }
@@ -223,8 +223,8 @@ public class input_dialog extends javax.swing.JFrame
             this.setVisible(false);
             this.dispose();
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 

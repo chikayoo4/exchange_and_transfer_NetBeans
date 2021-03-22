@@ -63,7 +63,8 @@ public class account {
                 user_n = rs.getString("user_name");
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return user_n;
     }
@@ -87,7 +88,8 @@ public class account {
                 id = rs.getInt("id_acc");
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return id;
     }
@@ -112,7 +114,8 @@ public class account {
                 is_has = true;
             }
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return is_has;
     }

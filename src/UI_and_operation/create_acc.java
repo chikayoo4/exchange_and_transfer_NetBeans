@@ -145,8 +145,8 @@ public class create_acc extends javax.swing.JFrame
     private void login_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_bnActionPerformed
         if (!user_name_tf.getText().isEmpty() && !password_tf.getText().isEmpty() && !re_password_tf.getText().isEmpty()) {
             String user_name = user_name_tf.getText().trim();
-            String password = password_tf.getText().trim();
-            String re_password = re_password_tf.getText().trim();
+            String password = password_tf.getText();
+            String re_password = re_password_tf.getText();
             try {
                 Connection con;
                 PreparedStatement pst;
@@ -164,6 +164,7 @@ public class create_acc extends javax.swing.JFrame
                         pst.setString(2, password);
                         pst.executeUpdate();
                         login_obj.setEnabled(true);
+                        login_obj.set_user_name_tf(user_name);
                         this.setVisible(false);
                         this.dispose();
                     } else {
@@ -173,7 +174,8 @@ public class create_acc extends javax.swing.JFrame
                     JOptionPane.showMessageDialog(this, "password not match!!!!!", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (SQLException ex) {
-                System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
         }
     }//GEN-LAST:event_login_bnActionPerformed

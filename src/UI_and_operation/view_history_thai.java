@@ -6,7 +6,6 @@
 package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
-import static UI_and_operation.UI_and_operation.set_admin_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
@@ -57,8 +56,8 @@ public class view_history_thai extends javax.swing.JFrame
                 bn_1_col.setEnabled(false);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -83,8 +82,8 @@ public class view_history_thai extends javax.swing.JFrame
                 bn_1_col.setEnabled(false);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -131,8 +130,8 @@ public class view_history_thai extends javax.swing.JFrame
                 dft.setRowCount(0);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -309,8 +308,8 @@ public class view_history_thai extends javax.swing.JFrame
                         break;
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
 
         }
@@ -365,8 +364,8 @@ public class view_history_thai extends javax.swing.JFrame
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }//GEN-LAST:event_bn_1_colActionPerformed
 

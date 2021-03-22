@@ -22,9 +22,9 @@ import java.sql.SQLException;
  */
 public class path_file {
 
-    public static String exc_reciept_path = "\\reciept_for_print\\exchanging.jrxml"; 
-    public static String double_exc_reciept_path = "\\reciept_for_print\\double_exchanging.jrxml"; 
-    
+    public static String exc_reciept_path = "\\reciept_for_print\\exchanging.jrxml";
+    public static String double_exc_reciept_path = "\\reciept_for_print\\double_exchanging.jrxml";
+
     public static String get_path() {
         String path = "";
         try {
@@ -40,8 +40,8 @@ public class path_file {
         return path;
     }
 
-    public static void set_main_proj_path_to_db(){
-        
+    public static void set_main_proj_path_to_db() {
+
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -70,8 +70,9 @@ public class path_file {
             pst.executeUpdate();
 
         } catch (SQLException ex) {
-            System.out.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
-        
+
     }
 }

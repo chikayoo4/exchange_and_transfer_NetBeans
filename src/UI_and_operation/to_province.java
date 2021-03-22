@@ -155,7 +155,8 @@ public class to_province {
                         break;
                 }
             } catch (SQLException ex) {
-                System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
             two_three_sender_phone_no_tf.setText("");
             two_three_receiver_phone_no_tf.setText("");
@@ -254,7 +255,8 @@ public class to_province {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -320,7 +322,8 @@ public class to_province {
             //dialog when added to access is success
             //                        JOptionPane.showMessageDialog(this, "records update");
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 }

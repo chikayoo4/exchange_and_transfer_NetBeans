@@ -27,6 +27,9 @@ BEGIN
 RETURN @StringDate
 END
 GO
+CREATE TABLE admin_pass_tb (
+    password VARCHAR(50) NOT NULL
+);
 CREATE TABLE delete_last_7d_tb (
     is_delete INT NOT NULL
 );
@@ -245,7 +248,7 @@ INSERT INTO purpose_tb ( pur_type ) VALUES ('add_total_money');
 INSERT INTO money_type_tb ( type_of_money ) VALUES ('Rial');
 INSERT INTO money_type_tb ( type_of_money ) VALUES ('Dollar');
 INSERT INTO money_type_tb ( type_of_money ) VALUES ('Bart');
-INSERT INTO account_tb ( user_name, password ) VALUES ('chi', '1234');
 INSERT INTO exc_rate_tb (date_rate, dollar_to_rial, rial_to_dollar, dollar_to_bart, bart_to_dollar, bart_to_rial, rial_to_bart) VALUES ('2021-01-01', 4005, 4010, 30.00, 30.10, 130.0, 131.0);
 INSERT INTO project_path (path_name) VALUES ('C:');
 INSERT INTO delete_last_7d_tb ( is_delete ) VALUES (0);
+INSERT INTO admin_pass_tb ( password) VALUES ('');

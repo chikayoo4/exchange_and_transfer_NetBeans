@@ -7,7 +7,7 @@ package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_choose_e_d_c;
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
-import static UI_and_operation.UI_and_operation.set_admin_password;
+import static UI_and_operation.UI_and_operation.field_admin_pass;
 import static UI_and_operation.UI_and_operation.set_cb;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
@@ -66,8 +66,8 @@ public class view_history_list extends javax.swing.JFrame
                 bn_1_col.setEnabled(false);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -92,8 +92,8 @@ public class view_history_list extends javax.swing.JFrame
                 bn_1_col.setEnabled(false);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -130,8 +130,8 @@ public class view_history_list extends javax.swing.JFrame
                 dft.setRowCount(0);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -291,7 +291,7 @@ public class view_history_list extends javax.swing.JFrame
 
                     Boolean is_correct_pass = true;
                     if (is_input_pass) {
-                        if (!set_admin_password.equals(JOptionPane.showInputDialog(this, "Enter password"))) {
+                        if (!field_admin_pass()) {
                             is_correct_pass = false;
                             JOptionPane.showMessageDialog(this, "Incorrect password", "Alert", JOptionPane.WARNING_MESSAGE);
                         }
@@ -311,8 +311,8 @@ public class view_history_list extends javax.swing.JFrame
                                     + "where " + col_sql + " = '" + sender_ph_no + "'");
                             pst.executeUpdate();
                         } catch (SQLException ex) {
-                            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
                         }
                         if (ui_and_ope_obj.get_idx_transfer_pt() == 0) {
                             set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
@@ -381,8 +381,8 @@ public class view_history_list extends javax.swing.JFrame
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
 
     }//GEN-LAST:event_bn_1_colActionPerformed

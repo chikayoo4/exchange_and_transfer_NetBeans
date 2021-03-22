@@ -53,8 +53,10 @@ public class reciept {
                 //print report 
                 JasperPrintManager.printReport(jprint, false);
 
-            } catch (SQLException | JRException ex) {
-
+            } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+            } catch(JRException ex){
                 Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
             }
     }

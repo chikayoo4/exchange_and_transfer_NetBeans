@@ -80,7 +80,8 @@ public class to_thai {
             //dialog when added to access is success
             //                        JOptionPane.showMessageDialog(this, "records update");
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -145,7 +146,8 @@ public class to_thai {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 }

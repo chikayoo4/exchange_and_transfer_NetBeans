@@ -41,7 +41,8 @@ public class purpose {
                         pur = rs.getString("pur_type");
                 }
             } catch ( SQLException ex) {
-                System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
         return pur;
     }
@@ -65,7 +66,8 @@ public class purpose {
                         id = rs.getInt("id_pur");
                 }
             } catch ( SQLException ex) {
-                System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
         return id;
     }

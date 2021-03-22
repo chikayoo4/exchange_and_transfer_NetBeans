@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.field_admin_pass;
 import static UI_and_operation.account.setAccount;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
@@ -79,6 +80,9 @@ public class login extends javax.swing.JFrame
         } catch (FileNotFoundException e) {
             System.out.println("error");
         }
+//        System.out.println("getLocal_host() : " + getLocal_host());
+//        System.out.println("getLocal_host_user_name() : " + getLocal_host_user_name());
+//        System.out.println("getLocal_host_password() : " + getLocal_host_password());
     }
 
     private void set_acc_file(String acc_user_name) {
@@ -94,6 +98,10 @@ public class login extends javax.swing.JFrame
         } catch (IOException e) {
             System.out.println("error");
         }
+    }
+    
+    public void set_user_name_tf(String user_name){
+        user_name_tf.setText(user_name);
     }
 
     private void init_components() {
@@ -271,6 +279,7 @@ public class login extends javax.swing.JFrame
                         UI_and_ope_obj.set_history();
                         UI_and_ope_obj.setEnabled(true);
                         UI_and_ope_obj.set_history();
+                        UI_and_ope_obj.set_lb_user_name(user_name);
                     }
                     this.setVisible(false);
                     this.dispose();
@@ -278,8 +287,8 @@ public class login extends javax.swing.JFrame
                     JOptionPane.showMessageDialog(this, "Incorrect user name or password", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
             }
         }
     }//GEN-LAST:event_login_bnActionPerformed

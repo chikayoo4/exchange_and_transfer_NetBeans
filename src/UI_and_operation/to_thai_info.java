@@ -60,7 +60,8 @@ public class to_thai_info extends javax.swing.JFrame
                 }
 
         } catch (SQLException ex) {
-            System.err.println("error: two_three_bn_finish\n" + ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
     

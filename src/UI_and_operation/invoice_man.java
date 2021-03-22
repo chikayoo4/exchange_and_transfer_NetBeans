@@ -60,7 +60,8 @@ public class invoice_man {
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -94,7 +95,8 @@ public class invoice_man {
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -118,7 +120,8 @@ public class invoice_man {
                 return false;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return true;
     }
@@ -143,7 +146,8 @@ public class invoice_man {
                 return rs.getInt("id_invoice");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return -1;
     }
@@ -172,7 +176,8 @@ public class invoice_man {
             pst.setString(3, pur);
             pst.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
     }
 
@@ -203,7 +208,8 @@ public class invoice_man {
                 count_id_invoice_man = rs.getInt("count_id_invoice_man");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         return count_id_invoice_man;
     }
@@ -229,7 +235,8 @@ public class invoice_man {
             pst.setString(3, pur);
             pst.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
         }
         
     }
