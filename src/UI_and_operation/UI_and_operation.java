@@ -109,6 +109,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     Color sky_c = new Color(153, 255, 255);
     Color silivor_c = new Color(200, 200, 200);
     Color white_c = new Color(255, 255, 255);
+    Color black_c = Color.BLACK;
     private int next_show_his = 0;
     private final int num_show_his = 10;
     private int idx_transfer_pt = 0;
@@ -614,7 +615,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     public void set_history() {
 //        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
-        if (three_calendar_cld.getDate() != null) {
+        if (three_calendar_cld.getDate() != null && validate_dc(three_calendar_cld)) {
             three_calendar_cld.setBackground(Color.lightGray);
 
             if (is_delete_last_7d()) {
@@ -1094,27 +1095,27 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
         if (two_one_pro_name) {
             two_one_pro_name_cb.requestFocus();
-            two_one_pro_name_cb.setBackground(sky_c);
+            two_one_pro_name_cb.setBackground(Color.cyan);
         } else {
-            two_one_pro_name_cb.setBackground(white_c);
+            two_one_pro_name_cb.setBackground(Color.GRAY);
         }
         if (two_three_rial_money) {
             two_three_rial_money_rb.requestFocus();
-            two_three_rial_money_rb.setBackground(sky_c);
+            two_three_rial_money_rb.setForeground(sky_c);
         } else {
-            two_three_rial_money_rb.setBackground(white_c);
+            two_three_rial_money_rb.setForeground(black_c);
         }
         if (two_three_dollar_money) {
             two_three_dollar_money_rb.requestFocus();
-            two_three_dollar_money_rb.setBackground(sky_c);
+            two_three_dollar_money_rb.setForeground(sky_c);
         } else {
-            two_three_dollar_money_rb.setBackground(white_c);
+            two_three_dollar_money_rb.setForeground(black_c);
         }
         if (two_three_bart_money) {
             two_three_bart_money_rb.requestFocus();
-            two_three_bart_money_rb.setBackground(sky_c);
+            two_three_bart_money_rb.setForeground(sky_c);
         } else {
-            two_three_bart_money_rb.setBackground(white_c);
+            two_three_bart_money_rb.setForeground(black_c);
         }
         if (two_three_sender_money) {
             two_three_sender_money_tf.requestFocus();
@@ -1145,6 +1146,231 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_one_print_bn.setBackground(sky_c);
         } else {
             two_one_print_bn.setBackground(silivor_c);
+        }
+    }
+
+    private void set_color_with_focus_from_pro(Boolean two_two_reciever_his, Boolean two_two_receiver_phone_no,
+            Boolean two_two_pro_his, Boolean two_two_pro_name, Boolean two_two_rial_money,
+            Boolean two_two_dollar_money, Boolean two_two_bart_money, Boolean two_two_reciece_money,
+            Boolean two_two_total_money, Boolean two_two_finish_, Boolean two_two_print_) {
+
+        if (two_two_reciever_his) {
+            two_two_reciever_his_bn.requestFocus();
+            two_two_reciever_his_bn.setBackground(sky_c);
+        } else {
+            two_two_reciever_his_bn.setBackground(silivor_c);
+        }
+        if (two_two_receiver_phone_no) {
+            two_two_receiver_phone_no_tf.requestFocus();
+            two_two_receiver_phone_no_tf.setBackground(sky_c);
+        } else {
+            two_two_receiver_phone_no_tf.setBackground(white_c);
+        }
+        if (two_two_pro_his) {
+            two_two_pro_his_bn.requestFocus();
+            two_two_pro_his_bn.setBackground(sky_c);
+        } else {
+            two_two_pro_his_bn.setBackground(silivor_c);
+        }
+        if (two_two_pro_name) {
+            two_two_pro_name_cb.requestFocus();
+            two_two_pro_name_cb.setBackground(Color.cyan);
+        } else {
+            two_two_pro_name_cb.setBackground(Color.GRAY);
+        }
+        if (two_two_rial_money) {
+            two_two_rial_money_rb.requestFocus();
+            two_two_rial_money_rb.setForeground(sky_c);
+        } else {
+            two_two_rial_money_rb.setForeground(black_c);
+        }
+        if (two_two_dollar_money) {
+            two_two_dollar_money_rb.requestFocus();
+            two_two_dollar_money_rb.setForeground(sky_c);
+        } else {
+            two_two_dollar_money_rb.setForeground(black_c);
+        }
+        if (two_two_bart_money) {
+            two_two_bart_money_rb.requestFocus();
+            two_two_bart_money_rb.setForeground(sky_c);
+        } else {
+            two_two_bart_money_rb.setForeground(black_c);
+        }
+        if (two_two_reciece_money) {
+            two_two_reciece_money_tf.requestFocus();
+            two_two_reciece_money_tf.setBackground(sky_c);
+        } else {
+            two_two_reciece_money_tf.setBackground(white_c);
+        }
+        if (two_two_total_money) {
+            two_two_total_money_tf.requestFocus();
+            two_two_total_money_tf.setBackground(sky_c);
+        } else {
+            two_two_total_money_tf.setBackground(white_c);
+        }
+        if (two_two_finish_) {
+            two_two_bn_finish_.requestFocus();
+            two_two_bn_finish_.setBackground(sky_c);
+        } else {
+            two_two_bn_finish_.setBackground(silivor_c);
+        }
+        if (two_two_print_) {
+            two_two_bn_print_.requestFocus();
+            two_two_bn_print_.setBackground(sky_c);
+        } else {
+            two_two_bn_print_.setBackground(silivor_c);
+        }
+    }
+
+    private void set_color_with_focus_to_thai(Boolean two_three_bank_info_his, Boolean two_one_cus_no,
+            Boolean two_one_cus_name, Boolean two_three_cus_ph_no, Boolean two_three_bank_his,
+            Boolean two_three_bank_thai, Boolean two_one_cus_money, Boolean two_one_service_money,
+            Boolean two_one_finish, Boolean two_three_print) {
+
+        if (two_three_bank_info_his) {
+            two_three_bank_info_his_bn.requestFocus();
+            two_three_bank_info_his_bn.setBackground(sky_c);
+        } else {
+            two_three_bank_info_his_bn.setBackground(silivor_c);
+        }
+        if (two_one_cus_no) {
+            two_one_tf_cus_no.requestFocus();
+            two_one_tf_cus_no.setBackground(sky_c);
+        } else {
+            two_one_tf_cus_no.setBackground(white_c);
+        }
+        if (two_one_cus_name) {
+            two_one_tf_cus_name.requestFocus();
+            two_one_tf_cus_name.setBackground(sky_c);
+        } else {
+            two_one_tf_cus_name.setBackground(white_c);
+        }
+        if (two_three_cus_ph_no) {
+            two_three_tf_cus_ph_no.requestFocus();
+            two_three_tf_cus_ph_no.setBackground(sky_c);
+        } else {
+            two_three_tf_cus_ph_no.setBackground(white_c);
+        }
+        if (two_three_bank_his) {
+            two_three_bank_his_bn.requestFocus();
+            two_three_bank_his_bn.setBackground(sky_c);
+        } else {
+            two_three_bank_his_bn.setBackground(silivor_c);
+        }
+        if (two_three_bank_thai) {
+            two_three_bank_thai_cb.requestFocus();
+            two_three_bank_thai_cb.setBackground(Color.cyan);
+        } else {
+            two_three_bank_thai_cb.setBackground(Color.GRAY);
+        }
+        if (two_one_cus_money) {
+            two_one_tf_cus_money.requestFocus();
+            two_one_tf_cus_money.setBackground(sky_c);
+        } else {
+            two_one_tf_cus_money.setBackground(white_c);
+        }
+        if (two_one_service_money) {
+            two_one_tf_service_money.requestFocus();
+            two_one_tf_service_money.setBackground(sky_c);
+        } else {
+            two_one_tf_service_money.setBackground(white_c);
+        }
+        if (two_one_finish) {
+            two_one_bn_finish.requestFocus();
+            two_one_bn_finish.setBackground(sky_c);
+        } else {
+            two_one_bn_finish.setBackground(silivor_c);
+        }
+        if (two_three_print) {
+            two_three_print_bn.requestFocus();
+            two_three_print_bn.setBackground(sky_c);
+        } else {
+            two_three_print_bn.setBackground(silivor_c);
+        }
+    }
+
+    private void set_color_with_focus_from_thai(Boolean two_four_date_, Boolean two_four_hour,
+            Boolean two_four_mm, Boolean two_four_am_, Boolean two_four_pm_,
+            Boolean two_four_reciever_ph_no_his, Boolean two_two_reveiver_ph_no, Boolean two_two_reveiver_money,
+            Boolean two_two_service_money, Boolean two_two_finish, Boolean two_four_print) {
+
+//        if (two_four_date_) {
+//            two_four_date.requestFocus();
+//            two_four_date_lb.setForeground(sky_c);
+//            Font font = new Font("Tahoma", Font.BOLD, 27);
+//            two_four_date_lb.setFont(font);
+//        } else {
+//            two_four_date_lb.setForeground(black_c);
+//            Font font = new Font("Tahoma", Font.PLAIN, 24);
+//            two_four_date_lb.setFont(font);
+//        }
+//        if (two_four_hour) {
+//            two_four_hour_lb.setForeground(sky_c);
+//            Font font = new Font("Tahoma", Font.BOLD, 27);
+//            two_four_hour_lb.setFont(font);
+//            two_four_sn_hour.requestFocus();
+//        } else {
+//            two_four_hour_lb.setForeground(black_c);
+//            Font font = new Font("Tahoma", Font.PLAIN, 24);
+//            two_four_hour_lb.setFont(font);
+//        }
+//        if (two_four_mm) {
+//            two_four_mm_lb.setForeground(sky_c);
+//            Font font = new Font("Tahoma", Font.BOLD, 27);
+//            two_four_mm_lb.setFont(font);
+//            two_four_sn_minute.requestFocus();
+//        } else {
+//            two_four_mm_lb.setForeground(black_c);
+//            Font font = new Font("Tahoma", Font.PLAIN, 24);
+//            two_four_mm_lb.setFont(font);
+//        }
+        if (two_four_am_) {
+            two_four_am.requestFocus();
+            two_four_am.setForeground(sky_c);
+        } else {
+            two_four_am.setForeground(black_c);
+        }
+        if (two_four_pm_) {
+            two_four_pm.requestFocus();
+            two_four_pm.setForeground(sky_c);
+        } else {
+            two_four_pm.setForeground(black_c);
+        }
+        if (two_four_reciever_ph_no_his) {
+            two_four_reciever_ph_no_his_bn.requestFocus();
+            two_four_reciever_ph_no_his_bn.setBackground(sky_c);
+        } else {
+            two_four_reciever_ph_no_his_bn.setBackground(silivor_c);
+        }
+        if (two_two_reveiver_ph_no) {
+            two_two_reveiver_ph_no_tf.requestFocus();
+            two_two_reveiver_ph_no_tf.setBackground(sky_c);
+        } else {
+            two_two_reveiver_ph_no_tf.setBackground(white_c);
+        }
+        if (two_two_reveiver_money) {
+            two_two_reveiver_money_tf.requestFocus();
+            two_two_reveiver_money_tf.setBackground(sky_c);
+        } else {
+            two_two_reveiver_money_tf.setBackground(white_c);
+        }
+        if (two_two_service_money) {
+            two_two_service_money_tf.requestFocus();
+            two_two_service_money_tf.setBackground(sky_c);
+        } else {
+            two_two_service_money_tf.setBackground(white_c);
+        }
+        if (two_two_finish) {
+            two_two_bn_finish.requestFocus();
+            two_two_bn_finish.setBackground(sky_c);
+        } else {
+            two_two_bn_finish.setBackground(silivor_c);
+        }
+        if (two_four_print) {
+            two_four_print_bn.requestFocus();
+            two_four_print_bn.setBackground(sky_c);
+        } else {
+            two_four_print_bn.setBackground(silivor_c);
         }
     }
 
@@ -1337,6 +1563,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 pass = rs.getString("password");
             }
         } catch (SQLException ex) {
+            pass = "lasdjfiohger28394811ernca6-wedf1";
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
@@ -1355,16 +1582,8 @@ public class UI_and_operation extends javax.swing.JFrame {
         return correct_pass;
     }
 
-    /**
-     * Creates new form UI_and_operation
-     */
-    public UI_and_operation() {
-
-//        this.setUndecorated(false);
-//        this.setAlwaysOnTop(true);
-//        this.setResizable(true);
-//        this.setVisible(true);
-        initComponents();
+    private void init_component() {
+        
         end_task_ppt();
         open_exc_rate_ppt();
 
@@ -1376,10 +1595,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         three_calendar_cld.setDate(current_date());
 
-        //set account user to class for waiting to use
-//        setAccount(five_user_name_tf.getText(), five_password_tf.getText());
-//        set_con_db();
-//        set_main_proj_path_to_db();
         setTitle("Exchange and Transfer money");
 
         setIconImage(Toolkit.getDefaultToolkit().getImage("logo_and_icon\\icon\\main_logo.png"));
@@ -1388,8 +1603,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_cb(two_two_pro_name_cb, "transfer_province", "province_name_history_tb");
         set_cb(two_three_bank_thai_cb, "bank", "to_thai_bank_name_history_tb");
 
-//        one_bn_S_to_R.requestFocus();
-//        one_bn_S_to_R.setBackground(new Color(204, 255, 255));
         set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
 
         custom_four_rate_default();
@@ -1408,8 +1621,16 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         set_listener_cb_on_click(one_two_rate_bc2);
 
+        set_listener_cb_on_click(two_one_pro_name_cb);
+        
+        set_listener_cb_on_click(two_two_pro_name_cb);
+        
+        set_listener_cb_on_click(two_three_bank_thai_cb);
+        
         three_up.setEnabled(false);
+        
         next_show_his = 0;
+        
         if (count_db_to_list_pur_and_id() <= num_show_his) {
             three_down.setEnabled(false);
         } else {
@@ -1421,6 +1642,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_history();
 
         set_lb_user_name(getUser_name());
+    }
+
+    /**
+     * Creates new form UI_and_operation
+     */
+    public UI_and_operation() {
+        initComponents();
+        init_component();
     }
 
     /**
@@ -1521,23 +1750,23 @@ public class UI_and_operation extends javax.swing.JFrame {
         from_pro_pn = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jLabel23 = new javax.swing.JLabel();
-        two_four_reciece_money_tf = new javax.swing.JTextField();
-        two_four_balance_money_tf = new javax.swing.JTextField();
+        two_two_reciece_money_tf = new javax.swing.JTextField();
+        two_two_balance_money_tf = new javax.swing.JTextField();
         jLabel27 = new javax.swing.JLabel();
-        two_four_total_money_tf = new javax.swing.JTextField();
+        two_two_total_money_tf = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
-        jButton15 = new javax.swing.JButton();
-        two_four_bn_finish = new javax.swing.JButton();
-        two_four_rial_money_rb = new javax.swing.JRadioButton();
-        two_four_dollar_money_rb = new javax.swing.JRadioButton();
-        two_four_bart_money_rb = new javax.swing.JRadioButton();
+        two_two_bn_print_ = new javax.swing.JButton();
+        two_two_bn_finish_ = new javax.swing.JButton();
+        two_two_rial_money_rb = new javax.swing.JRadioButton();
+        two_two_dollar_money_rb = new javax.swing.JRadioButton();
+        two_two_bart_money_rb = new javax.swing.JRadioButton();
         jPanel12 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        two_four_receiver_phone_no_tf = new javax.swing.JTextField();
+        two_two_receiver_phone_no_tf = new javax.swing.JTextField();
         jLabel58 = new javax.swing.JLabel();
         two_two_pro_name_cb = new javax.swing.JComboBox<>();
         two_two_reciever_his_bn = new javax.swing.JButton();
-        two_one_pro_his_bn1 = new javax.swing.JButton();
+        two_two_pro_his_bn = new javax.swing.JButton();
         two_two_ph_recieve_layer_pane = new javax.swing.JLayeredPane();
         two_two_ph_recieve_list = new javax.swing.JList<>();
         to_thai_pn = new javax.swing.JPanel();
@@ -1546,7 +1775,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         two_one_tf_service_money = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jButton9 = new javax.swing.JButton();
+        two_three_print_bn = new javax.swing.JButton();
         two_one_tf_total_money = new javax.swing.JTextField();
         two_one_bn_finish = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
@@ -1567,7 +1796,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         two_one_tf_cus_name = new javax.swing.JTextField();
         from_thai_pn = new javax.swing.JPanel();
-        print = new javax.swing.JButton();
+        two_four_print_bn = new javax.swing.JButton();
         two_two_bn_finish = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -1581,9 +1810,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_four_date = new com.toedter.calendar.JDateChooser();
         two_four_am = new javax.swing.JRadioButton();
         two_four_pm = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        two_four_date_lb = new javax.swing.JLabel();
+        two_four_hour_lb = new javax.swing.JLabel();
+        two_four_mm_lb = new javax.swing.JLabel();
         two_four_sn_hour = new javax.swing.JSpinner();
         two_four_sn_minute = new javax.swing.JSpinner();
         two_four_reciever_ph_no_his_bn = new javax.swing.JButton();
@@ -1615,6 +1844,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         three_chb_m_b_bank = new javax.swing.JCheckBox();
         three_chb_m_detail = new javax.swing.JCheckBox();
         del_last_7d_cb = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
         rate_pt = new javax.swing.JPanel();
         four_bn_edit_exchange_rate = new javax.swing.JButton();
         four_S_to_R_four_tf = new javax.swing.JTextField();
@@ -2391,6 +2621,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_three_sender_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_sender_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_three_sender_money_tfKeyReleased(evt);
             }
@@ -2421,6 +2654,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_three_service_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_service_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_three_service_money_tfKeyReleased(evt);
             }
@@ -2507,6 +2743,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_dollar_money_rbActionPerformed(evt);
             }
         });
+        two_three_dollar_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_dollar_money_rbKeyPressed(evt);
+            }
+        });
 
         bg_to_pro.add(two_three_rial_money_rb);
         two_three_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -2522,6 +2763,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_rial_money_rbActionPerformed(evt);
             }
         });
+        two_three_rial_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_rial_money_rbKeyPressed(evt);
+            }
+        });
 
         bg_to_pro.add(two_three_bart_money_rb);
         two_three_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -2534,6 +2780,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_bart_money_rb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_three_bart_money_rbActionPerformed(evt);
+            }
+        });
+        two_three_bart_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_bart_money_rbKeyPressed(evt);
             }
         });
 
@@ -2674,6 +2925,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_pro_his_bnActionPerformed(evt);
             }
         });
+        two_one_pro_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_pro_his_bnKeyPressed(evt);
+            }
+        });
         jPanel11.add(two_one_pro_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 360, 200, 50));
 
         two_one_sender_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
@@ -2697,9 +2953,19 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_one_reciever_his_bn.setText("view history");
+        two_one_reciever_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                two_one_reciever_his_bnMouseClicked(evt);
+            }
+        });
         two_one_reciever_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_one_reciever_his_bnActionPerformed(evt);
+            }
+        });
+        two_one_reciever_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_reciever_his_bnKeyPressed(evt);
             }
         });
         jPanel11.add(two_one_reciever_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, 200, 50));
@@ -2716,6 +2982,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_pro_name_cbActionPerformed(evt);
             }
         });
+        two_one_pro_name_cb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_pro_name_cbKeyPressed(evt);
+            }
+        });
         jPanel11.add(two_one_pro_name_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 690, 70));
 
         two_one_edit_bn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -2728,6 +2999,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_one_edit_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_one_edit_bnActionPerformed(evt);
+            }
+        });
+        two_one_edit_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_edit_bnKeyPressed(evt);
             }
         });
 
@@ -2754,15 +3030,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                         .addComponent(jLabel17)
                                         .addGap(18, 18, 18)
-                                        .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(20, 20, 20)
+                                        .addComponent(two_three_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(two_three_dollar_money_rb)
                                         .addGap(18, 18, 18)
                                         .addComponent(two_three_bart_money_rb))
                                     .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 69, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, to_pro_pnLayout.createSequentialGroup()
                                 .addComponent(two_three_service_money_tf)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2797,12 +3073,12 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(two_three_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(to_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(two_one_print_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(two_three_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(to_pro_pnLayout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(22, 22, 22)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -2812,142 +3088,163 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel23.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel23.setText("ចំនួនទឹកប្រាក់");
 
-        two_four_reciece_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_reciece_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
+        two_two_reciece_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_reciece_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                two_four_reciece_money_tfCaretUpdate(evt);
+                two_two_reciece_money_tfCaretUpdate(evt);
             }
         });
-        two_four_reciece_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_reciece_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_reciece_money_tfMouseClicked(evt);
+                two_two_reciece_money_tfMouseClicked(evt);
             }
         });
-        two_four_reciece_money_tf.addActionListener(new java.awt.event.ActionListener() {
+        two_two_reciece_money_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_reciece_money_tfActionPerformed(evt);
+                two_two_reciece_money_tfActionPerformed(evt);
             }
         });
-        two_four_reciece_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_two_reciece_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_reciece_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                two_four_reciece_money_tfKeyReleased(evt);
+                two_two_reciece_money_tfKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                two_four_reciece_money_tfKeyTyped(evt);
+                two_two_reciece_money_tfKeyTyped(evt);
             }
         });
 
-        two_four_balance_money_tf.setEditable(false);
-        two_four_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_balance_money_tf.setFocusable(false);
+        two_two_balance_money_tf.setEditable(false);
+        two_two_balance_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_balance_money_tf.setFocusable(false);
 
         jLabel27.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel27.setText("ទឹកប្រាក់ប្រគល់");
 
-        two_four_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_total_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
+        two_two_total_money_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_total_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                two_four_total_money_tfCaretUpdate(evt);
+                two_two_total_money_tfCaretUpdate(evt);
             }
         });
-        two_four_total_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_total_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_total_money_tfMouseClicked(evt);
+                two_two_total_money_tfMouseClicked(evt);
             }
         });
-        two_four_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
+        two_two_total_money_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_total_money_tfActionPerformed(evt);
+                two_two_total_money_tfActionPerformed(evt);
             }
         });
-        two_four_total_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_two_total_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_total_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                two_four_total_money_tfKeyReleased(evt);
+                two_two_total_money_tfKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                two_four_total_money_tfKeyTyped(evt);
+                two_two_total_money_tfKeyTyped(evt);
             }
         });
 
         jLabel28.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel28.setText("Balance");
 
-        jButton15.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jButton15.setText("ព្រីនវិក្កិយបត្រ");
-        jButton15.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_bn_print_.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_two_bn_print_.setText("ព្រីនវិក្កិយបត្រ");
+        two_two_bn_print_.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton15MouseClicked(evt);
+                two_two_bn_print_MouseClicked(evt);
             }
         });
-        jButton15.addActionListener(new java.awt.event.ActionListener() {
+        two_two_bn_print_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
+                two_two_bn_print_ActionPerformed(evt);
             }
         });
-        jButton15.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_two_bn_print_.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jButton15KeyPressed(evt);
+                two_two_bn_print_KeyPressed(evt);
             }
         });
 
-        two_four_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        two_four_bn_finish.setText("រួចរាល់");
-        two_four_bn_finish.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_bn_finish_.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_two_bn_finish_.setText("រួចរាល់");
+        two_two_bn_finish_.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_bn_finishMouseClicked(evt);
+                two_two_bn_finish_MouseClicked(evt);
             }
         });
-        two_four_bn_finish.addActionListener(new java.awt.event.ActionListener() {
+        two_two_bn_finish_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_bn_finishActionPerformed(evt);
+                two_two_bn_finish_ActionPerformed(evt);
             }
         });
-        two_four_bn_finish.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_two_bn_finish_.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                two_four_bn_finishKeyPressed(evt);
+                two_two_bn_finish_KeyPressed(evt);
             }
         });
 
-        bg_from_pro.add(two_four_rial_money_rb);
-        two_four_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_rial_money_rb.setText("៛");
-        two_four_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
-        two_four_rial_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
+        bg_from_pro.add(two_two_rial_money_rb);
+        two_two_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_two_rial_money_rb.setText("៛");
+        two_two_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
+        two_two_rial_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_rial_money_rbMouseClicked(evt);
+                two_two_rial_money_rbMouseClicked(evt);
             }
         });
-        two_four_rial_money_rb.addActionListener(new java.awt.event.ActionListener() {
+        two_two_rial_money_rb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_rial_money_rbActionPerformed(evt);
+                two_two_rial_money_rbActionPerformed(evt);
+            }
+        });
+        two_two_rial_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_rial_money_rbKeyPressed(evt);
             }
         });
 
-        bg_from_pro.add(two_four_dollar_money_rb);
-        two_four_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_dollar_money_rb.setText("$");
-        two_four_dollar_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
+        bg_from_pro.add(two_two_dollar_money_rb);
+        two_two_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_two_dollar_money_rb.setText("$");
+        two_two_dollar_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_dollar_money_rbMouseClicked(evt);
+                two_two_dollar_money_rbMouseClicked(evt);
             }
         });
-        two_four_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
+        two_two_dollar_money_rb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_dollar_money_rbActionPerformed(evt);
+                two_two_dollar_money_rbActionPerformed(evt);
+            }
+        });
+        two_two_dollar_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_dollar_money_rbKeyPressed(evt);
             }
         });
 
-        bg_from_pro.add(two_four_bart_money_rb);
-        two_four_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        two_four_bart_money_rb.setText("฿");
-        two_four_bart_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
+        bg_from_pro.add(two_two_bart_money_rb);
+        two_two_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        two_two_bart_money_rb.setText("฿");
+        two_two_bart_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_bart_money_rbMouseClicked(evt);
+                two_two_bart_money_rbMouseClicked(evt);
             }
         });
-        two_four_bart_money_rb.addActionListener(new java.awt.event.ActionListener() {
+        two_two_bart_money_rb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_bart_money_rbActionPerformed(evt);
+                two_two_bart_money_rbActionPerformed(evt);
+            }
+        });
+        two_two_bart_money_rb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_bart_money_rbKeyPressed(evt);
             }
         });
 
@@ -2957,29 +3254,29 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel22.setText("លេខទូរស័ព្ទអ្នកទទួល");
         jPanel12.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 317, 57));
 
-        two_four_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
-        two_four_receiver_phone_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_receiver_phone_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_four_receiver_phone_no_tfMouseClicked(evt);
+                two_two_receiver_phone_no_tfMouseClicked(evt);
             }
         });
-        two_four_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
+        two_two_receiver_phone_no_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_four_receiver_phone_no_tfActionPerformed(evt);
+                two_two_receiver_phone_no_tfActionPerformed(evt);
             }
         });
-        two_four_receiver_phone_no_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_two_receiver_phone_no_tf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                two_four_receiver_phone_no_tfKeyPressed(evt);
+                two_two_receiver_phone_no_tfKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                two_four_receiver_phone_no_tfKeyReleased(evt);
+                two_two_receiver_phone_no_tfKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                two_four_receiver_phone_no_tfKeyTyped(evt);
+                two_two_receiver_phone_no_tfKeyTyped(evt);
             }
         });
-        jPanel12.add(two_four_receiver_phone_no_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 700, 75));
+        jPanel12.add(two_two_receiver_phone_no_tf, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 700, 75));
 
         jLabel58.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         jLabel58.setText("ផ្ទេរពី");
@@ -2997,6 +3294,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_two_pro_name_cbActionPerformed(evt);
             }
         });
+        two_two_pro_name_cb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_pro_name_cbKeyPressed(evt);
+            }
+        });
         jPanel12.add(two_two_pro_name_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, 700, 70));
 
         two_two_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
@@ -3011,21 +3313,31 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_two_reciever_his_bnActionPerformed(evt);
             }
         });
+        two_two_reciever_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_reciever_his_bnKeyPressed(evt);
+            }
+        });
         jPanel12.add(two_two_reciever_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 200, 50));
 
-        two_one_pro_his_bn1.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
-        two_one_pro_his_bn1.setText("view history");
-        two_one_pro_his_bn1.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_two_pro_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
+        two_two_pro_his_bn.setText("view history");
+        two_two_pro_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                two_one_pro_his_bn1MouseClicked(evt);
+                two_two_pro_his_bnMouseClicked(evt);
             }
         });
-        two_one_pro_his_bn1.addActionListener(new java.awt.event.ActionListener() {
+        two_two_pro_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                two_one_pro_his_bn1ActionPerformed(evt);
+                two_two_pro_his_bnActionPerformed(evt);
             }
         });
-        jPanel12.add(two_one_pro_his_bn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 200, 50));
+        two_two_pro_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_pro_his_bnKeyPressed(evt);
+            }
+        });
+        jPanel12.add(two_two_pro_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 200, 50));
 
         two_two_ph_recieve_list.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         two_two_ph_recieve_list.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -3066,17 +3378,17 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(from_pro_pnLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(two_two_bn_finish_, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(two_two_bn_print_, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(from_pro_pnLayout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(122, 122, 122)
                         .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(two_four_balance_money_tf)
-                            .addComponent(two_four_total_money_tf)
-                            .addComponent(two_four_reciece_money_tf)
+                            .addComponent(two_two_balance_money_tf)
+                            .addComponent(two_two_total_money_tf)
+                            .addComponent(two_two_reciece_money_tf)
                             .addGroup(from_pro_pnLayout.createSequentialGroup()
                                 .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel27)
@@ -3084,11 +3396,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addGroup(from_pro_pnLayout.createSequentialGroup()
                                         .addComponent(jLabel23)
                                         .addGap(18, 18, 18)
-                                        .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(two_two_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(28, 28, 28)
-                                        .addComponent(two_four_dollar_money_rb)
+                                        .addComponent(two_two_dollar_money_rb)
                                         .addGap(41, 41, 41)
-                                        .addComponent(two_four_bart_money_rb)))
+                                        .addComponent(two_two_bart_money_rb)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(100, 100, 100))
         );
@@ -3101,23 +3413,23 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(from_pro_pnLayout.createSequentialGroup()
                         .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel23)
-                            .addComponent(two_four_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(two_four_dollar_money_rb)
-                            .addComponent(two_four_bart_money_rb))
+                            .addComponent(two_two_rial_money_rb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(two_two_dollar_money_rb)
+                            .addComponent(two_two_bart_money_rb))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_reciece_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(two_two_reciece_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(jLabel27)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(two_four_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(two_two_total_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel28)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(two_four_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(two_two_balance_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                 .addGroup(from_pro_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(two_four_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(two_two_bn_print_, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(two_two_bn_finish_, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(60, 60, 60))
             .addGroup(from_pro_pnLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
@@ -3147,6 +3459,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_one_tf_cus_money.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_tf_cus_moneyKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_one_tf_cus_moneyKeyReleased(evt);
             }
@@ -3170,6 +3485,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_one_tf_service_money.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_one_tf_service_moneyKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_one_tf_service_moneyKeyReleased(evt);
             }
@@ -3181,21 +3499,21 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 30)); // NOI18N
         jLabel12.setText("ទឹកប្រាក់ទទួល");
 
-        jButton9.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        jButton9.setText("ព្រីនវិក្កិយបត្រ");
-        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_three_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_three_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_three_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton9MouseClicked(evt);
+                two_three_print_bnMouseClicked(evt);
             }
         });
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        two_three_print_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                two_three_print_bnActionPerformed(evt);
             }
         });
-        jButton9.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_three_print_bn.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jButton9KeyPressed(evt);
+                two_three_print_bnKeyPressed(evt);
             }
         });
 
@@ -3263,6 +3581,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_bank_info_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_three_bank_info_his_bnActionPerformed(evt);
+            }
+        });
+        two_three_bank_info_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_bank_info_his_bnKeyPressed(evt);
             }
         });
         jPanel13.add(two_three_bank_info_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 200, 50));
@@ -3388,6 +3711,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_bank_thai_cbMouseClicked(evt);
             }
         });
+        two_three_bank_thai_cb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_bank_thai_cbKeyPressed(evt);
+            }
+        });
         jPanel13.add(two_three_bank_thai_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 700, 70));
 
         two_three_bank_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
@@ -3400,6 +3728,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_bank_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_three_bank_his_bnActionPerformed(evt);
+            }
+        });
+        two_three_bank_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_three_bank_his_bnKeyPressed(evt);
             }
         });
         jPanel13.add(two_three_bank_his_bn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, 200, 50));
@@ -3448,7 +3781,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(two_three_print_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(130, 130, 130))
         );
         to_thai_pnLayout.setVerticalGroup(
@@ -3468,7 +3801,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(two_one_tf_total_money, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(to_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(two_three_print_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(two_one_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(74, 74, 74))
             .addGroup(to_thai_pnLayout.createSequentialGroup()
@@ -3479,16 +3812,16 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         sub_tran_pt.addTab("ផ្ទេរប្រាក់ទៅថៃ", to_thai_pn);
 
-        print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
-        print.setText("ព្រីនវិក្កិយបត្រ");
-        print.addMouseListener(new java.awt.event.MouseAdapter() {
+        two_four_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
+        two_four_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_four_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                printMouseClicked(evt);
+                two_four_print_bnMouseClicked(evt);
             }
         });
-        print.addKeyListener(new java.awt.event.KeyAdapter() {
+        two_four_print_bn.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                printKeyPressed(evt);
+                two_four_print_bnKeyPressed(evt);
             }
         });
 
@@ -3533,6 +3866,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_two_reveiver_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_reveiver_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_two_reveiver_money_tfKeyReleased(evt);
             }
@@ -3561,6 +3897,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
         two_two_service_money_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_two_service_money_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 two_two_service_money_tfKeyReleased(evt);
             }
@@ -3612,6 +3951,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_four_dateMouseClicked(evt);
             }
         });
+        two_four_date.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_dateKeyPressed(evt);
+            }
+        });
 
         bg_from_thai.add(two_four_am);
         two_four_am.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -3619,6 +3963,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_four_am.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_amMouseClicked(evt);
+            }
+        });
+        two_four_am.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_amKeyPressed(evt);
             }
         });
 
@@ -3630,15 +3979,22 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_four_pmMouseClicked(evt);
             }
         });
+        two_four_pm.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_pmKeyPressed(evt);
+            }
+        });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel3.setText("dd-mm-yyyy");
+        two_four_date_lb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_four_date_lb.setText("dd-mm-yyyy");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel4.setText("hh");
+        two_four_hour_lb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_four_hour_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        two_four_hour_lb.setText("hh");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel5.setText("mm    ");
+        two_four_mm_lb.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        two_four_mm_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        two_four_mm_lb.setText("mm    ");
 
         two_four_sn_hour.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_sn_hour.setModel(new javax.swing.SpinnerNumberModel(0, 0, 12, 1));
@@ -3647,12 +4003,22 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_four_sn_hourMouseClicked(evt);
             }
         });
+        two_four_sn_hour.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_sn_hourKeyPressed(evt);
+            }
+        });
 
         two_four_sn_minute.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_sn_minute.setModel(new javax.swing.SpinnerNumberModel(0, 0, 60, 1));
         two_four_sn_minute.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_sn_minuteMouseClicked(evt);
+            }
+        });
+        two_four_sn_minute.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_sn_minuteKeyPressed(evt);
             }
         });
 
@@ -3666,6 +4032,11 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_four_reciever_ph_no_his_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 two_four_reciever_ph_no_his_bnActionPerformed(evt);
+            }
+        });
+        two_four_reciever_ph_no_his_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                two_four_reciever_ph_no_his_bnKeyPressed(evt);
             }
         });
 
@@ -3701,34 +4072,37 @@ public class UI_and_operation extends javax.swing.JFrame {
         from_thai_pnLayout.setHorizontalGroup(
             from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(from_thai_pnLayout.createSequentialGroup()
-                .addGap(164, 164, 164)
+                .addGap(143, 143, 143)
                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(from_thai_pnLayout.createSequentialGroup()
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(from_thai_pnLayout.createSequentialGroup()
                                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(two_four_date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(from_thai_pnLayout.createSequentialGroup()
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(10, 10, 10)
+                                        .addComponent(two_four_date_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(18, 18, 18)
-                                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                    .addComponent(two_four_sn_hour, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(two_four_sn_hour, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(two_four_hour_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(two_four_mm_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(two_four_sn_minute, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(two_four_am)
                                     .addComponent(two_four_pm)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, from_thai_pnLayout.createSequentialGroup()
-                                .addComponent(jLabel34)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                                .addComponent(two_four_reciever_ph_no_his_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 2, Short.MAX_VALUE)))
+                            .addGroup(from_thai_pnLayout.createSequentialGroup()
+                                .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(two_two_reveiver_ph_no_tf, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, from_thai_pnLayout.createSequentialGroup()
+                                        .addComponent(jLabel34)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(two_four_reciever_ph_no_his_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)))
+                                .addGap(2, 2, 2)))
                         .addGap(171, 171, 171))
                     .addGroup(from_thai_pnLayout.createSequentialGroup()
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3742,10 +4116,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, from_thai_pnLayout.createSequentialGroup()
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(from_thai_pnLayout.createSequentialGroup()
-                                .addGap(0, 212, Short.MAX_VALUE)
+                                .addGap(0, 219, Short.MAX_VALUE)
                                 .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(two_four_print_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(two_two_service_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_two_reveiver_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(two_two_result_money_tf, javax.swing.GroupLayout.Alignment.LEADING)
@@ -3754,12 +4128,12 @@ public class UI_and_operation extends javax.swing.JFrame {
                                     .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(167, 167, 167))))
+                        .addGap(157, 157, 157))))
         );
         from_thai_pnLayout.setVerticalGroup(
             from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(from_thai_pnLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(34, 34, 34)
                 .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(from_thai_pnLayout.createSequentialGroup()
                         .addComponent(jLabel14)
@@ -3773,18 +4147,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(two_two_result_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(two_four_print_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(38, 38, 38))
                     .addGroup(from_thai_pnLayout.createSequentialGroup()
                         .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(21, 21, 21)
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(two_four_date_lb)
+                            .addComponent(two_four_hour_lb)
+                            .addComponent(two_four_mm_lb))
                         .addGap(0, 0, 0)
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(two_four_sn_minute)
@@ -3940,7 +4314,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel47.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel47.setText("Add to total");
 
-        three_calendar_cld.setDateFormatString("d-M-yyyy");
+        three_calendar_cld.setDateFormatString("dd-MM-yyyy");
         three_calendar_cld.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         three_calendar_cld.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -4056,6 +4430,9 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("dd-MM-yyyy");
+
         javax.swing.GroupLayout his_ptLayout = new javax.swing.GroupLayout(his_pt);
         his_pt.setLayout(his_ptLayout);
         his_ptLayout.setHorizontalGroup(
@@ -4105,15 +4482,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(three_chb_m_b_bank)
                                         .addGap(34, 34, 34)
                                         .addComponent(three_chb_m_detail)))
-                                .addGap(0, 217, Short.MAX_VALUE))
+                                .addGap(0, 229, Short.MAX_VALUE))
                             .addGroup(his_ptLayout.createSequentialGroup()
                                 .addComponent(jLabel35)
                                 .addGap(18, 18, 18)
-                                .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(51, 51, 51)
                                 .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(90, 90, 90)
-                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGap(52, 52, 52)
+                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         his_ptLayout.setVerticalGroup(
@@ -4135,8 +4515,11 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(del_last_7d_cb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(date_history_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, his_ptLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(three_calendar_cld, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27)
                 .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(three_chb_id, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4740,7 +5123,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             .addGroup(db_con_ptLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(five_user_name_lb)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(sql_lb)
@@ -5880,18 +6263,18 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_three_tb_historyMouseClicked
 
-    private void two_four_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbActionPerformed
+    private void two_two_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbActionPerformed
         selected_money_type_from_pro = type_of_money.Dollar;
-        two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
-                two_four_total_money_tf, two_four_balance_money_tf,
-                two_four_rial_money_rb, two_four_dollar_money_rb,
-                two_four_bart_money_rb);
-    }//GEN-LAST:event_two_four_dollar_money_rbActionPerformed
+        two_two_cal(selected_money_type_from_pro, two_two_reciece_money_tf,
+                two_two_total_money_tf, two_two_balance_money_tf,
+                two_two_rial_money_rb, two_two_dollar_money_rb,
+                two_two_bart_money_rb);
+    }//GEN-LAST:event_two_two_dollar_money_rbActionPerformed
 
-    private void two_four_bn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_bn_finishActionPerformed
-        if ((!two_four_receiver_phone_no_tf.getText().isEmpty() && !two_two_pro_name_cb.getSelectedItem().equals("none")
-                && !two_four_reciece_money_tf.getText().isEmpty() && !two_four_total_money_tf.getText().isEmpty()) && (two_four_rial_money_rb.isSelected()
-                || two_four_dollar_money_rb.isSelected() || two_four_bart_money_rb.isSelected())) {
+    private void two_two_bn_finish_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_bn_finish_ActionPerformed
+        if ((!two_two_receiver_phone_no_tf.getText().isEmpty() && !two_two_pro_name_cb.getSelectedItem().equals("none")
+                && !two_two_reciece_money_tf.getText().isEmpty() && !two_two_total_money_tf.getText().isEmpty()) && (two_two_rial_money_rb.isSelected()
+                || two_two_dollar_money_rb.isSelected() || two_two_bart_money_rb.isSelected())) {
             int lastinsert_id_invoice = -1;
             Connection con;
             PreparedStatement pst;
@@ -5916,10 +6299,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                         Statement.RETURN_GENERATED_KEYS);
 
                 //set value to ? in query
-                pst.setString(1, two_four_balance_money_tf.getText());
-                pst.setString(2, cut_the_lastest_point(two_four_reciece_money_tf.getText()));
-                pst.setString(3, two_four_total_money_tf.getText());
-                pst.setString(4, two_four_receiver_phone_no_tf.getText().trim());
+                pst.setString(1, two_two_balance_money_tf.getText());
+                pst.setString(2, cut_the_lastest_point(two_two_reciece_money_tf.getText()));
+                pst.setString(3, two_two_total_money_tf.getText());
+                pst.setString(4, two_two_receiver_phone_no_tf.getText().trim());
                 pst.setInt(5, get_id_money_type_from_db(selected_money_type_from_pro));
                 pst.setInt(6, get_id_province_name_from_db(two_two_pro_name_cb.getSelectedItem().toString()));
                 pst.setInt(7, get_acc_id());
@@ -5930,8 +6313,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                     lastinsert_id_invoice = generatekey.getInt(1);
                 }
 
-                if (!is_has_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb")) {
-                    set_history_list_db(two_four_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
+                if (!is_has_history_list_db(two_two_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb")) {
+                    set_history_list_db(two_two_receiver_phone_no_tf.getText().trim(), "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
                 }
 
                 invoice_man in_man = new invoice_man();
@@ -5940,7 +6323,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 switch (selected_money_type_from_pro) {
                     case Rial:
                         set_invoice_man_db(
-                                String.valueOf(rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText())))),
+                                String.valueOf(rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
                                 String.valueOf(in_man.getDollar()),
                                 String.valueOf(in_man.getBart()),
                                 String.valueOf(in_man.getBank_Bart()),
@@ -5952,7 +6335,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                     case Dollar:
                         set_invoice_man_db(
                                 String.valueOf(in_man.getRial()),
-                                String.valueOf(dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText())))),
+                                String.valueOf(dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
                                 String.valueOf(in_man.getBart()),
                                 String.valueOf(in_man.getBank_Bart()),
                                 lastinsert_id_invoice,
@@ -5964,7 +6347,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         set_invoice_man_db(
                                 String.valueOf(in_man.getRial()),
                                 String.valueOf(in_man.getDollar()),
-                                String.valueOf(bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(two_four_total_money_tf.getText())))),
+                                String.valueOf(bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
                                 String.valueOf(in_man.getBank_Bart()),
                                 lastinsert_id_invoice,
                                 get_acc_id(),
@@ -5977,32 +6360,32 @@ public class UI_and_operation extends javax.swing.JFrame {
                 sql_con_obj.setVisible(true);
             }
 
-            two_four_receiver_phone_no_tf.setText("");
+            two_two_receiver_phone_no_tf.setText("");
             two_two_pro_name_cb.getModel().setSelectedItem("none");
-            two_four_reciece_money_tf.setText("");
-            two_four_total_money_tf.setText("");
+            two_two_reciece_money_tf.setText("");
+            two_two_total_money_tf.setText("");
             bg_from_pro.clearSelection();
             remove_all_in_list(two_two_ph_recieve_list);
 //            set_history();
             set_is_change_true();
         }
-    }//GEN-LAST:event_two_four_bn_finishActionPerformed
+    }//GEN-LAST:event_two_two_bn_finish_ActionPerformed
 
-    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+    private void two_two_bn_print_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_bn_print_ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton15ActionPerformed
+    }//GEN-LAST:event_two_two_bn_print_ActionPerformed
 
-    private void two_four_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_total_money_tfActionPerformed
+    private void two_two_total_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_total_money_tfActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_total_money_tfActionPerformed
+    }//GEN-LAST:event_two_two_total_money_tfActionPerformed
 
-    private void two_four_reciece_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfActionPerformed
+    private void two_two_reciece_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_reciece_money_tfActionPerformed
+    }//GEN-LAST:event_two_two_reciece_money_tfActionPerformed
 
-    private void two_four_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfActionPerformed
+    private void two_two_receiver_phone_no_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfActionPerformed
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfActionPerformed
 
     private void two_three_dollar_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbActionPerformed
         selected_money_type_to_pro = type_of_money.Dollar;
@@ -6199,9 +6582,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_two_one_bn_finishActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void two_three_print_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_print_bnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_two_three_print_bnActionPerformed
 
     private void two_one_tf_cus_moneyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyActionPerformed
         // TODO add your handling code here:
@@ -6350,6 +6733,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             two_three_service_money_tf.setEditable(false);
             two_one_is_off_edit = true;
         }
+
         two_one_cal(selected_money_type_to_pro, two_three_sender_money_tf,
                 two_three_service_money_tf, two_one_total_money_tf,
                 two_three_balance_money_tf, two_three_rial_money_rb,
@@ -6381,6 +6765,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
                 break;
             case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_one_ph_senter_list.getModel().getSize() != 0) {
@@ -6402,13 +6787,30 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_ph_senter_listKeyPressed
 
     private void two_three_receiver_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfKeyPressed
-        if (two_one_ph_reciever_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_one_ph_reciever_list.getModel().getSize() != 0) {
                     two_one_ph_reciever_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, true, false, false, false, false, false, false, false, false, false);
+                }
+                break;
         }
     }//GEN-LAST:event_two_three_receiver_phone_no_tfKeyPressed
 
@@ -6435,40 +6837,47 @@ public class UI_and_operation extends javax.swing.JFrame {
         this.setEnabled(false);
     }//GEN-LAST:event_two_two_reciever_his_bnActionPerformed
 
-    private void two_one_pro_his_bn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_one_pro_his_bn1ActionPerformed
+    private void two_two_pro_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_pro_his_bnActionPerformed
         view_history_list view_his_obj = new view_history_list(
                 this, "transfer_province", "province_name_history_tb",
                 "view transfer province history", "transfer province hishory", "Edit transfer province",
                 "Add new transfer province", "edit transfer province history", "add transfer province history", false, false, true);
         view_his_obj.setVisible(true);
         this.setEnabled(false);
-    }//GEN-LAST:event_two_one_pro_his_bn1ActionPerformed
+    }//GEN-LAST:event_two_two_pro_his_bnActionPerformed
 
     private void two_three_receiver_phone_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfMouseClicked
         remove_all_in_list(two_one_ph_senter_list);
         search_engine_pro(two_one_ph_reciever_list, two_three_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "to_pro_receiver_ph_no_history_tb");
+        set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_three_receiver_phone_no_tfMouseClicked
 
     private void two_three_sender_phone_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         search_engine_pro(two_one_ph_senter_list, two_three_sender_phone_no_tf.getText().trim(),
                 "sender_phone_no", "to_pro_sender_ph_no_history_tb");
+        set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_three_sender_phone_no_tfMouseClicked
 
     private void two_one_pro_name_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_pro_name_cbMouseClicked
 
     private void two_three_sender_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_sender_money_tfMouseClicked
 
     private void two_three_service_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_service_money_tfMouseClicked
-        remove_all_in_list(two_one_ph_reciever_list);
-        remove_all_in_list(two_one_ph_senter_list);
+        if (!two_one_is_off_edit) {
+            remove_all_in_list(two_one_ph_reciever_list);
+            remove_all_in_list(two_one_ph_senter_list);
+            set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+        }
     }//GEN-LAST:event_two_three_service_money_tfMouseClicked
 
     private void two_one_sender_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_sender_his_bnMouseClicked
@@ -6479,14 +6888,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_ph_recieve_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listMousePressed
 
-        get_pro_result_search_db(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
+        get_pro_result_search_db(two_two_ph_recieve_list, two_two_receiver_phone_no_tf);
     }//GEN-LAST:event_two_two_ph_recieve_listMousePressed
 
     private void two_two_ph_recieve_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_ENTER:
-                get_pro_result_search_db(two_two_ph_recieve_list, two_four_receiver_phone_no_tf);
+                get_pro_result_search_db(two_two_ph_recieve_list, two_two_receiver_phone_no_tf);
                 break;
         }
     }//GEN-LAST:event_two_two_ph_recieve_listKeyPressed
@@ -6495,76 +6904,90 @@ public class UI_and_operation extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_two_three_receiver_phone_no_tfActionPerformed
 
-    private void two_four_receiver_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfKeyPressed
-        if (two_two_ph_recieve_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+    private void two_two_receiver_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_pro(true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_two_ph_recieve_list.getModel().getSize() != 0) {
                     two_two_ph_recieve_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_from_pro(false, false, true, false, false, false, false, false, false, false, false);
+                }
+                break;
         }
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfKeyPressed
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfKeyPressed
 
-    private void two_four_receiver_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfKeyReleased
-        search_engine_pro(two_two_ph_recieve_list, two_four_receiver_phone_no_tf.getText().trim(),
+    private void two_two_receiver_phone_no_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfKeyReleased
+        search_engine_pro(two_two_ph_recieve_list, two_two_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfKeyReleased
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfKeyReleased
 
-    private void two_four_receiver_phone_no_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfKeyTyped
-        validate_keyTyped_ph_num(evt, two_four_receiver_phone_no_tf);
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfKeyTyped
+    private void two_two_receiver_phone_no_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfKeyTyped
+        validate_keyTyped_ph_num(evt, two_two_receiver_phone_no_tf);
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfKeyTyped
 
-    private void two_four_receiver_phone_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_receiver_phone_no_tfMouseClicked
-        search_engine_pro(two_two_ph_recieve_list, two_four_receiver_phone_no_tf.getText().trim(),
+    private void two_two_receiver_phone_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfMouseClicked
+        search_engine_pro(two_two_ph_recieve_list, two_two_receiver_phone_no_tf.getText().trim(),
                 "receiver_phone_no", "from_pro_receiver_ph_no_history_tb");
-    }//GEN-LAST:event_two_four_receiver_phone_no_tfMouseClicked
+        set_color_with_focus_from_pro(false, true, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfMouseClicked
 
-    private void two_four_rial_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_rial_money_rbActionPerformed
+    private void two_two_rial_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbActionPerformed
         selected_money_type_from_pro = type_of_money.Rial;
-        two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
-                two_four_total_money_tf, two_four_balance_money_tf,
-                two_four_rial_money_rb, two_four_dollar_money_rb,
-                two_four_bart_money_rb);
-    }//GEN-LAST:event_two_four_rial_money_rbActionPerformed
+        two_two_cal(selected_money_type_from_pro, two_two_reciece_money_tf,
+                two_two_total_money_tf, two_two_balance_money_tf,
+                two_two_rial_money_rb, two_two_dollar_money_rb,
+                two_two_bart_money_rb);
+    }//GEN-LAST:event_two_two_rial_money_rbActionPerformed
 
-    private void two_four_bart_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_four_bart_money_rbActionPerformed
+    private void two_two_bart_money_rbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbActionPerformed
         selected_money_type_from_pro = type_of_money.Bart;
-        two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
-                two_four_total_money_tf, two_four_balance_money_tf,
-                two_four_rial_money_rb, two_four_dollar_money_rb,
-                two_four_bart_money_rb);
-    }//GEN-LAST:event_two_four_bart_money_rbActionPerformed
+        two_two_cal(selected_money_type_from_pro, two_two_reciece_money_tf,
+                two_two_total_money_tf, two_two_balance_money_tf,
+                two_two_rial_money_rb, two_two_dollar_money_rb,
+                two_two_bart_money_rb);
+    }//GEN-LAST:event_two_two_bart_money_rbActionPerformed
 
-    private void two_four_reciece_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfKeyReleased
-        validate_KeyReleased_money(evt, two_four_reciece_money_tf);
-    }//GEN-LAST:event_two_four_reciece_money_tfKeyReleased
+    private void two_two_reciece_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfKeyReleased
+        validate_KeyReleased_money(evt, two_two_reciece_money_tf);
+    }//GEN-LAST:event_two_two_reciece_money_tfKeyReleased
 
-    private void two_four_reciece_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfKeyTyped
-        validate_KeyTyped_money(evt, two_four_reciece_money_tf);
-    }//GEN-LAST:event_two_four_reciece_money_tfKeyTyped
+    private void two_two_reciece_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfKeyTyped
+        validate_KeyTyped_money(evt, two_two_reciece_money_tf);
+    }//GEN-LAST:event_two_two_reciece_money_tfKeyTyped
 
-    private void two_four_total_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_total_money_tfKeyReleased
-        validate_KeyReleased_money(evt, two_four_total_money_tf);
-    }//GEN-LAST:event_two_four_total_money_tfKeyReleased
+    private void two_two_total_money_tfKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_total_money_tfKeyReleased
+        validate_KeyReleased_money(evt, two_two_total_money_tf);
+    }//GEN-LAST:event_two_two_total_money_tfKeyReleased
 
-    private void two_four_total_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_total_money_tfKeyTyped
-        validate_KeyTyped_money(evt, two_four_total_money_tf);
-    }//GEN-LAST:event_two_four_total_money_tfKeyTyped
+    private void two_two_total_money_tfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_total_money_tfKeyTyped
+        validate_KeyTyped_money(evt, two_two_total_money_tf);
+    }//GEN-LAST:event_two_two_total_money_tfKeyTyped
 
-    private void two_four_reciece_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfCaretUpdate
-        two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
-                two_four_total_money_tf, two_four_balance_money_tf,
-                two_four_rial_money_rb, two_four_dollar_money_rb,
-                two_four_bart_money_rb);
-    }//GEN-LAST:event_two_four_reciece_money_tfCaretUpdate
+    private void two_two_reciece_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfCaretUpdate
+        two_two_cal(selected_money_type_from_pro, two_two_reciece_money_tf,
+                two_two_total_money_tf, two_two_balance_money_tf,
+                two_two_rial_money_rb, two_two_dollar_money_rb,
+                two_two_bart_money_rb);
+    }//GEN-LAST:event_two_two_reciece_money_tfCaretUpdate
 
-    private void two_four_total_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_four_total_money_tfCaretUpdate
-        two_two_cal(selected_money_type_from_pro, two_four_reciece_money_tf,
-                two_four_total_money_tf, two_four_balance_money_tf,
-                two_four_rial_money_rb, two_four_dollar_money_rb,
-                two_four_bart_money_rb);
-    }//GEN-LAST:event_two_four_total_money_tfCaretUpdate
+    private void two_two_total_money_tfCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_two_two_total_money_tfCaretUpdate
+        two_two_cal(selected_money_type_from_pro, two_two_reciece_money_tf,
+                two_two_total_money_tf, two_two_balance_money_tf,
+                two_two_rial_money_rb, two_two_dollar_money_rb,
+                two_two_bart_money_rb);
+    }//GEN-LAST:event_two_two_total_money_tfCaretUpdate
 
     private void two_two_service_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_service_money_tfActionPerformed
         // TODO add your handling code here:
@@ -6668,27 +7091,33 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_pro_name_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
+        set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_two_pro_name_cbMouseClicked
 
-    private void two_four_reciece_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciece_money_tfMouseClicked
+    private void two_two_reciece_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_reciece_money_tfMouseClicked
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_reciece_money_tfMouseClicked
 
-    private void two_four_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_rial_money_rbMouseClicked
+    private void two_two_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_rial_money_rbMouseClicked
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_rial_money_rbMouseClicked
 
-    private void two_four_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_dollar_money_rbMouseClicked
+    private void two_two_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_dollar_money_rbMouseClicked
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_dollar_money_rbMouseClicked
 
-    private void two_four_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_bart_money_rbMouseClicked
+    private void two_two_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_bart_money_rbMouseClicked
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_bart_money_rbMouseClicked
 
-    private void two_four_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_total_money_tfMouseClicked
+    private void two_two_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_total_money_tfMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_total_money_tfMouseClicked
+        set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_two_two_total_money_tfMouseClicked
 
     private void two_three_sender_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfActionPerformed
         // TODO add your handling code here:
@@ -6702,6 +7131,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(true, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_three_bank_info_his_bnMouseClicked
 
     private void two_three_bank_info_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnActionPerformed
@@ -6815,6 +7245,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_double_exc(true, false, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
+                set_color_with_focus_double_exc(false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_double_exc(false, false, false, true, false, false);
@@ -6822,7 +7253,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_LEFT:
                 break;
             case KeyEvent.VK_DOWN:
-                set_color_with_focus_double_exc(false, false, false, false, false, true);
+                set_color_with_focus_double_exc(false, false, false, false, true, false);
                 break;
         }
     }//GEN-LAST:event_one_tf_customer_money2KeyPressed
@@ -7024,6 +7455,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_bank_thai_cbMouseClicked
 
     private void two_three_bank_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnActionPerformed
@@ -7125,7 +7557,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 break;
             case KeyEvent.VK_ENTER:
-                set_color_with_focus_double_exc(false, false, false, false, false, true);
+                set_color_with_focus_double_exc(false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 break;
@@ -7221,35 +7653,74 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfKeyReleased
 
     private void two_one_tf_cus_noKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noKeyPressed
-        if (two_three_to_thai_bank_id_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(true, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_three_to_thai_bank_id_list.getModel().getSize() != 0) {
                     two_three_to_thai_bank_id_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                }
+                break;
         }
     }//GEN-LAST:event_two_one_tf_cus_noKeyPressed
 
     private void two_one_tf_cus_nameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameKeyPressed
-        if (two_three_to_thai_name_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_three_to_thai_name_list.getModel().getSize() != 0) {
                     two_three_to_thai_name_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
+                }
+                break;
         }
     }//GEN-LAST:event_two_one_tf_cus_nameKeyPressed
 
     private void two_three_tf_cus_ph_noKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noKeyPressed
-        if (two_three_to_thai_ph_no_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_three_to_thai_ph_no_list.getModel().getSize() != 0) {
                     two_three_to_thai_ph_no_list.requestFocus();
-                    break;
-            }
+                } else {
+                    set_color_with_focus_to_thai(false, false, false, false, true, false, false, false, false, false);
+                }
+                break;
         }
     }//GEN-LAST:event_two_three_tf_cus_ph_noKeyPressed
 
@@ -7261,6 +7732,23 @@ public class UI_and_operation extends javax.swing.JFrame {
                     two_four_ph_recieve_list.requestFocus();
                     break;
             }
+        }
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+                break;
         }
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfKeyPressed
 
@@ -7291,6 +7779,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_ph_no_list);
         search_engine_bank_thai(two_three_to_thai_bank_id_list, two_one_tf_cus_no.getText().trim(),
                 "bank_id", "name", "phone_no", "bank", "to_thai_history_tb");
+        set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_tf_cus_noMouseClicked
 
     private void two_one_tf_cus_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameMouseClicked
@@ -7298,6 +7787,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_ph_no_list);
         search_engine_bank_thai(two_three_to_thai_name_list, two_one_tf_cus_name.getText().trim(),
                 "name", "bank_id", "phone_no", "bank", "to_thai_history_tb");
+        set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_tf_cus_nameMouseClicked
 
     private void two_three_tf_cus_ph_noMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noMouseClicked
@@ -7305,24 +7795,28 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_name_list);
         search_engine_bank_thai(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no.getText().trim(),
                 "phone_no", "bank_id", "name", "bank", "to_thai_history_tb");
+        set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
     }//GEN-LAST:event_two_three_tf_cus_ph_noMouseClicked
 
     private void two_three_bank_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(false, false, false, false, true, false, false, false, false, false);
     }//GEN-LAST:event_two_three_bank_his_bnMouseClicked
 
     private void two_one_tf_cus_moneyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_one_tf_cus_moneyMouseClicked
 
     private void two_one_tf_service_moneyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
     }//GEN-LAST:event_two_one_tf_service_moneyMouseClicked
 
     private void two_one_tf_total_moneyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_tf_total_moneyMouseClicked
@@ -7335,64 +7829,77 @@ public class UI_and_operation extends javax.swing.JFrame {
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
     }//GEN-LAST:event_two_one_bn_finishMouseClicked
 
-    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+    private void two_three_print_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_print_bnMouseClicked
         remove_all_in_list(two_three_to_thai_bank_id_list);
         remove_all_in_list(two_three_to_thai_name_list);
         remove_all_in_list(two_three_to_thai_ph_no_list);
-    }//GEN-LAST:event_jButton9MouseClicked
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_three_print_bnMouseClicked
 
     private void two_one_pro_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_pro_his_bnMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, true, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_pro_his_bnMouseClicked
 
     private void two_three_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_rial_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_rial_money_rbMouseClicked
 
     private void two_three_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_dollar_money_rbMouseClicked
 
     private void two_three_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_bart_money_rbMouseClicked
 
     private void two_one_edit_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_edit_bnMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
     }//GEN-LAST:event_two_one_edit_bnMouseClicked
 
     private void two_three_bn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bn_finishMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
     }//GEN-LAST:event_two_three_bn_finishMouseClicked
 
     private void two_one_print_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_print_bnMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, false, true);
     }//GEN-LAST:event_two_one_print_bnMouseClicked
 
     private void two_two_reciever_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
+        set_color_with_focus_from_pro(true, false, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_two_reciever_his_bnMouseClicked
 
-    private void two_one_pro_his_bn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_pro_his_bn1MouseClicked
+    private void two_two_pro_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_pro_his_bnMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_one_pro_his_bn1MouseClicked
+        set_color_with_focus_from_pro(false, false, true, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_pro_his_bnMouseClicked
 
-    private void two_four_bn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_bn_finishMouseClicked
+    private void two_two_bn_finish_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bn_finish_MouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_two_four_bn_finishMouseClicked
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_two_two_bn_finish_MouseClicked
 
-    private void jButton15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton15MouseClicked
+    private void two_two_bn_print_MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bn_print_MouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-    }//GEN-LAST:event_jButton15MouseClicked
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_two_bn_print_MouseClicked
 
     private void two_four_dateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_dateMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
@@ -7408,42 +7915,65 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_four_amMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_amMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_four_amMouseClicked
 
     private void two_four_pmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_pmMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_four_pmMouseClicked
 
     private void two_four_reciever_ph_no_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                    set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
     }//GEN-LAST:event_two_four_reciever_ph_no_his_bnMouseClicked
 
     private void two_two_reveiver_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_two_reveiver_money_tfMouseClicked
 
     private void two_two_service_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_service_money_tfMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
     }//GEN-LAST:event_two_two_service_money_tfMouseClicked
 
     private void two_two_bn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bn_finishMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
     }//GEN-LAST:event_two_two_bn_finishMouseClicked
 
-    private void printMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseClicked
+    private void two_four_print_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_print_bnMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-    }//GEN-LAST:event_printMouseClicked
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_four_print_bnMouseClicked
 
     private void two_two_reveiver_ph_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfMouseClicked
         search_engine_pro(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf.getText().trim(),
                 "reciever_phone_no", "from_thai_reciever_ph_no_his_tb");
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfMouseClicked
 
     private void two_three_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bn_finishKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, false, true);
+                break;
             case KeyEvent.VK_ENTER:
                 two_three_bn_finish.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
     }//GEN-LAST:event_two_three_bn_finishKeyPressed
@@ -7451,65 +7981,142 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_one_print_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_print_bnKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
             case KeyEvent.VK_ENTER:
                 two_one_print_bn.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
     }//GEN-LAST:event_two_one_print_bnKeyPressed
 
-    private void two_four_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_bn_finishKeyPressed
+    private void two_two_bn_finish_KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_bn_finish_KeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, false, true);
+                break;
             case KeyEvent.VK_ENTER:
-                two_four_bn_finish.doClick();
+                two_two_bn_finish_.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
-    }//GEN-LAST:event_two_four_bn_finishKeyPressed
+    }//GEN-LAST:event_two_two_bn_finish_KeyPressed
 
-    private void jButton15KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton15KeyPressed
+    private void two_two_bn_print_KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_bn_print_KeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
             case KeyEvent.VK_ENTER:
-                jButton15.doClick();
+                two_two_bn_finish_.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
-    }//GEN-LAST:event_jButton15KeyPressed
+    }//GEN-LAST:event_two_two_bn_print_KeyPressed
 
     private void two_one_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_bn_finishKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, false, true);
+                break;
             case KeyEvent.VK_ENTER:
                 two_one_bn_finish.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
     }//GEN-LAST:event_two_one_bn_finishKeyPressed
 
-    private void jButton9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton9KeyPressed
+    private void two_three_print_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_print_bnKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
             case KeyEvent.VK_ENTER:
-                jButton9.doClick();
+                two_three_print_bn.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
-    }//GEN-LAST:event_jButton9KeyPressed
+    }//GEN-LAST:event_two_three_print_bnKeyPressed
 
     private void two_two_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_bn_finishKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                break;
             case KeyEvent.VK_ENTER:
                 two_two_bn_finish.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
     }//GEN-LAST:event_two_two_bn_finishKeyPressed
 
-    private void printKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_printKeyPressed
+    private void two_four_print_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_print_bnKeyPressed
         int code = evt.getKeyCode();
         switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                break;
             case KeyEvent.VK_ENTER:
-                print.doClick();
+                two_four_print_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_DOWN:
                 break;
         }
-    }//GEN-LAST:event_printKeyPressed
+    }//GEN-LAST:event_two_four_print_bnKeyPressed
 
     private void one_bn_finishedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_one_bn_finishedMouseClicked
         set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
@@ -7554,10 +8161,10 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_LEFT:
                 break;
             case KeyEvent.VK_RIGHT:
-                set_color_with_focus_to_pro(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
-                set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
+                two_one_sender_his_bn.doClick();
                 break;
             case KeyEvent.VK_UP:
                 break;
@@ -7566,6 +8173,620 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_two_one_sender_his_bnKeyPressed
+
+    private void two_one_reciever_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_reciever_his_bnMouseClicked
+        set_color_with_focus_to_pro(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_reciever_his_bnMouseClicked
+
+    private void two_one_reciever_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_reciever_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_one_reciever_his_bn.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_one_reciever_his_bnKeyPressed
+
+    private void two_one_pro_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_pro_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_one_pro_his_bn.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_one_pro_his_bnKeyPressed
+
+    private void two_one_pro_name_cbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                break;
+        }
+    }//GEN-LAST:event_two_one_pro_name_cbKeyPressed
+
+    private void two_three_rial_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_rial_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                two_three_rial_money_rb.setSelected(true);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, true, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_rial_money_rbKeyPressed
+
+    private void two_three_dollar_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                two_three_dollar_money_rb.setSelected(true);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_dollar_money_rbKeyPressed
+
+    private void two_three_bart_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                two_three_bart_money_rb.setSelected(true);
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, true, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_bart_money_rbKeyPressed
+
+    private void two_three_sender_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                if (two_three_rial_money_rb.isSelected()) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+                } else if (two_three_bart_money_rb.isSelected()) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, true, false, false, false, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, true, false, false, false, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+        }
+    }//GEN-LAST:event_two_three_sender_money_tfKeyPressed
+
+    private void two_three_service_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_service_money_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_service_money_tfKeyPressed
+
+    private void two_one_edit_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_edit_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_one_edit_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                if (two_one_is_off_edit) {
+                    set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+                } else {
+                    set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+                break;
+        }
+    }//GEN-LAST:event_two_one_edit_bnKeyPressed
+
+    private void two_two_reciever_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, true, false, false, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_reciever_his_bnKeyPressed
+
+    private void two_two_pro_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_pro_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_pro(false, true, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_pro_his_bnKeyPressed
+
+    private void two_two_pro_name_cbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_pro_name_cbKeyPressed
+
+    private void two_two_reciece_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, true, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                if (two_two_rial_money_rb.isSelected()) {
+                    set_color_with_focus_from_pro(false, false, false, false, true, false, false, false, false, false, false);
+                } else if (two_two_bart_money_rb.isSelected()) {
+                    set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
+                } else {
+                    set_color_with_focus_from_pro(false, false, false, false, false, true, false, false, false, false, false);
+                }
+                break;
+        }
+    }//GEN-LAST:event_two_two_reciece_money_tfKeyPressed
+
+    private void two_two_rial_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_two_rial_money_rb.setSelected(true);
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_rial_money_rbKeyPressed
+
+    private void two_two_dollar_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, false, false, false, true, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_two_dollar_money_rb.setSelected(true);
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_dollar_money_rbKeyPressed
+
+    private void two_two_bart_money_rbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_ENTER:
+                two_two_bart_money_rb.setSelected(true);
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_bart_money_rbKeyPressed
+
+    private void two_two_total_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_total_money_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_total_money_tfKeyPressed
+
+    private void two_three_bank_info_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_three_bank_info_his_bn.doClick();
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_bank_info_his_bnKeyPressed
+
+    private void two_three_bank_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_three_bank_his_bn.doClick();
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_bank_his_bnKeyPressed
+
+    private void two_three_bank_thai_cbKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bank_thai_cbKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_three_bank_thai_cbKeyPressed
+
+    private void two_one_tf_cus_moneyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_UP:
+                break;
+        }
+    }//GEN-LAST:event_two_one_tf_cus_moneyKeyPressed
+
+    private void two_one_tf_service_moneyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_UP:
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_one_tf_service_moneyKeyPressed
+
+    private void two_four_dateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_dateKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, true, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_dateKeyPressed
+
+    private void two_four_sn_hourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_sn_hourKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, true, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_thai(true, false, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_sn_hourKeyPressed
+
+    private void two_four_sn_minuteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_sn_minuteKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                if (two_four_pm.isSelected()) {
+                    set_color_with_focus_from_thai(false, false, false, false, true, false, false, false, false, false, false);
+                } else {
+                    set_color_with_focus_from_thai(false, false, false, true, false, false, false, false, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_thai(false, true, false, false, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_sn_minuteKeyPressed
+
+    private void two_four_amKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_amKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+                two_four_am.setSelected(true);
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, true, false, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_amKeyPressed
+
+    private void two_four_pmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_pmKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_thai(false, false, false, true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                two_four_pm.setSelected(true);
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_pmKeyPressed
+
+    private void two_four_reciever_ph_no_his_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                if (two_four_am.isSelected()) {
+                    set_color_with_focus_from_thai(false, false, false, true, false, false, false, false, false, false, false);
+                } else {
+                    set_color_with_focus_from_thai(false, false, false, false, true, false, false, false, false, false, false);
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                two_four_reciever_ph_no_his_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_four_reciever_ph_no_his_bnKeyPressed
+
+    private void two_two_reveiver_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                if (two_four_pm.isSelected()) {
+                    set_color_with_focus_from_thai(false, false, false, false, true, false, false, false, false, false, false);
+                } else {
+                    set_color_with_focus_from_thai(false, false, false, true, false, false, false, false, false, false, false);
+                }
+                break;
+        }
+    }//GEN-LAST:event_two_two_reveiver_money_tfKeyPressed
+
+    private void two_two_service_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_service_money_tfKeyPressed
+                int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_two_two_service_money_tfKeyPressed
 
     /**
      * @param args the command line arguments
@@ -7653,8 +8874,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JPanel from_pro_pn;
     private javax.swing.JPanel from_thai_pn;
     private javax.swing.JPanel his_pt;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton9;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -7677,14 +8896,12 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
@@ -7693,10 +8910,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -7746,7 +8963,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JButton one_two_bn_print;
     private javax.swing.JComboBox<String> one_two_rate_bc1;
     private javax.swing.JComboBox<String> one_two_rate_bc2;
-    private javax.swing.JButton print;
     private javax.swing.JPanel rate_pt;
     private javax.swing.JLabel sql_lb;
     private javax.swing.JTabbedPane sub_exc_pt;
@@ -7774,21 +8990,17 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JPanel to_thai_pn;
     private javax.swing.JPanel tran_pt;
     private javax.swing.JRadioButton two_four_am;
-    private javax.swing.JTextField two_four_balance_money_tf;
-    private javax.swing.JRadioButton two_four_bart_money_rb;
-    private javax.swing.JButton two_four_bn_finish;
     private com.toedter.calendar.JDateChooser two_four_date;
-    private javax.swing.JRadioButton two_four_dollar_money_rb;
+    private javax.swing.JLabel two_four_date_lb;
+    private javax.swing.JLabel two_four_hour_lb;
+    private javax.swing.JLabel two_four_mm_lb;
     private javax.swing.JLayeredPane two_four_ph_recieve_layer_pane;
     private javax.swing.JList<String> two_four_ph_recieve_list;
     private javax.swing.JRadioButton two_four_pm;
-    private javax.swing.JTextField two_four_receiver_phone_no_tf;
-    private javax.swing.JTextField two_four_reciece_money_tf;
+    private javax.swing.JButton two_four_print_bn;
     private javax.swing.JButton two_four_reciever_ph_no_his_bn;
-    private javax.swing.JRadioButton two_four_rial_money_rb;
     private javax.swing.JSpinner two_four_sn_hour;
     private javax.swing.JSpinner two_four_sn_minute;
-    private javax.swing.JTextField two_four_total_money_tf;
     private javax.swing.JButton two_one_bn_finish;
     private javax.swing.JButton two_one_edit_bn;
     private javax.swing.JLayeredPane two_one_ph_reciever_layer_pane;
@@ -7797,7 +9009,6 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JList<String> two_one_ph_senter_list;
     private javax.swing.JButton two_one_print_bn;
     private javax.swing.JButton two_one_pro_his_bn;
-    private javax.swing.JButton two_one_pro_his_bn1;
     private javax.swing.JComboBox<String> two_one_pro_name_cb;
     private javax.swing.JButton two_one_reciever_his_bn;
     private javax.swing.JButton two_one_sender_his_bn;
@@ -7814,6 +9025,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JRadioButton two_three_bart_money_rb;
     private javax.swing.JButton two_three_bn_finish;
     private javax.swing.JRadioButton two_three_dollar_money_rb;
+    private javax.swing.JButton two_three_print_bn;
     private javax.swing.JTextField two_three_receiver_phone_no_tf;
     private javax.swing.JRadioButton two_three_rial_money_rb;
     private javax.swing.JTextField two_three_sender_money_tf;
@@ -7826,15 +9038,25 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JList<String> two_three_to_thai_name_list;
     private javax.swing.JLayeredPane two_three_to_thai_ph_no_layer_pane;
     private javax.swing.JList<String> two_three_to_thai_ph_no_list;
+    private javax.swing.JTextField two_two_balance_money_tf;
+    private javax.swing.JRadioButton two_two_bart_money_rb;
     private javax.swing.JButton two_two_bn_finish;
+    private javax.swing.JButton two_two_bn_finish_;
+    private javax.swing.JButton two_two_bn_print_;
+    private javax.swing.JRadioButton two_two_dollar_money_rb;
     private javax.swing.JLayeredPane two_two_ph_recieve_layer_pane;
     private javax.swing.JList<String> two_two_ph_recieve_list;
+    private javax.swing.JButton two_two_pro_his_bn;
     private javax.swing.JComboBox<String> two_two_pro_name_cb;
+    private javax.swing.JTextField two_two_receiver_phone_no_tf;
+    private javax.swing.JTextField two_two_reciece_money_tf;
     private javax.swing.JButton two_two_reciever_his_bn;
     private javax.swing.JTextField two_two_result_money_tf;
     private javax.swing.JTextField two_two_reveiver_money_tf;
     private javax.swing.JTextField two_two_reveiver_ph_no_tf;
+    private javax.swing.JRadioButton two_two_rial_money_rb;
     private javax.swing.JTextField two_two_service_money_tf;
+    private javax.swing.JTextField two_two_total_money_tf;
     private javax.swing.JTabbedPane zero_tp;
     // End of variables declaration//GEN-END:variables
 
