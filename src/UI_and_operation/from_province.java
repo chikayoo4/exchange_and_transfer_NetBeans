@@ -11,8 +11,10 @@ import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
+import static UI_and_operation.invoice_man.delete_ind_man;
 import static UI_and_operation.invoice_man.delete_inv_man;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
+import static UI_and_operation.invoice_man.update_ind_man_money;
 import static UI_and_operation.invoice_man.update_inv_man_money;
 import static UI_and_operation.purpose.get_id_pur_from_db;
 import static UI_and_operation.validate_value.clear_cvot;
@@ -136,12 +138,15 @@ public class from_province {
             switch (money_type) {
                 case "Rial":
                     update_inv_man_money(money, "0", "0", "0", id, acc, pur);
+                    update_ind_man_money(money, "0", "0", "0", id, acc, pur);
                     break;
                 case "Dollar":
                     update_inv_man_money("0", money, "0", "0", id, acc, pur);
+                    update_ind_man_money("0", money, "0", "0", id, acc, pur);
                     break;
                 case "Bart":
                     update_inv_man_money("0", "0", money, "0", id, acc, pur);
+                    update_ind_man_money("0", "0", money, "0", id, acc, pur);
                     break;
                 default:
                     System.out.println("Error");
@@ -158,6 +163,7 @@ public class from_province {
             pst.setString(3, pur);
             pst.executeUpdate();
 
+            delete_ind_man(id, acc, pur);
             delete_inv_man(id, acc, pur);
 
             //dialog when added to access is success

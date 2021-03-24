@@ -88,24 +88,27 @@ public class sql_con extends javax.swing.JFrame
         jLabel51 = new javax.swing.JLabel();
         five_local_host_user_name_tf = new javax.swing.JTextField();
         jLabel52 = new javax.swing.JLabel();
-        five_local_host_password_tf = new javax.swing.JTextField();
         jLabel53 = new javax.swing.JLabel();
         five_wifi_host_tf = new javax.swing.JTextField();
         jLabel54 = new javax.swing.JLabel();
         five_wifi_host_user_name_tf = new javax.swing.JTextField();
         jLabel55 = new javax.swing.JLabel();
-        five_wifi_host_password_tf = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         save_bn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tp_error_message = new javax.swing.JTextPane();
+        five_local_host_password_tf = new javax.swing.JPasswordField();
+        five_wifi_host_password_tf = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel50.setBackground(new java.awt.Color(255, 255, 255));
         jLabel50.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel50.setForeground(new java.awt.Color(255, 0, 0));
         jLabel50.setText("host name");
 
         five_local_host_server_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_local_host_server_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_server_name_tf.setText("kay");
         five_local_host_server_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,12 +117,16 @@ public class sql_con extends javax.swing.JFrame
         });
 
         five_local_host_db_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_local_host_db_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_db_name_tf.setText("exchange_transfer_sm");
 
+        jLabel51.setBackground(new java.awt.Color(255, 255, 255));
         jLabel51.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel51.setForeground(new java.awt.Color(255, 0, 0));
         jLabel51.setText("host user name");
 
         five_local_host_user_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_local_host_user_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_user_name_tf.setText("admin");
         five_local_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,22 +134,27 @@ public class sql_con extends javax.swing.JFrame
             }
         });
 
+        jLabel52.setBackground(new java.awt.Color(255, 255, 255));
         jLabel52.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel52.setForeground(new java.awt.Color(255, 0, 0));
         jLabel52.setText("host password");
 
-        five_local_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        five_local_host_password_tf.setText("1234");
-
+        jLabel53.setBackground(new java.awt.Color(255, 255, 255));
         jLabel53.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel53.setForeground(new java.awt.Color(255, 0, 0));
         jLabel53.setText("wifi host name");
 
         five_wifi_host_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_wifi_host_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_wifi_host_tf.setText("1.1.1.1");
 
+        jLabel54.setBackground(new java.awt.Color(255, 255, 255));
         jLabel54.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel54.setForeground(new java.awt.Color(255, 0, 0));
         jLabel54.setText("host user name");
 
         five_wifi_host_user_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_wifi_host_user_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_wifi_host_user_name_tf.setText("admin");
         five_wifi_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,22 +162,20 @@ public class sql_con extends javax.swing.JFrame
             }
         });
 
+        jLabel55.setBackground(new java.awt.Color(255, 255, 255));
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel55.setForeground(new java.awt.Color(255, 0, 0));
         jLabel55.setText("host password");
 
-        five_wifi_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        five_wifi_host_password_tf.setText("1234");
-        five_wifi_host_password_tf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                five_wifi_host_password_tfActionPerformed(evt);
-            }
-        });
-
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SQL Connection");
 
+        save_bn.setBackground(new java.awt.Color(255, 204, 204));
         save_bn.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        save_bn.setForeground(new java.awt.Color(255, 0, 0));
         save_bn.setText("save");
         save_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,17 +183,30 @@ public class sql_con extends javax.swing.JFrame
             }
         });
 
+        tp_error_message.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        tp_error_message.setForeground(new java.awt.Color(255, 0, 0));
+        tp_error_message.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(tp_error_message);
+
+        five_local_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_local_host_password_tf.setForeground(new java.awt.Color(255, 51, 51));
+        five_local_host_password_tf.setText("1234");
+
+        five_wifi_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        five_wifi_host_password_tf.setForeground(new java.awt.Color(255, 51, 51));
+        five_wifi_host_password_tf.setText("1234");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(save_bn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -193,18 +216,21 @@ public class sql_con extends javax.swing.JFrame
                             .addComponent(jLabel54, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                             .addComponent(jLabel51, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(five_wifi_host_tf)
-                                .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(five_local_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(five_wifi_host_tf)
+                            .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
+                            .addComponent(five_local_host_user_name_tf, javax.swing.GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(five_local_host_password_tf)
+                            .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGap(48, 48, 48))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(save_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -212,7 +238,7 @@ public class sql_con extends javax.swing.JFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(five_local_host_db_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -220,16 +246,14 @@ public class sql_con extends javax.swing.JFrame
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(five_local_host_server_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(20, 20, 20)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_local_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(five_local_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(five_local_host_password_tf))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_wifi_host_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -238,15 +262,13 @@ public class sql_con extends javax.swing.JFrame
                     .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(five_wifi_host_user_name_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(five_wifi_host_password_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
-                .addGap(33, 33, 33)
-                .addComponent(save_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel55, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(five_wifi_host_password_tf))
+                .addGap(36, 36, 36)
+                .addComponent(save_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -264,10 +286,6 @@ public class sql_con extends javax.swing.JFrame
     private void five_wifi_host_user_name_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_five_wifi_host_user_name_tfActionPerformed
-
-    private void five_wifi_host_password_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_wifi_host_password_tfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_five_wifi_host_password_tfActionPerformed
 
     private void save_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_bnActionPerformed
         try {
@@ -332,10 +350,10 @@ public class sql_con extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField five_local_host_db_name_tf;
-    private javax.swing.JTextField five_local_host_password_tf;
+    private javax.swing.JPasswordField five_local_host_password_tf;
     private javax.swing.JTextField five_local_host_server_name_tf;
     private javax.swing.JTextField five_local_host_user_name_tf;
-    private javax.swing.JTextField five_wifi_host_password_tf;
+    private javax.swing.JPasswordField five_wifi_host_password_tf;
     private javax.swing.JTextField five_wifi_host_tf;
     private javax.swing.JTextField five_wifi_host_user_name_tf;
     private javax.swing.JLabel jLabel1;

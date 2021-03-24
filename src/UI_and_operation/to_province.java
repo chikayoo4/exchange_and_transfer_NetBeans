@@ -12,15 +12,18 @@ import static UI_and_operation.UI_and_operation.get_id_province_name_from_db;
 import static UI_and_operation.UI_and_operation.is_has_history_list_db;
 import UI_and_operation.UI_and_operation.purpose_type;
 import static UI_and_operation.UI_and_operation.set_history_list_db;
-import static UI_and_operation.UI_and_operation.set_invoice_man_db;
 import static UI_and_operation.UI_and_operation.set_is_change_true;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
+import static UI_and_operation.invoice_man.delete_ind_man;
 import static UI_and_operation.invoice_man.delete_inv_man;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
+import static UI_and_operation.invoice_man.set_ind_man_db;
+import static UI_and_operation.invoice_man.set_invoice_man_db;
+import static UI_and_operation.invoice_man.update_ind_man_money;
 import static UI_and_operation.invoice_man.update_inv_man_money;
 import static UI_and_operation.purpose.get_id_pur_from_db;
 import static UI_and_operation.validate_value.bart_validation;
@@ -118,45 +121,36 @@ public class to_province {
                 }
                 invoice_man in_man = new invoice_man();
                 in_man.get_R_D_B_B_top_1_from_db();
+                in_man.get_ind_R_D_B_B_top_1_from_db();
 
+                String rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())));
+                String dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
+                String bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
+                String bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
+
+                String ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
+                String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
+                String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
+                String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())));
                 switch (selected_money_type_to_pro) {
                     case Rial:
-                        set_invoice_man_db(
-                                String.valueOf(rial_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getRial())))),
-                                String.valueOf(in_man.getDollar()),
-                                String.valueOf(in_man.getBart()),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.to_province,
-                                current_date());
+                        rial = rial_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getRial())));
+                        ind_rial = rial_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
                         break;
                     case Dollar:
-                        set_invoice_man_db(
-                                String.valueOf(in_man.getRial()),
-                                String.valueOf(dollar_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getDollar())))),
-                                String.valueOf(in_man.getBart()),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.to_province,
-                                current_date());
+                        dollar = dollar_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getDollar())));
+                        ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
                         break;
                     case Bart:
-                        set_invoice_man_db(
-                                String.valueOf(in_man.getRial()),
-                                String.valueOf(in_man.getDollar()),
-                                String.valueOf(bart_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getBart())))),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.to_province,
-                                current_date());
+                        bart = bart_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getBart())));
+                        ind_bart = bart_validation(Double.parseDouble(clear_cvot(two_one_total_money_tf.getText())) + Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
                         break;
                 }
+                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.to_province, current_date());
+                set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
             } catch (SQLException ex) {
-            sql_con sql_con_obj = new sql_con(ex);
-            sql_con_obj.setVisible(true);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
             two_three_sender_phone_no_tf.setText("");
             two_three_receiver_phone_no_tf.setText("");
@@ -166,7 +160,7 @@ public class to_province {
             buttonGroup2.clearSelection();
 //            ui_ope.set_history();
 
-                set_is_change_true();
+            set_is_change_true();
         }
     }
 
@@ -271,40 +265,43 @@ public class to_province {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            
-            if(is_update_inv_man){
-            String money = "";
-            String money_type = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT total_money, type_of_money "
-                    + "FROM to_province_invoice_tb INNER JOIN money_type_tb "
-                    + "ON to_province_invoice_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                    + "where id_invoice = ? "
-                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                money = clear_cvot(rs.getString("total_money"));
-                money_type = rs.getString("type_of_money");
-            }
+            if (is_update_inv_man) {
+                String money = "";
+                String money_type = "";
 
-            switch (money_type) {
-                case "Rial":
-                    update_inv_man_money("-" + money, "0", "0", "0", id, acc, pur);
-                    break;
-                case "Dollar":
-                    update_inv_man_money("0", "-" + money, "0", "0", id, acc, pur);
-                    break;
-                case "Bart":
-                    update_inv_man_money("0", "0", "-" + money, "0", id, acc, pur);
-                    break;
-                default:
-                    System.out.println("Error");
-            }
+                //query to access
+                pst = con.prepareStatement("SELECT total_money, type_of_money "
+                        + "FROM to_province_invoice_tb INNER JOIN money_type_tb "
+                        + "ON to_province_invoice_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                        + "where id_invoice = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    money = clear_cvot(rs.getString("total_money"));
+                    money_type = rs.getString("type_of_money");
+                }
+
+                switch (money_type) {
+                    case "Rial":
+                        update_inv_man_money("-" + money, "0", "0", "0", id, acc, pur);
+                        update_ind_man_money("-" + money, "0", "0", "0", id, acc, pur);
+                        break;
+                    case "Dollar":
+                        update_inv_man_money("0", "-" + money, "0", "0", id, acc, pur);
+                        update_ind_man_money("0", "-" + money, "0", "0", id, acc, pur);
+                        break;
+                    case "Bart":
+                        update_inv_man_money("0", "0", "-" + money, "0", id, acc, pur);
+                        update_ind_man_money("0", "0", "-" + money, "0", id, acc, pur);
+                        break;
+                    default:
+                        System.out.println("Error");
+                }
             }
             //update sql query to access
             pst = con.prepareStatement("delete from to_province_invoice_tb "
@@ -317,6 +314,7 @@ public class to_province {
             pst.setString(3, pur);
             pst.executeUpdate();
 
+            delete_ind_man(id, acc, pur);
             delete_inv_man(id, acc, pur);
 
             //dialog when added to access is success

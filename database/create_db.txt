@@ -216,6 +216,14 @@ CREATE TABLE invoice_management_tb (
     id_pur INTEGER NOT NULL,
 	CONSTRAINT FK_invoice_man_id_pur FOREIGN KEY (id_pur) REFERENCES purpose_tb (id_pur)
 );
+CREATE TABLE individual_total_money_management_tb (
+    rial VARCHAR(40) NOT NULL,
+    dollar VARCHAR(40) NOT NULL,
+    bart VARCHAR(40) NOT NULL,
+    bank_bart VARCHAR(40) NOT NULL,
+    id_invoice_man INTEGER NOT NULL,
+	CONSTRAINT FK_individual_total_money_management_id_pur FOREIGN KEY (id_invoice_man) REFERENCES invoice_management_tb (id_invoice_man)
+);
 CREATE TABLE add_money_history_tb (
     id_add int IDENTITY(1,1) PRIMARY KEY,
     add_date DATETIME NOT NULL,

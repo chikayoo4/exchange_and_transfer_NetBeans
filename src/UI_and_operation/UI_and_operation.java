@@ -25,10 +25,11 @@ import static UI_and_operation.from_thai.get_from_thai_db_set_to_tb;
 import static UI_and_operation.invoice_man.get_count_id_invoice_man_from_db;
 import static UI_and_operation.invoice_man.get_id_invoice;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
+import static UI_and_operation.invoice_man.set_ind_man_db;
+import static UI_and_operation.invoice_man.set_invoice_man_db;
 import static UI_and_operation.path_file.double_exc_reciept_path;
 import static UI_and_operation.path_file.exc_reciept_path;
 import static UI_and_operation.path_file.get_path;
-import static UI_and_operation.path_file.set_main_proj_path_to_db;
 import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
 import static UI_and_operation.to_province.two_one_cal;
@@ -59,7 +60,6 @@ import static UI_and_operation.to_thai.detele_to_thai_to_db;
 import static UI_and_operation.to_thai.get_to_thai_db_set_to_tb;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
@@ -67,10 +67,8 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -129,6 +127,10 @@ public class UI_and_operation extends javax.swing.JFrame {
     //------------------------------------------------------my function------------------------------------------------------
     public static void set_is_change_true() {
         is_change_his = true;
+    }
+
+    public void set_selected_exchange_rate_to_not_select() {
+        selected_exchange_rate = type_of_exchange.not_select;
     }
 
     public int get_idx_transfer_pt() {
@@ -267,7 +269,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 return "B";
             default:
-                return "error";
+                return "error : convert_to_short_money_type";
         }
     }
 
@@ -370,42 +372,6 @@ public class UI_and_operation extends javax.swing.JFrame {
             list.setModel(mode);
             mode.removeAllElements();
         }
-    }
-
-    public static int set_invoice_man_db(String rial, String dollar, String bart, String bank_bart,
-            int id_invoice, int id_acc, purpose_type pur, Timestamp invoice_man_date) {
-        int id_inv_man = -1;
-        Connection con;
-        PreparedStatement pst;
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-            //write sql query to access
-            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
-                    Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, rial);
-            pst.setString(2, dollar);
-            pst.setString(3, bart);
-            pst.setString(4, bank_bart);
-            pst.setInt(5, id_invoice);
-            pst.setInt(6, id_acc);
-            pst.setInt(7, get_id_pur_from_db(pur));
-            pst.setTimestamp(8, invoice_man_date);
-            pst.executeUpdate();
-            ResultSet generatekey = pst.getGeneratedKeys();
-            if (generatekey.next()) {
-                id_inv_man = generatekey.getInt(1);
-            }
-
-        } catch (SQLException ex) {
-            sql_con sql_con_obj = new sql_con(ex);
-            sql_con_obj.setVisible(true);
-        }
-        return id_inv_man;
     }
 
     public static int get_id_province_name_from_db(String province_name) {
@@ -658,7 +624,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         get_from_thai_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
                         break;
                     default:
-                        System.out.println("error");
+                        System.out.println("error : set_history");
                 }
             }
             if (v2.size() != 0) {
@@ -1439,7 +1405,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         detele_from_thai_to_db(id, acc, pur, false);
                         break;
                     default:
-                        System.out.println("error");
+                        System.out.println("error : delete_not_cur_to_last_7_d_from_db");
                 }
 
             }
@@ -1583,7 +1549,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }
 
     private void init_component() {
-        
+
         end_task_ppt();
         open_exc_rate_ppt();
 
@@ -1622,15 +1588,15 @@ public class UI_and_operation extends javax.swing.JFrame {
         set_listener_cb_on_click(one_two_rate_bc2);
 
         set_listener_cb_on_click(two_one_pro_name_cb);
-        
+
         set_listener_cb_on_click(two_two_pro_name_cb);
-        
+
         set_listener_cb_on_click(two_three_bank_thai_cb);
-        
+
         three_up.setEnabled(false);
-        
+
         next_show_his = 0;
-        
+
         if (count_db_to_list_pur_and_id() <= num_show_his) {
             three_down.setEnabled(false);
         } else {
@@ -4482,7 +4448,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addComponent(three_chb_m_b_bank)
                                         .addGap(34, 34, 34)
                                         .addComponent(three_chb_m_detail)))
-                                .addGap(0, 229, Short.MAX_VALUE))
+                                .addGap(0, 217, Short.MAX_VALUE))
                             .addGroup(his_ptLayout.createSequentialGroup()
                                 .addComponent(jLabel35)
                                 .addGap(18, 18, 18)
@@ -4492,8 +4458,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 .addGap(51, 51, 51)
                                 .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(52, 52, 52)
-                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         his_ptLayout.setVerticalGroup(
@@ -5138,7 +5103,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(zero_tp)
+                .addComponent(zero_tp, javax.swing.GroupLayout.DEFAULT_SIZE, 1559, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -5300,7 +5265,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         switch (code) {
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_ENTER:
-                set_color_with_focus_exc(false, false, false, false, false, false, false, false, true);
+                set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_UP:
                 if (!selected_exchange_rate.equals(type_of_exchange.R_to_S)) {
@@ -5310,7 +5275,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 }
                 break;
             case KeyEvent.VK_DOWN:
-                set_color_with_focus_exc(false, false, false, false, false, false, false, false, true);
+                set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
                 break;
         }
     }//GEN-LAST:event_one_tf_customer_moneyKeyPressed
@@ -5340,7 +5305,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
                 break;
             case KeyEvent.VK_ENTER:
+                System.out.println("enter");
                 one_bn_finished.doClick();
+                set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_exc(false, false, false, false, false, false, false, false, true);
@@ -5360,6 +5327,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 one_bn_print.doClick();
+                set_color_with_focus_exc(false, false, false, false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_RIGHT:
                 break;
@@ -5646,7 +5614,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                             pst.executeUpdate();
                             break;
                         default:
-                            System.out.println("Error");
+                            System.out.println("Error : three_add_bnActionPerformed");
                     }
                     three_up.setEnabled(false);
                     next_show_his = 0;
@@ -6240,7 +6208,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                                             detele_from_thai_to_db(id, acc, pur, true);
                                             break;
                                         default:
-                                            System.out.println("error");
+                                            System.out.println("error : three_tb_historyMouseClicked");
                                     }
                                     if (count_db_to_list_pur_and_id() <= num_show_his) {
                                         three_up.setEnabled(false);
@@ -6319,42 +6287,34 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 invoice_man in_man = new invoice_man();
                 in_man.get_R_D_B_B_top_1_from_db();
+                in_man.get_ind_R_D_B_B_top_1_from_db();
+
+                String rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())));
+                String dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
+                String bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
+                String bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
+
+                String ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
+                String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
+                String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
+                String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())));
 
                 switch (selected_money_type_from_pro) {
                     case Rial:
-                        set_invoice_man_db(
-                                String.valueOf(rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
-                                String.valueOf(in_man.getDollar()),
-                                String.valueOf(in_man.getBart()),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.from_province,
-                                current_date());
+                        rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
+                        ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
                         break;
                     case Dollar:
-                        set_invoice_man_db(
-                                String.valueOf(in_man.getRial()),
-                                String.valueOf(dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
-                                String.valueOf(in_man.getBart()),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.from_province,
-                                current_date());
+                        dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
+                        ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
                         break;
                     case Bart:
-                        set_invoice_man_db(
-                                String.valueOf(in_man.getRial()),
-                                String.valueOf(in_man.getDollar()),
-                                String.valueOf(bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())))),
-                                String.valueOf(in_man.getBank_Bart()),
-                                lastinsert_id_invoice,
-                                get_acc_id(),
-                                purpose_type.from_province,
-                                current_date());
+                        bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
+                        ind_dollar = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) - Double.parseDouble(clear_cvot(two_two_total_money_tf.getText())));
                         break;
                 }
+                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.from_province, current_date());
+                set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
             } catch (SQLException ex) {
                 sql_con sql_con_obj = new sql_con(ex);
                 sql_con_obj.setVisible(true);
@@ -6559,14 +6519,20 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 invoice_man in_man = new invoice_man();
                 in_man.get_R_D_B_B_top_1_from_db();
-                set_invoice_man_db(rial_validation(Double.parseDouble(clear_cvot(in_man.getRial()))),
-                        dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar()))),
-                        bart_validation(Double.parseDouble(clear_cvot(in_man.getBart()))),
-                        bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())) + Double.parseDouble(clear_cvot(two_one_tf_total_money.getText()))),
-                        id_inv_to_thai,
-                        get_acc_id(),
-                        purpose_type.to_thai,
-                        current_date());
+                in_man.get_ind_R_D_B_B_top_1_from_db();
+
+                String rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())));
+                String dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
+                String bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
+                String bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())) + Double.parseDouble(clear_cvot(two_one_tf_total_money.getText())));
+
+                String ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
+                String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
+                String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
+                String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())) + Double.parseDouble(clear_cvot(two_one_tf_total_money.getText())));
+                
+                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, id_inv_to_thai,get_acc_id(), purpose_type.to_thai, current_date());
+                set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
 
                 two_one_tf_cus_no.setText("");
                 two_one_tf_cus_name.setText("");
@@ -7059,17 +7025,20 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 invoice_man in_man = new invoice_man();
                 in_man.get_R_D_B_B_top_1_from_db();
+                in_man.get_ind_R_D_B_B_top_1_from_db();
 
-                set_invoice_man_db(
-                        String.valueOf(in_man.getRial()),
-                        String.valueOf(in_man.getDollar()),
-                        String.valueOf(in_man.getBart()),
-                        bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())) - Double.parseDouble(clear_cvot(two_two_result_money_tf.getText()))),
-                        lastinsert_id_invoice,
-                        get_acc_id(),
-                        purpose_type.from_thai,
-                        current_date());
+                String rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())));
+                String dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
+                String bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
+                String bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())) - Double.parseDouble(clear_cvot(two_two_result_money_tf.getText())));
 
+                String ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
+                String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
+                String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
+                String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())) - Double.parseDouble(clear_cvot(two_two_result_money_tf.getText())));
+                
+                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.from_thai, current_date());
+                set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
             } catch (SQLException ex) {
                 sql_con sql_con_obj = new sql_con(ex);
                 sql_con_obj.setVisible(true);
@@ -7101,17 +7070,17 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_two_rial_money_rbMouseClicked
 
     private void two_two_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_two_dollar_money_rbMouseClicked
 
     private void two_two_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-                set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_two_bart_money_rbMouseClicked
 
     private void two_two_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_total_money_tfMouseClicked
@@ -7155,6 +7124,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 break;
             case KeyEvent.VK_ENTER:
+                set_color_with_focus_double_exc(false, false, true, false, false, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_double_exc(false, false, true, false, false, false);
@@ -7192,6 +7162,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_double_exc(false, true, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
+                set_color_with_focus_double_exc(false, false, false, false, true, false);
                 one_two_bn_finished.doClick();
                 break;
             case KeyEvent.VK_RIGHT:
@@ -7218,6 +7189,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 one_two_bn_print.doClick();
+                set_color_with_focus_double_exc(false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_RIGHT:
                 break;
@@ -7245,7 +7217,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_double_exc(true, false, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
-                set_color_with_focus_double_exc(false, false, false, false, true, false);
+                set_color_with_focus_double_exc(false, false, false, true, false, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_double_exc(false, false, false, true, false, false);
@@ -7309,8 +7281,11 @@ public class UI_and_operation extends javax.swing.JFrame {
             case "៛ → ฿":
                 one_lb_operator1.setText("/");
                 break;
+            case "none":
+                one_lb_operator1.setText("");
+                break;
             default:
-                System.out.println("error");
+                System.out.println("error : one_two_rate_bc1ActionPerformed");
         }
     }//GEN-LAST:event_one_two_rate_bc1ActionPerformed
 
@@ -7329,8 +7304,11 @@ public class UI_and_operation extends javax.swing.JFrame {
             case "៛ → ฿":
                 one_lb_operator2.setText("/");
                 break;
+            case "none":
+                one_lb_operator2.setText("");
+                break;
             default:
-                System.out.println("error");
+                System.out.println("error : one_two_rate_bc2ActionPerformed");
         }
     }//GEN-LAST:event_one_two_rate_bc2ActionPerformed
 
@@ -7848,19 +7826,19 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_three_rial_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_rial_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
-                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_rial_money_rbMouseClicked
 
     private void two_three_dollar_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
-                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_dollar_money_rbMouseClicked
 
     private void two_three_bart_money_rbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbMouseClicked
         remove_all_in_list(two_one_ph_reciever_list);
         remove_all_in_list(two_one_ph_senter_list);
-                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_three_bart_money_rbMouseClicked
 
     private void two_one_edit_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_edit_bnMouseClicked
@@ -7915,43 +7893,43 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_four_amMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_amMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_four_amMouseClicked
 
     private void two_four_pmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_pmMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_four_pmMouseClicked
 
     private void two_four_reciever_ph_no_his_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                    set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
     }//GEN-LAST:event_two_four_reciever_ph_no_his_bnMouseClicked
 
     private void two_two_reveiver_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_two_reveiver_money_tfMouseClicked
 
     private void two_two_service_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_service_money_tfMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
     }//GEN-LAST:event_two_two_service_money_tfMouseClicked
 
     private void two_two_bn_finishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_bn_finishMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
     }//GEN-LAST:event_two_two_bn_finishMouseClicked
 
     private void two_four_print_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_print_bnMouseClicked
         remove_all_in_list(two_four_ph_recieve_list);
-                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
     }//GEN-LAST:event_two_four_print_bnMouseClicked
 
     private void two_two_reveiver_ph_no_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfMouseClicked
         search_engine_pro(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf.getText().trim(),
                 "reciever_phone_no", "from_thai_reciever_ph_no_his_tb");
-                    set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfMouseClicked
 
     private void two_three_bn_finishKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_bn_finishKeyPressed
@@ -7965,6 +7943,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_three_bn_finish.doClick();
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_UP:
                 if (two_one_is_off_edit) {
@@ -7988,6 +7967,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_one_print_bn.doClick();
+                set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_UP:
                 if (two_one_is_off_edit) {
@@ -8012,6 +7992,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_two_bn_finish_.doClick();
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
@@ -8031,6 +8012,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_two_bn_finish_.doClick();
+                set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
@@ -8051,6 +8033,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_one_bn_finish.doClick();
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
@@ -8070,6 +8053,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_three_print_bn.doClick();
+                set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
@@ -8087,6 +8071,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_two_bn_finish.doClick();
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
@@ -8107,6 +8092,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_four_print_bn.doClick();
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
                 break;
             case KeyEvent.VK_RIGHT:
                 break;
@@ -8771,7 +8757,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_two_reveiver_money_tfKeyPressed
 
     private void two_two_service_money_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_service_money_tfKeyPressed
-                int code = evt.getKeyCode();
+        int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_UP:
                 set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
