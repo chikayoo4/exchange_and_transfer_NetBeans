@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
@@ -83,15 +84,15 @@ public class from_province {
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
                     v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
                     v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
                     v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
-                    v3.add("លុយទទូល: -" + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
-                            + " | លុយទទូល: -" + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
-                            + " | លុយសរុប: " + rs.getString("pro_name")
-                            + " | លេខទទូល: " + rs.getString("receiver_phone_no"));
+                    v3.add("ទឺកប្រាក់: -" + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
+                            + "  |  លុយប្រគល់: -" + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
+                            + "  |  ឈ្មោះហាង: " + rs.getString("pro_name")
+                            + "  |  លេខទទូល: " + rs.getString("receiver_phone_no"));
                 }
             }
         } catch (SQLException ex) {

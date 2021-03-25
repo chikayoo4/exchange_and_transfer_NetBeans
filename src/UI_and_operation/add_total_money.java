@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
@@ -72,12 +73,12 @@ public class add_total_money {
 
                     //get date of exchanging money
                     String date_history = objSDF.format(rs.getTimestamp("add_date"));
-String add_type_of_money = rs.getString("type_of_money");
+                    String add_type_of_money = rs.getString("type_of_money");
                     //set to v2 all data only 1 row
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
                     v3.add((add_type_of_money.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
                     v3.add((add_type_of_money.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
                     v3.add((add_type_of_money.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
@@ -92,7 +93,7 @@ String add_type_of_money = rs.getString("type_of_money");
         return v3;
     }
 
-    public static void detele_add_total_to_db(int id, String acc, String pur, Boolean is_update_inv_man)  {
+    public static void detele_add_total_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {
 
         Connection con;
         PreparedStatement pst;
@@ -103,39 +104,39 @@ String add_type_of_money = rs.getString("type_of_money");
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-            
-            if(is_update_inv_man){
-            String add_money = "";
-            String money_type = "";
 
-            //query to access
-            pst = con.prepareStatement("SELECT add_money, type_of_money "
-                    + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
-                    + "where id_add = ? "
-                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
-                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
-            pst.setInt(1, id);
-            pst.setString(2, acc);
-            pst.setString(3, pur);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                add_money = clear_cvot(rs.getString("add_money"));
-                money_type = rs.getString("type_of_money");
-            }
+            if (is_update_inv_man) {
+                String add_money = "";
+                String money_type = "";
 
-            switch (money_type) {
-                case "Rial":
-                    update_inv_man_money("-" + add_money, "0", "0", "0", id, acc, pur);
-                    break;
-                case "Dollar":
-                    update_inv_man_money("0", "-" + add_money, "0", "0", id, acc, pur);
-                    break;
-                case "Bart":
-                    update_inv_man_money("0", "0", "-" + add_money, "0", id, acc, pur);
-                    break;
-                default:
-all_type_error_mes error_mes = new all_type_error_mes("error function add_total_money class: detele_add_total_to_db");
-            }
+                //query to access
+                pst = con.prepareStatement("SELECT add_money, type_of_money "
+                        + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
+                        + "where id_add = ? "
+                        + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                        + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?) ;");
+                pst.setInt(1, id);
+                pst.setString(2, acc);
+                pst.setString(3, pur);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    add_money = clear_cvot(rs.getString("add_money"));
+                    money_type = rs.getString("type_of_money");
+                }
+
+                switch (money_type) {
+                    case "Rial":
+                        update_inv_man_money("-" + add_money, "0", "0", "0", id, acc, pur);
+                        break;
+                    case "Dollar":
+                        update_inv_man_money("0", "-" + add_money, "0", "0", id, acc, pur);
+                        break;
+                    case "Bart":
+                        update_inv_man_money("0", "0", "-" + add_money, "0", id, acc, pur);
+                        break;
+                    default:
+                        all_type_error_mes error_mes = new all_type_error_mes("error function add_total_money class: detele_add_total_to_db");
+                }
             }
             //update sql query to access
             pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
@@ -145,8 +146,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function add_total_
             pst.setString(3, pur);
             pst.executeUpdate();
 
-            
-delete_inv_man(id, acc, pur);
+            delete_inv_man(id, acc, pur);
 
             //dialog when added to access is success
             //                        JOptionPane.showMessageDialog(this, "records update");

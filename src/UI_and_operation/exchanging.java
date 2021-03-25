@@ -5,6 +5,9 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
+import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
+import static UI_and_operation.UI_and_operation.convert_to_type_of_m;
 import static UI_and_operation.UI_and_operation.current_date;
 import UI_and_operation.UI_and_operation.purpose_type;
 import static UI_and_operation.UI_and_operation.set_is_change_true;
@@ -288,8 +291,8 @@ public class exchanging {
                     ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())));
                     break;
                 default:
-                    
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_to_db");
+
+                    all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_to_db");
             }
             int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.exchanging, getDate());
             set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
@@ -418,7 +421,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                         db_ind_bart = db_ind_bart - tf_one_res;
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
                 }
                 switch (convert_to_stan_exc_type(one_two_rate_bc2.getSelectedItem().toString())) {
                     case S_to_R:
@@ -464,7 +467,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                         db_ind_bart = db_ind_bart - tf_two_res;
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
                 }
                 id_inv_man = set_invoice_man_db(rial_validation(db_rial),
                         dollar_validation(db_dollar),
@@ -588,7 +591,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                         update_ind_man_money("-" + exchanging_money_one, "0", result_exchanging_money_one, "0", id, acc, pur);
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
                 }
                 switch (type_of_exchanging_two) {
                     case "S_to_R":
@@ -616,7 +619,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                         update_ind_man_money("-" + exchanging_money_two, "0", result_exchanging_money_two, "0", id, acc, pur);
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
                 }
             }
             //update sql query to access
@@ -701,7 +704,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                         update_ind_man_money("-" + exchanging_money, "0", result_exchanging_money, "0", id, acc, pur);
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_exe_from_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_exe_from_db");
                 }
             }
 
@@ -829,7 +832,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
             }
 
         } catch (Exception e) {
-all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: S_R_validation\n" + e);
+            all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: S_R_validation\n" + e);
         }
     }
 
@@ -922,7 +925,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
     }
 
     public static Vector get_from_pro_db_set_to_tb_double_exc(int id_invoice) {
-        
+
         Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
@@ -956,25 +959,36 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                 rs = pst.executeQuery();
 
                 while (rs.next()) {
+                    String exc1 = rs.getString("exchanging_money_one");
+                    String own1 = rs.getString("result_exchanging_money_one");
+                    String rate1 = rs.getString("one_rate");
                     String money_type_from_sql_one = rs.getString("exchange_type_one");
                     String cus_money_type_one = money_type_from_sql_one.substring(0, 1);
                     String owner_money_type_one = money_type_from_sql_one.substring(5, 6);
 
+                    String exc2 = rs.getString("exchanging_money_two");
+                    String own2 = rs.getString("result_exchanging_money_two");
+                    String rate2 = rs.getString("two_rate");
                     String money_type_from_sql_two = rs.getString("exchange_type_two");
                     String cus_money_type_two = money_type_from_sql_two.substring(0, 1);
                     String owner_money_type_two = money_type_from_sql_two.substring(5, 6);
+
+                    Timestamp ts_date = rs.getTimestamp("invoice_man_date");
+                    String id_man = String.valueOf(rs.getInt("id_invoice_man"));
+                    String acc = rs.getString("acc");
+                    String pur = rs.getString("pur");
 
                     //to get value then set in table history
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
                     //get date of exchanging money
-                    String date_history = objSDF.format(rs.getTimestamp("invoice_man_date"));
+                    String date_history = objSDF.format(ts_date);
 
                     v3.add(date_history);
-                    v3.add(String.valueOf(rs.getInt("id_invoice_man")));
-                    v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(id_man);
+                    v3.add(acc);
+                    v3.add(convert_pur_to_kh(pur));
 
                     v3.add((!(money_type_from_sql_one.equals("S_to_B") || money_type_from_sql_one.equals("B_to_S"))
                             || !(money_type_from_sql_two.equals("S_to_B") || money_type_from_sql_two.equals("B_to_S")))
@@ -986,15 +1000,38 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                             || !(money_type_from_sql_two.equals("S_to_R") || money_type_from_sql_two.equals("R_to_S")))
                             ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
-                    v3.add("គេ: "
-                            + rs.getString("exchanging_money_one") + " " + cus_money_type_one + "  |  យើង: -"
-                            + rs.getString("result_exchanging_money_one") + " " + owner_money_type_one + "  |  អត្រា: "
-                            + rs.getString("one_rate") + "  |  "
-                            + money_type_from_sql_one + " | គេ: "
-                            + rs.getString("exchanging_money_two") + " " + cus_money_type_two + "  |  យើង: -"
-                            + rs.getString("result_exchanging_money_two") + " " + owner_money_type_two + "  |  អត្រា: "
-                            + rs.getString("two_rate") + "  |  "
-                            + money_type_from_sql_two);
+                    if (!cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
+                        v3.add("លុយគេ: " + exc1 + " " + cus_money_type_one
+                                + "  |  លុយគេ: " + exc2 + " " + cus_money_type_two
+                                + "  |  លុយយើង: -" + own1 + " " + owner_money_type_one
+                                + "  |  លុយយើង: -" + own2 + " " + owner_money_type_two
+                                + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")"
+                                + "  |  អត្រា: " + rate2 + " (" + des_exc_type(money_type_from_sql_two) + ")");
+                    } else if (cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
+                        Double exc_d1 = Double.parseDouble(clear_cvot(exc1));
+                        Double exc_d2 = Double.parseDouble(clear_cvot(exc2));
+                        v3.add("លុយគេ: " + money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(exc_d1 + exc_d2), true) + " " + convert_to_short_money_type(cus_money_type_one)
+                                + "  |  លុយយើង: -" + own1 + " " + convert_to_short_money_type(owner_money_type_one)
+                                + "  |  លុយយើង: -" + own2 + " " + convert_to_short_money_type(owner_money_type_two)
+                                + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")"
+                                + "  |  អត្រា: " + rate2 + " (" + des_exc_type(money_type_from_sql_two) + ")");
+                    } else if (!cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
+                        Double own_d1 = Double.parseDouble(clear_cvot(own1));
+                        Double own_d2 = Double.parseDouble(clear_cvot(own2));
+                        v3.add("លុយគេ: " + exc1 + " " + convert_to_short_money_type(cus_money_type_one)
+                                + "  |  លុយគេ: " + exc2 + " " + convert_to_short_money_type(cus_money_type_two)
+                                + "  |  លុយយើង: -" + money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(own_d1 + own_d2), true) + " " + convert_to_short_money_type(owner_money_type_one)
+                                + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")"
+                                + "  |  អត្រា: " + rate2 + " (" + des_exc_type(money_type_from_sql_two) + ")");
+                    } else if (!cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
+                        Double exc_d1 = Double.parseDouble(clear_cvot(exc1));
+                        Double exc_d2 = Double.parseDouble(clear_cvot(exc2));
+                        Double own_d1 = Double.parseDouble(clear_cvot(own1));
+                        Double own_d2 = Double.parseDouble(clear_cvot(own2));
+                        v3.add("លុយគេ: " + money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(exc_d1 + exc_d2), true) + " " + convert_to_short_money_type(cus_money_type_one)
+                                + "  |  លុយយើង: -" + money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(own_d1 + own_d2), true) + " " + convert_to_short_money_type(owner_money_type_one)
+                                + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")");
+                    }
                 }
             }
         } catch (SQLException ex) {
@@ -1050,16 +1087,17 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
-                    v3.add((!(money_type_from_sql.equals("S_to_B") || money_type_from_sql.equals("B_to_S"))) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
-                    v3.add((!(money_type_from_sql.equals("B_to_R") || money_type_from_sql.equals("R_to_B"))) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
-                    v3.add((!(money_type_from_sql.equals("S_to_R") || money_type_from_sql.equals("R_to_S"))) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
+                    v3.add((!(money_type_from_sql.equals("S_to_B") || money_type_from_sql.equals("B_to_S")))
+                            ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
+                    v3.add((!(money_type_from_sql.equals("B_to_R") || money_type_from_sql.equals("R_to_B")))
+                            ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
+                    v3.add((!(money_type_from_sql.equals("S_to_R") || money_type_from_sql.equals("R_to_S")))
+                            ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
-                    v3.add("គេ: "
-                            + rs.getString("exchanging_money") + " " + cus_money_type + "  |  យើង: -"
-                            + rs.getString("result_exchanging_money") + " " + owner_money_type + "  |  អត្រា: "
-                            + rs.getString("exchange_rate") + "  |  "
-                            + money_type_from_sql);
+                    v3.add("លុយគេ: " + rs.getString("exchanging_money") + " " + convert_to_short_money_type(cus_money_type) + "  |  លុយយើង: -"
+                            + rs.getString("result_exchanging_money") + " " + convert_to_short_money_type(owner_money_type) + "  |  អត្រា: "
+                            + rs.getString("exchange_rate") + " (" + des_exc_type(money_type_from_sql) + ")");
                 }
             }
         } catch (SQLException ex) {
@@ -1069,4 +1107,30 @@ all_type_error_mes error_mes = new all_type_error_mes("error function exchanging
         return v3;
     }
 
+    private static String des_exc_type(String exe_type) {
+        String des = "";
+        switch (exe_type) {
+            case "S_to_R":
+                des = "$ -> ៛";
+                break;
+            case "R_to_S":
+                des = "៛ -> $";
+                break;
+            case "S_to_B":
+                des = "$ -> B";
+                break;
+            case "B_to_S":
+                des = "B -> $";
+                break;
+            case "B_to_R":
+                des = "B -> ៛";
+                break;
+            case "R_to_B":
+                des = "៛ -> B";
+                break;
+            default:
+                all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: des_exc_type");
+        }
+        return des;
+    }
 }

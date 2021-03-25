@@ -261,12 +261,13 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         switch (money_type) {
             case "Rial":
+            case "R":
                 return "៛";
             case "Dollar":
-
+            case "S":
                 return "$";
             case "Bart":
-
+            case "B":
                 return "B";
             default:
                 return "";
@@ -603,7 +604,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                         dft.addRow(v3);
                         row_increas++;
                     }
-
+                    if (row_increas == 0) {
+                        dft.setRowCount(0);
+                    }
                 } catch (SQLException ex) {
                     sql_con sql_con_obj = new sql_con(ex);
                     sql_con_obj.setVisible(true);
@@ -615,6 +618,36 @@ public class UI_and_operation extends javax.swing.JFrame {
             three_calendar_cld.setBackground(Color.red);
             JOptionPane.showMessageDialog(this, "Wrong day or month or year");
         }
+    }
+
+    public static String convert_pur_to_kh(String pur) {
+        String pur_kh = "";
+        switch (pur) {
+            case "exchanging":
+                pur_kh = "ប្តូរប្រាក់";
+                break;
+            case "add_total_money":
+                pur_kh = "បន្ថែមប្រាក់";
+                break;
+            case "to_province":
+                pur_kh = "ផ្ញើរប្រាក់ទៅតំបន់";
+                break;
+            case "from_province":
+                pur_kh = "ដកប្រាក់ពីតំបន់";
+                break;
+            case "double_exchanging":
+                pur_kh = "ប្តូរប្រាក់២ដង";
+                break;
+            case "to_thai":
+                pur_kh = "ផ្ញើរប្រាក់ទៅថៃ";
+                break;
+            case "from_thai":
+                pur_kh = "ដកប្រាក់ពីថៃ";
+                break;
+            default:
+                all_type_error_mes error_mes = new all_type_error_mes("error function UI_and_operation class: convert_pur_to_kh");
+        }
+        return pur_kh;
     }
 
     public static Boolean is_has_history_list_db(String value, String col, String tb) {
@@ -1510,6 +1543,30 @@ public class UI_and_operation extends javax.swing.JFrame {
         } else {
         }
         return correct_pass;
+    }
+
+    public static type_of_money convert_to_type_of_m(String money_type) {
+        type_of_money exc_rate = null;
+        switch (money_type) {
+            case "R":
+            case "Rial":
+            case "rial":
+                exc_rate = type_of_money.Rial;
+                break;
+            case "S":
+            case "Dollar":
+            case "dollar":
+                exc_rate = type_of_money.Dollar;
+                break;
+            case "B":
+            case "Bart":
+            case "bart":
+                exc_rate = type_of_money.Bart;
+                break;
+            default:
+                all_type_error_mes error_mes = new all_type_error_mes("error function UI_and_operation class: convert_to_type_of_m");
+        }
+        return exc_rate;
     }
 
     private void init_component() {
@@ -4411,18 +4468,18 @@ public class UI_and_operation extends javax.swing.JFrame {
                                         .addGap(33, 33, 33)
                                         .addComponent(three_chb_m_b_bank)
                                         .addGap(34, 34, 34)
-                                        .addComponent(three_chb_m_detail)))
-                                .addGap(0, 217, Short.MAX_VALUE))
-                            .addGroup(his_ptLayout.createSequentialGroup()
-                                .addComponent(jLabel35)
-                                .addGap(18, 18, 18)
-                                .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(51, 51, 51)
-                                .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(52, 52, 52)
-                                .addComponent(del_last_7d_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(three_chb_m_detail))
+                                    .addGroup(his_ptLayout.createSequentialGroup()
+                                        .addComponent(jLabel35)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(his_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(three_calendar_cld, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(51, 51, 51)
+                                        .addComponent(date_history_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(52, 52, 52)
+                                        .addComponent(del_last_7d_cb, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 147, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         his_ptLayout.setVerticalGroup(
@@ -5067,7 +5124,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(zero_tp, javax.swing.GroupLayout.DEFAULT_SIZE, 1559, Short.MAX_VALUE)
+                .addComponent(zero_tp)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -6682,6 +6739,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_one_ph_senter_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_ph_senter_listMousePressed
         get_pro_result_search_db(two_one_ph_senter_list, two_three_sender_phone_no_tf);
+        set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_ph_senter_listMousePressed
 
     private void two_three_sender_phone_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfKeyPressed
@@ -6713,6 +6771,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         switch (code) {
             case KeyEvent.VK_ENTER:
                 get_pro_result_search_db(two_one_ph_senter_list, two_three_sender_phone_no_tf);
+                set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_one_ph_senter_listKeyPressed
@@ -6750,6 +6809,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         switch (code) {
             case KeyEvent.VK_ENTER:
                 get_pro_result_search_db(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
+                set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
                 break;
         }
 
@@ -6757,6 +6817,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_one_ph_reciever_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_one_ph_reciever_listMousePressed
         get_pro_result_search_db(two_one_ph_reciever_list, two_three_receiver_phone_no_tf);
+        set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_one_ph_reciever_listMousePressed
 
     private void two_two_reciever_his_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnActionPerformed
@@ -6818,8 +6879,8 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_one_sender_his_bnMouseClicked
 
     private void two_two_ph_recieve_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listMousePressed
-
         get_pro_result_search_db(two_two_ph_recieve_list, two_two_receiver_phone_no_tf);
+        set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
     }//GEN-LAST:event_two_two_ph_recieve_listMousePressed
 
     private void two_two_ph_recieve_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_ph_recieve_listKeyPressed
@@ -6827,6 +6888,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         switch (code) {
             case KeyEvent.VK_ENTER:
                 get_pro_result_search_db(two_two_ph_recieve_list, two_two_receiver_phone_no_tf);
+                set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_two_ph_recieve_listKeyPressed
@@ -6954,7 +7016,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 try {
                     timestamp = new java.sql.Timestamp(Date_time.getTime());
                 } catch (Exception e) {
-    JOptionPane.showMessageDialog(this,"error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + e,"Alert",JOptionPane.WARNING_MESSAGE); 
+                    JOptionPane.showMessageDialog(this, "error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
                 }
 
                 //write sql query to access
@@ -7007,7 +7069,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 sql_con sql_con_obj = new sql_con(ex);
                 sql_con_obj.setVisible(true);
             } catch (ParseException ex) {
-    JOptionPane.showMessageDialog(this,"error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + ex,"Alert",JOptionPane.WARNING_MESSAGE); 
+                JOptionPane.showMessageDialog(this, "error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + ex, "Alert", JOptionPane.WARNING_MESSAGE);
             }
 
             two_four_date.setCalendar(null);
@@ -7049,7 +7111,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_two_total_money_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_two_total_money_tfMouseClicked
         remove_all_in_list(two_two_ph_recieve_list);
-        set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
     }//GEN-LAST:event_two_two_total_money_tfMouseClicked
 
     private void two_three_sender_money_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfActionPerformed
@@ -7348,6 +7410,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_three_to_thai_bank_id_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_id_listMousePressed
         get_bank_thai_result_search_db(two_three_to_thai_bank_id_list, two_one_tf_cus_no,
                 two_one_tf_cus_name, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_three_to_thai_bank_id_listMousePressed
 
     private void two_three_to_thai_bank_id_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_bank_id_listKeyPressed
@@ -7356,6 +7419,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_ENTER:
                 get_bank_thai_result_search_db(two_three_to_thai_bank_id_list, two_one_tf_cus_no,
                         two_one_tf_cus_name, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_three_to_thai_bank_id_listKeyPressed
@@ -7368,6 +7432,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_three_to_thai_name_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_name_listMousePressed
         get_bank_thai_result_search_db(two_three_to_thai_name_list, two_one_tf_cus_name,
                 two_one_tf_cus_no, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_three_to_thai_name_listMousePressed
 
     private void two_three_to_thai_name_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_name_listKeyPressed
@@ -7376,6 +7441,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_ENTER:
                 get_bank_thai_result_search_db(two_three_to_thai_name_list, two_one_tf_cus_name,
                         two_one_tf_cus_no, two_three_tf_cus_ph_no, two_three_bank_thai_cb);
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_three_to_thai_name_listKeyPressed
@@ -7383,6 +7449,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private void two_three_to_thai_ph_no_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_three_to_thai_ph_no_listMousePressed
         get_bank_thai_result_search_db(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no,
                 two_one_tf_cus_no, two_one_tf_cus_name, two_three_bank_thai_cb);
+        set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_three_to_thai_ph_no_listMousePressed
 
     private void two_three_to_thai_ph_no_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_three_to_thai_ph_no_listKeyPressed
@@ -7391,6 +7458,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_ENTER:
                 get_bank_thai_result_search_db(two_three_to_thai_ph_no_list, two_three_tf_cus_ph_no,
                         two_one_tf_cus_no, two_one_tf_cus_name, two_three_bank_thai_cb);
+                set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_three_to_thai_ph_no_listKeyPressed
@@ -7580,6 +7648,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     private void two_four_ph_recieve_listMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_two_four_ph_recieve_listMousePressed
         get_pro_result_search_db(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf);
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
     }//GEN-LAST:event_two_four_ph_recieve_listMousePressed
 
     private void two_four_ph_recieve_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_four_ph_recieve_listKeyPressed
@@ -7587,6 +7656,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         switch (code) {
             case KeyEvent.VK_ENTER:
                 get_pro_result_search_db(two_four_ph_recieve_list, two_two_reveiver_ph_no_tf);
+                set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
                 break;
         }
     }//GEN-LAST:event_two_four_ph_recieve_listKeyPressed
@@ -7669,14 +7739,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_tf_cus_ph_noKeyPressed
 
     private void two_two_reveiver_ph_no_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfKeyPressed
-        if (two_four_ph_recieve_list.getModel().getSize() != 0) {
-            int code = evt.getKeyCode();
-            switch (code) {
-                case KeyEvent.VK_DOWN:
-                    two_four_ph_recieve_list.requestFocus();
-                    break;
-            }
-        }
+
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_UP:
@@ -7691,7 +7754,11 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_LEFT:
                 break;
             case KeyEvent.VK_DOWN:
-                set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+                if (two_four_ph_recieve_list.getModel().getSize() != 0) {
+                    two_four_ph_recieve_list.requestFocus();
+                } else {
+                    set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+                }
                 break;
         }
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfKeyPressed
@@ -9011,5 +9078,4 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JTextField two_two_total_money_tf;
     private javax.swing.JTabbedPane zero_tp;
     // End of variables declaration//GEN-END:variables
-
 }

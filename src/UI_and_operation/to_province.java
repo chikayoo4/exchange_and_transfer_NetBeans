@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
 import static UI_and_operation.UI_and_operation.current_date;
 import static UI_and_operation.UI_and_operation.get_id_money_type_from_db;
@@ -58,7 +59,7 @@ public class to_province {
             case Dollar:
                 return String.valueOf(Double.parseDouble(money) / 1000);
             default:
-all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: get_service_from_db");
+                all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: get_service_from_db");
         }
         return "";
     }
@@ -178,7 +179,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function to_provinc
                 two_three_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_to_pro,
                         String.valueOf(Double.parseDouble(clear_cvot(two_three_service_money_tf.getText())) / 2), true));
             } catch (Exception e) {
-all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: two_one_cal\n" + e);
+                all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: two_one_cal\n" + e);
             }
         } else {
             two_one_total_money_tf.setText("");
@@ -221,7 +222,6 @@ all_type_error_mes error_mes = new all_type_error_mes("error function to_provinc
 
                 while (rs.next()) {
 
-
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
@@ -233,16 +233,17 @@ all_type_error_mes error_mes = new all_type_error_mes("error function to_provinc
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
                     v3.add((money_type.equals("Rial")) ? money_S_B_R_validate(type_of_money.Rial, inv_man_obj.getRial(), true) : "");
                     v3.add((money_type.equals("Dollar")) ? money_S_B_R_validate(type_of_money.Dollar, inv_man_obj.getDollar(), true) : "");
                     v3.add((money_type.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
                     v3.add("លុយផ្ញើរ: " + rs.getString("transfering_money") + " " + convert_to_short_money_type(money_type)
-                            + " | លុយសរុប: " + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
-                            + " | បើនៅ: " + rs.getString("pro_name")
-                            + " | លេខផ្ញើរ: " + rs.getString("sender_phone_no")
-                            + " | លេខទទូល: " + rs.getString("receiver_phone_no"));
+                            + "  |  លុយសាវា: " + rs.getString("service_money") + " " + convert_to_short_money_type(money_type)
+                            + "  |  លុយសរុប: " + rs.getString("total_money") + " " + convert_to_short_money_type(money_type)
+                            + "  |  បើនៅ: " + rs.getString("pro_name")
+                            + "  |  លេខផ្ញើរ: " + rs.getString("sender_phone_no")
+                            + "  |  លេខទទូល: " + rs.getString("receiver_phone_no"));
                 }
             }
         } catch (SQLException ex) {
@@ -298,7 +299,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function to_provinc
                         update_ind_man_money("0", "0", "-" + money, "0", id, acc, pur);
                         break;
                     default:
-all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: detele_to_pro_to_db");
+                        all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: detele_to_pro_to_db");
                 }
             }
             //update sql query to access

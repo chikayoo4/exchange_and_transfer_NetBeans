@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
 import UI_and_operation.UI_and_operation.purpose_type;
 import UI_and_operation.UI_and_operation.type_of_money;
@@ -60,7 +61,7 @@ public class from_thai {
                         + "(SELECT invoice_man_date FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.from_thai) + ") AS invoice_man_date,"
                         + "(select  user_name FROM account_tb WHERE account_tb.id_acc = from_thai_invoice_tb.id_acc) AS acc, "
                         + "(select  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = from_thai_invoice_tb.id_pur) AS pur, "
-                        + "receiver_ph_no, receiver_money, total_money, date_from_thai "
+                        + "receiver_ph_no, servise_money, receiver_money, total_money, date_from_thai "
                         + "FROM from_thai_invoice_tb "
                         + "WHERE id_invoice = ?");
                 pst.setInt(1, id_invoice);
@@ -83,15 +84,16 @@ public class from_thai {
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
                     v3.add("");
                     v3.add("");
                     v3.add("");
                     v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBank_Bart(), true));
-                    v3.add("លុយទទូល: -" + rs.getString("receiver_money") + " ฿"
-                            + " | លុយទទូល: -" + rs.getString("total_money") + " ฿"
-                            + " | date: " + date_his_fr_thai
-                            + " | លេខទទូល: " + rs.getString("receiver_ph_no"));
+                    v3.add("លុយទទូល: -" + rs.getString("receiver_money") + " ฿B"
+                            + "  |  លុយសាវា: " + rs.getString("servise_money") + " B"
+                            + "  |  លុយសរុប: -" + rs.getString("total_money") + " ฿B"
+                            + "  |  លេខទទូល: " + rs.getString("receiver_ph_no")
+                            + "  |  date: " + date_his_fr_thai);
                 }
             }
         } catch (SQLException ex) {

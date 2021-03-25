@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
 import UI_and_operation.UI_and_operation.purpose_type;
 import UI_and_operation.UI_and_operation.type_of_money;
@@ -114,7 +115,7 @@ public class to_thai {
                         + "(SELECT  user_name FROM account_tb WHERE account_tb.id_acc = to_thai_invoice_tb.id_acc) AS acc , "
                         + "(SELECT  pur_type FROM purpose_tb WHERE purpose_tb.id_pur = to_thai_invoice_tb.id_pur) AS pur, "
                         + "(SELECT bank_name FROM to_thai_bank_tb WHERE to_thai_bank_tb.id_bank = to_thai_sender_tb.id_bank) AS bank_name, "
-                        + "sender_money, total_money, sender_name, sender_num_acc "
+                        + "sender_money, servise_money, total_money, sender_name, sender_num_acc "
                         + "FROM (to_thai_invoice_tb INNER JOIN to_thai_sender_tb "
                         + "ON to_thai_invoice_tb.id_sender = to_thai_sender_tb.id_sender) "
                         + "WHERE id_invoice = ?");
@@ -136,15 +137,17 @@ public class to_thai {
                     v3.add(date_history);
                     v3.add(String.valueOf(rs.getInt("id_invoice_man")));
                     v3.add(rs.getString("acc"));
-                    v3.add(rs.getString("pur"));
+                    v3.add(convert_pur_to_kh(rs.getString("pur")));
                     v3.add("");
                     v3.add("");
                     v3.add("");
                     v3.add(money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBank_Bart(), true));
-                    v3.add("លុយផ្ញើរ: " + rs.getString("sender_money") + " ฿"
-                            + " | លុយសរុប: " + rs.getString("total_money") + " ฿"
-                            + " | bank: " + rs.getString("bank_name") + " | user: " + rs.getString("sender_name")
-                            + " | id: " + rs.getString("sender_num_acc"));
+                    v3.add("លុយផ្ញើរ: " + rs.getString("sender_money") + " ฿B"
+                            + "  |  លុយសាវា: " + rs.getString("servise_money") + " B"
+                            + "  |  លុយសរុប: " + rs.getString("total_money") + " ฿B"
+                            + "  |  ធនាគា: " + rs.getString("bank_name") 
+                            + "  |  ឈ្មោះ: " + rs.getString("sender_name")
+                            + "  |  លេខគង់: " + rs.getString("sender_num_acc"));
                 }
             }
         } catch (SQLException ex) {
