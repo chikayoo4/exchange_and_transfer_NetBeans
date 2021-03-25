@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -261,7 +262,8 @@ public class to_thai_info extends javax.swing.JFrame
                             "to_thai_history_tb", "id_to_thai", id);
                     break;
                 default:
-                    System.out.println("Eorror");
+
+    JOptionPane.showMessageDialog(this,"error function to_thai_info class: agree_bnActionPerformed","Alert",JOptionPane.WARNING_MESSAGE);   
             }
 //                view_his_obj.set_history();
             view_his_thai_obj.set_history();

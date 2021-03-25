@@ -56,10 +56,9 @@ public class to_province {
 
                 break;
             case Dollar:
-
                 return String.valueOf(Double.parseDouble(money) / 1000);
             default:
-                System.out.println("error");
+all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: get_service_from_db");
         }
         return "";
     }
@@ -179,7 +178,7 @@ public class to_province {
                 two_three_balance_money_tf.setText(money_S_B_R_validate(selected_money_type_to_pro,
                         String.valueOf(Double.parseDouble(clear_cvot(two_three_service_money_tf.getText())) / 2), true));
             } catch (Exception e) {
-                System.out.println("to_province \n" + e);
+all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: two_one_cal\n" + e);
             }
         } else {
             two_one_total_money_tf.setText("");
@@ -187,8 +186,9 @@ public class to_province {
         }
     }
 
-    public static void get_to_pro_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_to_pro_db_set_to_tb(int id_invoice) {
 
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -221,7 +221,6 @@ public class to_province {
 
                 while (rs.next()) {
 
-                    Vector v3 = new Vector();
 
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
@@ -244,14 +243,13 @@ public class to_province {
                             + " | បើនៅ: " + rs.getString("pro_name")
                             + " | លេខផ្ញើរ: " + rs.getString("sender_phone_no")
                             + " | លេខទទូល: " + rs.getString("receiver_phone_no"));
-//                                    System.out.println(v3);
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 
     public static void detele_to_pro_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {
@@ -300,7 +298,7 @@ public class to_province {
                         update_ind_man_money("0", "0", "-" + money, "0", id, acc, pur);
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function to_province class: detele_to_pro_to_db");
                 }
             }
             //update sql query to access

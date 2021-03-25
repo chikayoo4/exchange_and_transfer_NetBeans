@@ -57,7 +57,7 @@ public class reciept {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
             } catch(JRException ex){
-                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+all_type_error_mes error_mes = new all_type_error_mes("error function reciept class: print_reciept\n" + ex);
             }
     }
     

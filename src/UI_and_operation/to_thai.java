@@ -89,8 +89,9 @@ public class to_thai {
         }
     }
 
-    public static void get_to_thai_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_to_thai_db_set_to_tb(int id_invoice) {
 
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -125,7 +126,6 @@ public class to_thai {
 
                 while (rs.next()) {
 
-                    Vector v3 = new Vector();
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
@@ -145,13 +145,12 @@ public class to_thai {
                             + " | លុយសរុប: " + rs.getString("total_money") + " ฿"
                             + " | bank: " + rs.getString("bank_name") + " | user: " + rs.getString("sender_name")
                             + " | id: " + rs.getString("sender_num_acc"));
-//                                    System.out.println(v3);
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 }

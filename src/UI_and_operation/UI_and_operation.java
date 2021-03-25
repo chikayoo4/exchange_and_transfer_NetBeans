@@ -269,7 +269,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                 return "B";
             default:
-                return "error : convert_to_short_money_type";
+                return "";
         }
     }
 
@@ -351,12 +351,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                     set_on_tf1.setText(set_val.substring(0, i - 1));
 
                     for (int j = i + 2; j < set_val.length() - 1; j++) {
-//                        System.out.println("set_val.charAt(j - 1) : " + set_val.charAt(j - 1));
                         if (set_val.charAt(j - 1) == ' ' && set_val.charAt(j) == '|' && set_val.charAt(j + 1) == ' ') {
                             set_on_tf2.setText(set_val.substring(i + 2, j - 1));
 
                             for (int k = j + 2; k < set_val.length() - 1; k++) {
-//                        System.out.println("set_val.charAt(j - 1) : " + set_val.charAt(j - 1));
                                 if (set_val.charAt(k - 1) == ' ' && set_val.charAt(k) == '|' && set_val.charAt(k + 1) == ' ') {
                                     set_on_tf3.setText(set_val.substring(j + 2, k - 1));
                                     set_on_cb4.getModel().setSelectedItem(set_val.substring(k + 2, set_val.length()));
@@ -425,17 +423,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         }
         return id;
 
-    }
-
-    class list_pur_and_id {
-
-        ArrayList<String> pur_type = new ArrayList<>();
-        ArrayList<Integer> id_invoice = new ArrayList<>();
-
-        list_pur_and_id() {
-            pur_type = new ArrayList<>();
-            id_invoice = new ArrayList<>();
-        }
     }
 
     private void get_from_db_set_total_in_tb() {
@@ -514,55 +501,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         return count;
     }
 
-    private list_pur_and_id set_data_db_to_list_pur_and_id() {
-
-        list_pur_and_id list_pur_id_obj = new list_pur_and_id();
-        Connection con;
-        PreparedStatement pst;
-        ResultSet rs;
-        try {
-            con = DriverManager.getConnection(
-                    getLocal_host(),
-                    getLocal_host_user_name(),
-                    getLocal_host_password()
-            );
-
-            Calendar start_cal = three_calendar_cld.getCalendar();
-            Calendar start_cal2 = three_calendar_cld.getCalendar();
-            Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
-            start_cal.add(Calendar.DAY_OF_MONTH, 1);
-            String start_date = sdf.format(start_cal.getTime());
-            String start_date2 = sdf2.format(start_cal2.getTime());
-            pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, 0);
-            String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
-//            String pre_7_day_from_start_date2 = sdf2.format(pre_7_day_from_start_cal.getTime());
-            date_history_lb.setText(start_date2);
-            pst = con.prepareStatement("SELECT id_invoice, pur_type "
-                    + "FROM invoice_management_tb INNER JOIN purpose_tb "
-                    + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
-                    + "WHERE id_acc = ? AND invoice_man_date >= '" + pre_7_day_from_start_date + "' "
-                    + "AND invoice_man_date <= '" + start_date + "' "
-                    + "ORDER BY id_invoice_man DESC "
-                    + "OFFSET " + next_show_his + " ROWS "
-                    + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
-            pst.setInt(1, get_acc_id());
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                list_pur_id_obj.pur_type.add(rs.getString("pur_type"));
-                list_pur_id_obj.id_invoice.add(rs.getInt("id_invoice"));
-            }
-//            System.out.println("id_invoice : " + list_pur_id_obj.id_invoice);
-
-        } catch (SQLException ex) {
-            sql_con sql_con_obj = new sql_con(ex);
-            sql_con_obj.setVisible(true);
-        }
-        return list_pur_id_obj;
-    }
-
     private void set_to_tb(String S, String R, String B, String B_bank) {
 
         DefaultTableModel dft1 = (DefaultTableModel) three_tb_total_money.getModel();
@@ -579,58 +517,99 @@ public class UI_and_operation extends javax.swing.JFrame {
         dft1.addRow(v3);
     }
 
+    private class start_end_date_db {
+
+        private String start_date;
+        private String end_date;
+        private String dd_MM_yyyy;
+
+        public start_end_date_db(int start_num, int end_num) {
+            Calendar start_cal = three_calendar_cld.getCalendar();
+            Calendar start_cal_d_m_y = three_calendar_cld.getCalendar();
+            Calendar end_cal = three_calendar_cld.getCalendar();
+            SimpleDateFormat sdf_y_m_d = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_d_m_y = new SimpleDateFormat("dd-MM-yyyy");
+            start_cal.add(Calendar.DAY_OF_MONTH, start_num);
+            start_date = sdf_y_m_d.format(start_cal.getTime());
+            dd_MM_yyyy = sdf_d_m_y.format(start_cal_d_m_y.getTime());
+            end_cal.add(Calendar.DAY_OF_MONTH, end_num);
+            end_date = sdf_y_m_d.format(end_cal.getTime());
+        }
+    }
+
     public void set_history() {
-//        System.out.println("count_db_to_list_pur_and_id() : " + count_db_to_list_pur_and_id());
         if (three_calendar_cld.getDate() != null && validate_dc(three_calendar_cld)) {
             three_calendar_cld.setBackground(Color.lightGray);
 
             if (is_delete_last_7d()) {
                 delete_not_cur_to_last_7_d_from_db();
             }
-            list_pur_and_id list_pur_id_obj = new list_pur_and_id();
-//            System.out.println("get_acc_id() : " + get_acc_id());
-//            System.out.println("!is_null_acc_id_invoice_man(get_acc_id()) : " + !is_null_acc_id_invoice_man(get_acc_id()));
+
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
                 get_from_db_set_total_in_tb();
-                list_pur_id_obj = set_data_db_to_list_pur_and_id();
+                Connection con;
+                PreparedStatement pst;
+                ResultSet rs;
+                try {
+                    con = DriverManager.getConnection(
+                            getLocal_host(),
+                            getLocal_host_user_name(),
+                            getLocal_host_password()
+                    );
+
+                    start_end_date_db s_e_d_db_obj = new start_end_date_db(1, 0);
+                    date_history_lb.setText(s_e_d_db_obj.dd_MM_yyyy);
+                    pst = con.prepareStatement("SELECT id_invoice, pur_type "
+                            + "FROM invoice_management_tb INNER JOIN purpose_tb "
+                            + "ON invoice_management_tb.id_pur = purpose_tb.id_pur "
+                            + "WHERE id_acc = " + get_acc_id() + " AND invoice_man_date >= '" + s_e_d_db_obj.end_date + "' "
+                            + "AND invoice_man_date <= '" + s_e_d_db_obj.start_date + "' "
+                            + "ORDER BY id_invoice_man DESC "
+                            + "OFFSET " + next_show_his + " ROWS "
+                            + "FETCH NEXT " + num_show_his + " ROWS ONLY;");
+                    rs = pst.executeQuery();
+                    DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
+                    int row_increas = 0;
+                    while (rs.next()) {
+                        dft.setRowCount(row_increas);
+                        Vector v3 = new Vector();
+                        dft.setRowCount(row_increas);
+                        int id_inv = rs.getInt("id_invoice");
+                        switch (rs.getString("pur_type")) {
+                            case "exchanging":
+                                v3 = get_exe_db_set_to_tb(id_inv);
+                                break;
+                            case "add_total_money":
+                                v3 = get_add_total_db_set_to_tb(id_inv);
+                                break;
+                            case "to_province":
+                                v3 = get_to_pro_db_set_to_tb(id_inv);
+                                break;
+                            case "from_province":
+                                v3 = get_from_pro_db_set_to_tb(id_inv);
+                                break;
+                            case "double_exchanging":
+                                v3 = get_from_pro_db_set_to_tb_double_exc(id_inv);
+                                break;
+                            case "to_thai":
+                                v3 = get_to_thai_db_set_to_tb(id_inv);
+                                break;
+                            case "from_thai":
+                                v3 = get_from_thai_db_set_to_tb(id_inv);
+                                break;
+                            default:
+                                JOptionPane.showMessageDialog(this, "error : set_history", "Alert", JOptionPane.WARNING_MESSAGE);
+                        }
+                        dft.addRow(v3);
+                        row_increas++;
+                    }
+
+                } catch (SQLException ex) {
+                    sql_con sql_con_obj = new sql_con(ex);
+                    sql_con_obj.setVisible(true);
+                }
             } else {
                 set_to_tb("0", "0", "0", "0");
-            }
-
-            ArrayList<Vector> v2 = new ArrayList<>();
-            DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
-            dft.setRowCount(0);
-            for (int i = 0; i < list_pur_id_obj.id_invoice.size(); i++) {
-                switch (list_pur_id_obj.pur_type.get(i)) {
-                    case "exchanging":
-                        get_exe_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "add_total_money":
-                        get_add_total_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "to_province":
-                        get_to_pro_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "from_province":
-                        get_from_pro_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "double_exchanging":
-                        get_from_pro_db_set_to_tb_double_exc(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "to_thai":
-                        get_to_thai_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    case "from_thai":
-                        get_from_thai_db_set_to_tb(list_pur_id_obj.id_invoice.get(i), v2);
-                        break;
-                    default:
-                        System.out.println("error : set_history");
-                }
-            }
-            if (v2.size() != 0) {
-                for (int i = 0; i < v2.size(); i++) {
-                    dft.addRow(v2.get(i));
-                }
             }
         } else {
             three_calendar_cld.setBackground(Color.red);
@@ -789,7 +768,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
-        //        System.out.println(five_local_host_tf.getText());
         try {
             con = DriverManager.getConnection(
                     getLocal_host(),
@@ -875,7 +853,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         zero_tp.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-//            System.out.println("Tab: " + zero_tp.getSelectedIndex());
 
                 if (zero_tp.getSelectedIndex() == 2 && is_change_his) {
                     three_up.setEnabled(false);
@@ -896,7 +873,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         sub_exc_pt.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-//                System.out.println("Tab: " + sub_exc_pt.getSelectedIndex());
                 if (sub_exc_pt.getSelectedIndex() == 0) {
                     set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
                 } else if (sub_exc_pt.getSelectedIndex() == 1) {
@@ -910,7 +886,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         sub_tran_pt.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-//            System.out.println("Tab: " + sub_tran_pt.getSelectedIndex());
                 idx_transfer_pt = sub_tran_pt.getSelectedIndex();
                 if (sub_tran_pt.getSelectedIndex() == 0 && is_change_pro) {
                     set_cb(two_one_pro_name_cb, "transfer_province", "province_name_history_tb");
@@ -1349,20 +1324,9 @@ public class UI_and_operation extends javax.swing.JFrame {
         });
     }
 
-//    class num_count_each_d_perform_from_db{
-//        public ArrayList<String> Date_str = new ArrayList<>();
-//        public ArrayList<Integer> num_count = new ArrayList<>();
-//    }
     private void delete_not_cur_to_last_7_d_from_db() {
 
-//        num_count_each_d_perform_from_db obj = new num_count_each_d_perform_from_db();
-        Calendar start_cal = three_calendar_cld.getCalendar();
-        Calendar pre_7_day_from_start_cal = three_calendar_cld.getCalendar();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        start_cal.add(Calendar.DAY_OF_MONTH, 1);
-        String start_date = sdf.format(start_cal.getTime());
-        pre_7_day_from_start_cal.add(Calendar.DAY_OF_MONTH, -7);
-        String pre_7_day_from_start_date = sdf.format(pre_7_day_from_start_cal.getTime());
+        start_end_date_db s_e_d_db_obj = new start_end_date_db(1, -7);
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -1375,8 +1339,8 @@ public class UI_and_operation extends javax.swing.JFrame {
 
             pst = con.prepareStatement("SELECT id_invoice, id_acc, id_pur "
                     + "FROM invoice_management_tb "
-                    + "WHERE NOT invoice_man_date >= '" + pre_7_day_from_start_date + "' "
-                    + "AND invoice_man_date <= '" + start_date + "';");
+                    + "WHERE NOT invoice_man_date >= '" + s_e_d_db_obj.end_date + "' "
+                    + "AND invoice_man_date <= '" + s_e_d_db_obj.start_date + "';");
             rs = pst.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id_invoice");
@@ -1405,7 +1369,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                         detele_from_thai_to_db(id, acc, pur, false);
                         break;
                     default:
-                        System.out.println("error : delete_not_cur_to_last_7_d_from_db");
+                        JOptionPane.showMessageDialog(this, "error function main class: delete_not_cur_to_last_7_d_from_db", "Alert", JOptionPane.WARNING_MESSAGE);
+
                 }
 
             }
@@ -1543,7 +1508,6 @@ public class UI_and_operation extends javax.swing.JFrame {
         if (action == JOptionPane.OK_OPTION) {
             correct_pass = pwd.getText().equals(get_admin_pass_from_db());
         } else {
-//            System.out.println("User canceled / closed the dialog, action = " + action);
         }
         return correct_pass;
     }
@@ -5305,7 +5269,6 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
                 break;
             case KeyEvent.VK_ENTER:
-                System.out.println("enter");
                 one_bn_finished.doClick();
                 set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
                 break;
@@ -5614,7 +5577,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                             pst.executeUpdate();
                             break;
                         default:
-                            System.out.println("Error : three_add_bnActionPerformed");
+                            JOptionPane.showMessageDialog(this, "error function main class: three_add_bnActionPerformed", "Alert", JOptionPane.WARNING_MESSAGE);
+
                     }
                     three_up.setEnabled(false);
                     next_show_his = 0;
@@ -6139,7 +6103,6 @@ public class UI_and_operation extends javax.swing.JFrame {
             if (idx != -1) {
                 choose_from_dialog = dialog_choose_p_d_c.values()[idx];
             }
-//            System.out.println(choose_from_dialog);
             switch (choose_from_dialog) {
                 case Print:
 
@@ -6162,7 +6125,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                                 print_reciept(get_path() + double_exc_reciept_path, id);
                                 break;
                             default:
-                                System.out.println("errorrrrrrrrr");
+                                JOptionPane.showMessageDialog(this, "error function main class: three_tb_historyMouseClicked", "Alert", JOptionPane.WARNING_MESSAGE);
+
                         }
                     }
                     break;
@@ -6208,7 +6172,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                                             detele_from_thai_to_db(id, acc, pur, true);
                                             break;
                                         default:
-                                            System.out.println("error : three_tb_historyMouseClicked");
+                                            JOptionPane.showMessageDialog(this, "error function main class: three_tb_historyMouseClicked", "Alert", JOptionPane.WARNING_MESSAGE);
+
                                     }
                                     if (count_db_to_list_pur_and_id() <= num_show_his) {
                                         three_up.setEnabled(false);
@@ -6530,8 +6495,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
                 String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
                 String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())) + Double.parseDouble(clear_cvot(two_one_tf_total_money.getText())));
-                
-                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, id_inv_to_thai,get_acc_id(), purpose_type.to_thai, current_date());
+
+                int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, id_inv_to_thai, get_acc_id(), purpose_type.to_thai, current_date());
                 set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
 
                 two_one_tf_cus_no.setText("");
@@ -6989,8 +6954,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 try {
                     timestamp = new java.sql.Timestamp(Date_time.getTime());
                 } catch (Exception e) {
-                    //this generic but you can control another types of exception
-                    // look the origin of excption
+    JOptionPane.showMessageDialog(this,"error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + e,"Alert",JOptionPane.WARNING_MESSAGE); 
                 }
 
                 //write sql query to access
@@ -7036,14 +7000,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 String ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
                 String ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
                 String ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())) - Double.parseDouble(clear_cvot(two_two_result_money_tf.getText())));
-                
+
                 int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.from_thai, current_date());
                 set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
             } catch (SQLException ex) {
                 sql_con sql_con_obj = new sql_con(ex);
                 sql_con_obj.setVisible(true);
             } catch (ParseException ex) {
-                Logger.getLogger(UI_and_operation.class.getName()).log(Level.SEVERE, null, ex);
+    JOptionPane.showMessageDialog(this,"error function UI_and_operation class: two_two_bn_finishActionPerformed\n" + ex,"Alert",JOptionPane.WARNING_MESSAGE); 
             }
 
             two_four_date.setCalendar(null);
@@ -7285,7 +7249,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 one_lb_operator1.setText("");
                 break;
             default:
-                System.out.println("error : one_two_rate_bc1ActionPerformed");
+                JOptionPane.showMessageDialog(this, "error function main class: one_two_rate_bc1ActionPerformed", "Alert", JOptionPane.WARNING_MESSAGE);
+
         }
     }//GEN-LAST:event_one_two_rate_bc1ActionPerformed
 
@@ -7308,7 +7273,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 one_lb_operator2.setText("");
                 break;
             default:
-                System.out.println("error : one_two_rate_bc2ActionPerformed");
+                JOptionPane.showMessageDialog(this, "error function main class: one_two_rate_bc2ActionPerformed", "Alert", JOptionPane.WARNING_MESSAGE);
+
         }
     }//GEN-LAST:event_one_two_rate_bc2ActionPerformed
 

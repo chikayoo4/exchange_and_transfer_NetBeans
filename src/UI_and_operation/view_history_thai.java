@@ -291,7 +291,6 @@ public class view_history_thai extends javax.swing.JFrame
                         getLocal_host_password()
                 );
 
-//System.out.println("choose_from_dialog : " + choose_from_dialog);
                 switch (choose_from_dialog) {
                     case Edit:
                         to_thai_info to_thai_info_obj = new to_thai_info("Save", dialog_type_for_db_e_a.Edit, this);

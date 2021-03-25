@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -74,7 +75,7 @@ public class exc_rate {
         try {
             Runtime.getRuntime().exec("taskkill /f /im POWERPNT.EXE");
         } catch (IOException e) {
-            System.out.println(e);
+all_type_error_mes error_mes = new all_type_error_mes("error function exc_rate class: end_task_ppt\n" + e);
         }
     }
 
@@ -82,7 +83,7 @@ public class exc_rate {
         try {
             Desktop.getDesktop().open(new File(get_path() + "\\54 exchange.pptx"));
         } catch (IOException e) {
-            e.printStackTrace();
+all_type_error_mes error_mes = new all_type_error_mes("error function exc_rate class: open_exc_rate_ppt\n" + e);
         }
     }
 
@@ -91,7 +92,6 @@ public class exc_rate {
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
-        //        System.out.println(five_local_host_tf.getText());
         try {
             con = DriverManager.getConnection(
                     getLocal_host(),
@@ -183,7 +183,7 @@ public class exc_rate {
             fos.flush();
             fos.close();
         } catch (Exception e) {
-            System.out.println(e);
+all_type_error_mes error_mes = new all_type_error_mes("error function exc_rate class: set_rate_to_excel\n" + e);
         }
 
     }
@@ -260,7 +260,7 @@ public class exc_rate {
                 R_to_B_four = rate.substring(4, 5);
                 break;
             default:
-                System.out.println("errorrrrr");
+all_type_error_mes error_mes = new all_type_error_mes("error function exc_rate class: set_each_rate");
         }
     }
 

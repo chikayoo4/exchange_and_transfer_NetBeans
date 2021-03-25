@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,8 +35,9 @@ import java.util.logging.Logger;
  */
 public class add_total_money {
 
-    public static void get_add_total_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_add_total_db_set_to_tb(int id_invoice) {
 
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -65,8 +67,6 @@ public class add_total_money {
 
                 while (rs.next()) {
 
-                    Vector v3 = new Vector();
-
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
 
@@ -83,14 +83,13 @@ String add_type_of_money = rs.getString("type_of_money");
                     v3.add((add_type_of_money.equals("Bart")) ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
                     v3.add("បន្ថែម: " + rs.getString("add_money") + " " + convert_to_short_money_type(add_type_of_money));
-//                                    System.out.println(v3);
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 
     public static void detele_add_total_to_db(int id, String acc, String pur, Boolean is_update_inv_man)  {
@@ -135,7 +134,7 @@ String add_type_of_money = rs.getString("type_of_money");
                     update_inv_man_money("0", "0", "-" + add_money, "0", id, acc, pur);
                     break;
                 default:
-                    System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function add_total_money class: detele_add_total_to_db");
             }
             }
             //update sql query to access

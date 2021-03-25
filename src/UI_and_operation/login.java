@@ -64,7 +64,7 @@ public class login extends javax.swing.JFrame
                 pw.close();
             }
         } catch (IOException e) {
-            System.out.println("error");
+    JOptionPane.showMessageDialog(this,"error function login class: set_default_for_sql_file\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
         }
     }
 
@@ -78,11 +78,8 @@ public class login extends javax.swing.JFrame
             setWifi_host_user_name(sc_file.nextLine());
             setWifi_host_user_name(sc_file.nextLine());
         } catch (FileNotFoundException e) {
-            System.out.println("error");
+all_type_error_mes error_mes = new all_type_error_mes("error function login class: get_from_sql_file_to_tf\n" + e);
         }
-//        System.out.println("getLocal_host() : " + getLocal_host());
-//        System.out.println("getLocal_host_user_name() : " + getLocal_host_user_name());
-//        System.out.println("getLocal_host_password() : " + getLocal_host_password());
     }
 
     private void set_acc_file(String acc_user_name) {
@@ -96,7 +93,7 @@ public class login extends javax.swing.JFrame
             pw.println(acc_user_name);
             pw.close();
         } catch (IOException e) {
-            System.out.println("error");
+    JOptionPane.showMessageDialog(this,"error function login class: set_acc_file\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
         }
     }
     
@@ -118,7 +115,7 @@ public class login extends javax.swing.JFrame
                 password_tf.requestFocus();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("error");
+    JOptionPane.showMessageDialog(this,"error function login class: init_components\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
         }
     }
 

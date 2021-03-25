@@ -277,10 +277,8 @@ public class view_history_list extends javax.swing.JFrame
                 choose_from_dialog = dialog_choose_e_d_c.values()[idx];
             }
 
-//System.out.println("choose_from_dialog : " + choose_from_dialog);
             switch (choose_from_dialog) {
                 case Edit:
-//                    input_dialog in_di = new input_dialog(this, "Edit Phone number", "Save", dialog_type_for_db.Edit);
                     input_dialog in_di = new input_dialog(this, dia_edit_app_bar, dia_edit_title,
                             "Save", dialog_type_for_db_e_a.Edit, is_allow_validate, is_validate_ph, is_input_pass, ui_and_ope_obj);
                     in_di.set_default_edit_value(sender_ph_no);

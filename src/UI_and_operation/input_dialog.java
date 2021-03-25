@@ -207,7 +207,7 @@ public class input_dialog extends javax.swing.JFrame
                     }
                     break;
                 default:
-                    System.out.println("Eorror");
+    JOptionPane.showMessageDialog(this,"error function input_dialog class: agree_bn_fn","Alert",JOptionPane.WARNING_MESSAGE);   
             }
             if (ui_and_ope_obj.get_idx_transfer_pt() == 0) {
                 set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");

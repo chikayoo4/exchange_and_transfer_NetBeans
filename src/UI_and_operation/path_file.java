@@ -35,7 +35,7 @@ public class path_file {
             path = file.getAbsolutePath();
             path = path.substring(0, path.length() - 6);
         } catch (IOException e) {
-            System.out.println("error");
+all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: get_path\n" + e);
         }
         return path;
     }
@@ -45,7 +45,6 @@ public class path_file {
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
-        //        System.out.println(five_local_host_tf.getText());
         try {
             con = DriverManager.getConnection(
                     getLocal_host(),
@@ -61,9 +60,8 @@ public class path_file {
                 }
                 path = file.getAbsolutePath();
                 path = path.substring(0, path.length() - 6);
-//                                System.out.println("path : " + path);
             } catch (IOException e) {
-                System.out.println("error");
+all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: set_main_proj_path_to_db\n" + e);
             }
 
             pst = con.prepareStatement("UPDATE project_path SET path_name = '" + path + "';");

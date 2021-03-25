@@ -40,9 +40,10 @@ public class validate_value {
                     ser = (int) Math.ceil(num);
                     return String.valueOf(ser * 30);
                 default:
-                    System.out.println("error");
+all_type_error_mes error_mes = new all_type_error_mes("error function validate_value class: service_validate");
             }
         } catch (Exception e) {
+all_type_error_mes error_mes = new all_type_error_mes("error function validate_value class: service_validate\n" + e);
             return "";
         }
         return "";

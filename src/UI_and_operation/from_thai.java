@@ -35,8 +35,9 @@ import java.util.logging.Logger;
  */
 public class from_thai {
 
-    public static void get_from_thai_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_from_thai_db_set_to_tb(int id_invoice) {
 
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -69,7 +70,6 @@ public class from_thai {
 
                 while (rs.next()) {
 
-                    Vector v3 = new Vector();
 
                     //Date format string is passed as an argument to the Date format object
                     SimpleDateFormat objSDF = new SimpleDateFormat("yyyy-MMM-dd  a hh:mm:ss");
@@ -92,13 +92,13 @@ public class from_thai {
                             + " | លុយទទូល: -" + rs.getString("total_money") + " ฿"
                             + " | date: " + date_his_fr_thai
                             + " | លេខទទូល: " + rs.getString("receiver_ph_no"));
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 
     public static void detele_from_thai_to_db(int id, String acc, String pur, Boolean is_update_inv_man) {

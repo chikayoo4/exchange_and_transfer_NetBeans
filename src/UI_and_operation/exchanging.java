@@ -226,7 +226,7 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) + Double.parseDouble(clear_cvot(customer_money)));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) - Double.parseDouble(clear_cvot(customer_result)));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) + Double.parseDouble(clear_cvot(customer_money)));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
@@ -237,7 +237,7 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) + Double.parseDouble(clear_cvot(customer_money)));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(customer_result)));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) + Double.parseDouble(clear_cvot(customer_money)));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) - Double.parseDouble(clear_cvot(customer_result)));
@@ -248,7 +248,7 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) + Double.parseDouble(clear_cvot(customer_money)));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) - Double.parseDouble(clear_cvot(customer_result)));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) + Double.parseDouble(clear_cvot(customer_money)));
@@ -259,7 +259,7 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(customer_result)));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) + Double.parseDouble(clear_cvot(customer_money)));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) - Double.parseDouble(clear_cvot(customer_result)));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())));
@@ -270,7 +270,7 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) - Double.parseDouble(clear_cvot(customer_result)));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) + Double.parseDouble(clear_cvot(customer_money)));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) - Double.parseDouble(clear_cvot(customer_result)));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) + Double.parseDouble(clear_cvot(customer_money)));
@@ -281,14 +281,15 @@ public class exchanging {
                     dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())));
                     bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) - Double.parseDouble(clear_cvot(customer_result)));
                     bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart())));
-                    
+
                     ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) + Double.parseDouble(clear_cvot(customer_money)));
                     ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())));
                     ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) - Double.parseDouble(clear_cvot(customer_result)));
                     ind_bart_bank = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bank_Bart())));
                     break;
                 default:
-                    System.out.println("Error");
+                    
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_to_db");
             }
             int id_ind_man = set_invoice_man_db(rial, dollar, bart, bart_bank, lastinsert_id_invoice, get_acc_id(), purpose_type.exchanging, getDate());
             set_ind_man_db(ind_rial, ind_dollar, ind_bart, ind_bart_bank, id_ind_man);
@@ -377,93 +378,93 @@ public class exchanging {
                     case S_to_R:
                         db_dollar = db_dollar + tf_one_cus;
                         db_rial = db_rial - tf_one_res;
-                        
+
                         db_ind_dollar = db_ind_dollar + tf_one_cus;
                         db_ind_rial = db_ind_rial - tf_one_res;
                         break;
                     case S_to_B:
                         db_dollar = db_dollar + tf_one_cus;
                         db_bart = db_bart - tf_one_res;
-                        
+
                         db_ind_dollar = db_ind_dollar + tf_one_cus;
                         db_ind_bart = db_ind_bart - tf_one_res;
                         break;
                     case B_to_R:
                         db_bart = db_bart + tf_one_cus;
                         db_rial = db_rial - tf_one_res;
-                        
+
                         db_ind_bart = db_ind_bart + tf_one_cus;
                         db_ind_rial = db_ind_rial - tf_one_res;
                         break;
                     case R_to_S:
                         db_rial = db_rial + tf_one_cus;
                         db_dollar = db_dollar - tf_one_res;
-                        
+
                         db_ind_rial = db_ind_rial + tf_one_cus;
                         db_ind_dollar = db_ind_dollar - tf_one_res;
                         break;
                     case B_to_S:
                         db_bart = db_bart + tf_one_cus;
                         db_dollar = db_dollar - tf_one_res;
-                        
+
                         db_ind_bart = db_ind_bart + tf_one_cus;
                         db_ind_dollar = db_ind_dollar - tf_one_res;
                         break;
                     case R_to_B:
                         db_rial = db_rial + tf_one_cus;
                         db_bart = db_bart - tf_one_res;
-                        
+
                         db_ind_rial = db_ind_rial + tf_one_cus;
                         db_ind_bart = db_ind_bart - tf_one_res;
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
                 }
                 switch (convert_to_stan_exc_type(one_two_rate_bc2.getSelectedItem().toString())) {
                     case S_to_R:
                         db_dollar = db_dollar + tf_two_cus;
                         db_rial = db_rial - tf_two_res;
-                        
+
                         db_ind_dollar = db_ind_dollar + tf_two_cus;
                         db_ind_rial = db_ind_rial - tf_two_res;
                         break;
                     case S_to_B:
                         db_dollar = db_dollar + tf_two_cus;
                         db_bart = db_bart - tf_two_res;
-                        
+
                         db_ind_dollar = db_ind_dollar + tf_two_cus;
                         db_ind_bart = db_ind_bart - tf_two_res;
                         break;
                     case B_to_R:
                         db_bart = db_bart + tf_two_cus;
                         db_rial = db_rial - tf_two_res;
-                        
+
                         db_ind_bart = db_ind_bart + tf_two_cus;
                         db_ind_rial = db_ind_rial - tf_two_res;
                         break;
                     case R_to_S:
                         db_rial = db_rial + tf_two_cus;
                         db_dollar = db_dollar - tf_two_res;
-                        
+
                         db_ind_rial = db_ind_rial + tf_two_cus;
                         db_ind_dollar = db_ind_dollar - tf_two_res;
                         break;
                     case B_to_S:
                         db_bart = db_bart + tf_two_cus;
                         db_dollar = db_dollar - tf_two_res;
-                        
+
                         db_ind_bart = db_ind_bart + tf_two_cus;
                         db_ind_dollar = db_ind_dollar - tf_two_res;
                         break;
                     case R_to_B:
                         db_rial = db_rial + tf_two_cus;
                         db_bart = db_bart - tf_two_res;
-                        
+
                         db_ind_rial = db_ind_rial + tf_two_cus;
                         db_ind_bart = db_ind_bart - tf_two_res;
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: insert_double_exc_to_db");
                 }
                 id_inv_man = set_invoice_man_db(rial_validation(db_rial),
                         dollar_validation(db_dollar),
@@ -587,7 +588,7 @@ public class exchanging {
                         update_ind_man_money("-" + exchanging_money_one, "0", result_exchanging_money_one, "0", id, acc, pur);
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
                 }
                 switch (type_of_exchanging_two) {
                     case "S_to_R":
@@ -615,7 +616,7 @@ public class exchanging {
                         update_ind_man_money("-" + exchanging_money_two, "0", result_exchanging_money_two, "0", id, acc, pur);
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_double_exe_from_db");
                 }
             }
             //update sql query to access
@@ -700,7 +701,7 @@ public class exchanging {
                         update_ind_man_money("-" + exchanging_money, "0", result_exchanging_money, "0", id, acc, pur);
                         break;
                     default:
-                        System.out.println("Error");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: delete_exe_from_db");
                 }
             }
 
@@ -828,7 +829,7 @@ public class exchanging {
             }
 
         } catch (Exception e) {
-            System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+all_type_error_mes error_mes = new all_type_error_mes("error function exchanging class: S_R_validation\n" + e);
         }
     }
 
@@ -896,7 +897,7 @@ public class exchanging {
             ui_ope.set_selected_exchange_rate_to_not_select();
 //            ui_ope.set_history();
             set_is_change_true();
-            
+
         }
     }
 
@@ -920,7 +921,9 @@ public class exchanging {
 
     }
 
-    public static void get_from_pro_db_set_to_tb_double_exc(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_from_pro_db_set_to_tb_double_exc(int id_invoice) {
+        
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -947,14 +950,12 @@ public class exchanging {
                         + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_two) AS exchange_type_two "
                         + "FROM exc_invoice_two_operator_tb WHERE id_invoice = ?;");
 
-//            System.out.println(id_invoice.get(i));
                 pst.setInt(1, id_invoice);
                 pst.setInt(2, id_invoice);
                 pst.setInt(3, id_invoice);
                 rs = pst.executeQuery();
 
                 while (rs.next()) {
-                    Vector v3 = new Vector();
                     String money_type_from_sql_one = rs.getString("exchange_type_one");
                     String cus_money_type_one = money_type_from_sql_one.substring(0, 1);
                     String owner_money_type_one = money_type_from_sql_one.substring(5, 6);
@@ -994,17 +995,18 @@ public class exchanging {
                             + rs.getString("result_exchanging_money_two") + " " + owner_money_type_two + "  |  អត្រា: "
                             + rs.getString("two_rate") + "  |  "
                             + money_type_from_sql_two);
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 
-    public static void get_exe_db_set_to_tb(int id_invoice, ArrayList<Vector> v2) {
+    public static Vector get_exe_db_set_to_tb(int id_invoice) {
 
+        Vector v3 = new Vector();
         Connection con;
         PreparedStatement pst;
         ResultSet rs;
@@ -1029,14 +1031,12 @@ public class exchanging {
                         + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
                         + "FROM exc_invoice_tb WHERE id_invoice = ?;");
 
-//            System.out.println(id_invoice.get(i));
                 pst.setInt(1, id_invoice);
                 pst.setInt(2, id_invoice);
                 rs = pst.executeQuery();
 
                 while (rs.next()) {
 
-                    Vector v3 = new Vector();
                     String money_type_from_sql = rs.getString("exchange_type");
                     String cus_money_type = money_type_from_sql.substring(0, 1);
                     String owner_money_type = money_type_from_sql.substring(5, 6);
@@ -1060,13 +1060,13 @@ public class exchanging {
                             + rs.getString("result_exchanging_money") + " " + owner_money_type + "  |  អត្រា: "
                             + rs.getString("exchange_rate") + "  |  "
                             + money_type_from_sql);
-                    v2.add(v3);
                 }
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
+        return v3;
     }
 
 }

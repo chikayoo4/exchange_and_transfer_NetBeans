@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Scanner;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +45,7 @@ public class sql_con extends javax.swing.JFrame
             five_wifi_host_user_name_tf.setText(sc_file.nextLine());
             five_wifi_host_password_tf.setText(sc_file.nextLine());
         } catch (FileNotFoundException e) {
-            System.out.println("error");
+    JOptionPane.showMessageDialog(this,"error function sql_con class: init_component\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);   
         }
     }
 
@@ -301,7 +302,7 @@ public class sql_con extends javax.swing.JFrame
             pw.println(five_wifi_host_password_tf.getText().trim());
             pw.close();
         } catch (IOException e) {
-            System.out.println("error");
+    JOptionPane.showMessageDialog(this,"error function sql_con class: save_bnActionPerformed\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);   
         }
         get_from_sql_file_to_tf();
         if (login_obj != null) {
