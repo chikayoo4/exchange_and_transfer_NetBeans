@@ -4114,10 +4114,10 @@
                           <Component id="five_user_name_lb" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="five_switch_acc_tf" min="-2" pref="208" max="-2" attributes="0"/>
                                   <Component id="sql_lb" min="-2" max="-2" attributes="0"/>
+                                  <Component id="five_switch_acc_tf" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="1299" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="1290" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -4131,9 +4131,9 @@
                       <Component id="five_user_name_lb" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Component id="five_switch_acc_tf" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="sql_lb" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="691" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="702" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

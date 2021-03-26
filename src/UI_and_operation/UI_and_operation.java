@@ -123,7 +123,6 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     //-----------------------------------------------------class call--------------------------------------------------
 //    exchange_rate_show exe_rate_show = new exchange_rate_show();
-
     //------------------------------------------------------my function------------------------------------------------------
     public static void set_is_change_true() {
         is_change_his = true;
@@ -613,6 +612,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 }
             } else {
                 set_to_tb("0", "0", "0", "0");
+                DefaultTableModel dft = (DefaultTableModel) three_tb_history.getModel();
+                dft.setRowCount(0);
             }
         } else {
             three_calendar_cld.setBackground(Color.red);
@@ -646,6 +647,36 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             default:
                 all_type_error_mes error_mes = new all_type_error_mes("error function UI_and_operation class: convert_pur_to_kh");
+        }
+        return pur_kh;
+    }
+
+    public String convert_kh_to_pur(String kh) {
+        String pur_kh = "";
+        switch (kh) {
+            case "ប្តូរប្រាក់":
+                pur_kh = "exchanging";
+                break;
+            case "បន្ថែមប្រាក់":
+                pur_kh = "add_total_money";
+                break;
+            case "ផ្ញើរប្រាក់ទៅតំបន់":
+                pur_kh = "to_province";
+                break;
+            case "ដកប្រាក់ពីតំបន់":
+                pur_kh = "from_province";
+                break;
+            case "ប្តូរប្រាក់២ដង":
+                pur_kh = "double_exchanging";
+                break;
+            case "ផ្ញើរប្រាក់ទៅថៃ":
+                pur_kh = "to_thai";
+                break;
+            case "ដកប្រាក់ពីថៃ":
+                pur_kh = "from_thai";
+                break;
+            default:
+                all_type_error_mes error_mes = new all_type_error_mes("error function UI_and_operation class: convert_kh_to_pur");
         }
         return pur_kh;
     }
@@ -5565,9 +5596,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                     .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(db_con_ptLayout.createSequentialGroup()
                         .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sql_lb))
-                        .addGap(0, 1299, Short.MAX_VALUE)))
+                            .addComponent(sql_lb)
+                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 1290, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         db_con_ptLayout.setVerticalGroup(
@@ -5577,9 +5608,9 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addComponent(five_user_name_lb)
                 .addGap(18, 18, 18)
                 .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sql_lb)
-                .addGap(691, 691, 691))
+                .addGap(702, 702, 702))
         );
 
         zero_tp.addTab("គណនេយ្យ", db_con_pt);
@@ -6667,7 +6698,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                             id = get_id_invoice(Integer.parseInt(model.getValueAt(selectedIndex, 1).toString()));
                             String acc = model.getValueAt(selectedIndex, 2).toString();
-                            String pur = model.getValueAt(selectedIndex, 3).toString();
+                            String pur = convert_kh_to_pur(model.getValueAt(selectedIndex, 3).toString());
                             int dialogresult = JOptionPane.showConfirmDialog(this, "Do you want to delete the record", "Warning", JOptionPane.YES_NO_OPTION);
 
                             if (dialogresult == JOptionPane.YES_NO_OPTION) {
@@ -7109,9 +7140,8 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_balance_money_tf, two_three_rial_money_rb,
                 two_three_dollar_money_rb, two_three_bart_money_rb);
         if (two_one_is_off_edit) {
-            if (!two_three_sender_money_tf.getText().isEmpty() && two_one_is_off_edit
-                    && (two_three_rial_money_rb.isSelected() || two_three_dollar_money_rb.isSelected()
-                    || two_three_bart_money_rb.isSelected())) {
+            if (!two_three_sender_money_tf.getText().isEmpty() && (two_three_rial_money_rb.isSelected()
+                    || two_three_dollar_money_rb.isSelected() || two_three_bart_money_rb.isSelected())) {
                 two_three_service_money_tf.setText(service_validate(money_S_B_R_validate(selected_money_type_to_pro, two_three_sender_money_tf.getText(), true), selected_money_type_to_pro));
             } else {
                 two_three_service_money_tf.setText("");
@@ -7215,12 +7245,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+                remove_all_in_list(two_one_ph_senter_list);
                 break;
             case KeyEvent.VK_ENTER:
+                remove_all_in_list(two_one_ph_senter_list);
                 set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
+                remove_all_in_list(two_one_ph_senter_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_one_ph_senter_list.getModel().getSize() != 0) {
@@ -7253,12 +7286,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 } else {
                     set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
                 }
+                remove_all_in_list(two_one_ph_reciever_list);
                 break;
             case KeyEvent.VK_ENTER:
+                remove_all_in_list(two_one_ph_reciever_list);
                 set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_pro(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+                remove_all_in_list(two_one_ph_reciever_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_one_ph_reciever_list.getModel().getSize() != 0) {
@@ -7370,12 +7406,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+                remove_all_in_list(two_two_ph_recieve_list);
                 break;
             case KeyEvent.VK_ENTER:
                 set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+                remove_all_in_list(two_two_ph_recieve_list);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_from_pro(true, false, false, false, false, false, false, false, false, false, false);
+                remove_all_in_list(two_two_ph_recieve_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_two_ph_recieve_list.getModel().getSize() != 0) {
@@ -8139,12 +8178,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+                remove_all_in_list(two_three_to_thai_bank_id_list);
                 break;
             case KeyEvent.VK_ENTER:
                 set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_bank_id_list);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_thai(true, false, false, false, false, false, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_bank_id_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_three_to_thai_bank_id_list.getModel().getSize() != 0) {
@@ -8163,12 +8205,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                remove_all_in_list(two_three_to_thai_name_list);
                 break;
             case KeyEvent.VK_ENTER:
                 set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_name_list);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_name_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_three_to_thai_name_list.getModel().getSize() != 0) {
@@ -8187,12 +8232,15 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+                remove_all_in_list(two_three_to_thai_ph_no_list);
                 break;
             case KeyEvent.VK_ENTER:
                 set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_ph_no_list);
                 break;
             case KeyEvent.VK_UP:
                 set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+                remove_all_in_list(two_three_to_thai_ph_no_list);
                 break;
             case KeyEvent.VK_DOWN:
                 if (two_three_to_thai_ph_no_list.getModel().getSize() != 0) {
@@ -8209,13 +8257,16 @@ public class UI_and_operation extends javax.swing.JFrame {
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_UP:
-                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);        
+                remove_all_in_list(two_four_ph_recieve_list);
                 break;
             case KeyEvent.VK_ENTER:
                 set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+                remove_all_in_list(two_four_ph_recieve_list);
                 break;
             case KeyEvent.VK_RIGHT:
                 set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+                remove_all_in_list(two_four_ph_recieve_list);
                 break;
             case KeyEvent.VK_LEFT:
                 break;
@@ -8727,6 +8778,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_three_rial_money_rb.setSelected(true);
+                selected_money_type_to_pro = type_of_money.Rial;
                 set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
                 break;
             case KeyEvent.VK_RIGHT:
@@ -8748,6 +8800,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_ENTER:
                 two_three_dollar_money_rb.setSelected(true);
+                selected_money_type_to_pro = type_of_money.Dollar;
                 set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
                 break;
             case KeyEvent.VK_RIGHT:
@@ -8768,6 +8821,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 break;
             case KeyEvent.VK_ENTER:
+                selected_money_type_to_pro = type_of_money.Bart;
                 two_three_bart_money_rb.setSelected(true);
                 set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
                 break;
@@ -8943,6 +8997,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_from_pro(false, false, false, false, false, true, false, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
+                selected_money_type_from_pro = type_of_money.Rial;
                 two_two_rial_money_rb.setSelected(true);
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
                 break;
@@ -8964,6 +9019,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                 set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
                 break;
             case KeyEvent.VK_ENTER:
+                selected_money_type_from_pro = type_of_money.Dollar;
                 two_two_dollar_money_rb.setSelected(true);
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
                 break;
@@ -8984,6 +9040,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             case KeyEvent.VK_RIGHT:
                 break;
             case KeyEvent.VK_ENTER:
+                selected_money_type_from_pro = type_of_money.Bart;
                 two_two_bart_money_rb.setSelected(true);
                 set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
                 break;
@@ -9650,11 +9707,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_two_bart_money_rbFocusLost
 
     private void two_two_reciece_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfFocusLost
-         two_two_reciece_money_tf.setBackground(white_c);
+        two_two_reciece_money_tf.setBackground(white_c);
     }//GEN-LAST:event_two_two_reciece_money_tfFocusLost
 
     private void two_two_total_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_total_money_tfFocusLost
-         two_two_total_money_tf.setBackground(white_c);
+        two_two_total_money_tf.setBackground(white_c);
     }//GEN-LAST:event_two_two_total_money_tfFocusLost
 
     private void two_two_bn_finish_FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finish_FocusLost
@@ -9670,15 +9727,15 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_bank_info_his_bnFocusLost
 
     private void two_one_tf_cus_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noFocusLost
-         two_one_tf_cus_no.setBackground(white_c);
+        two_one_tf_cus_no.setBackground(white_c);
     }//GEN-LAST:event_two_one_tf_cus_noFocusLost
 
     private void two_one_tf_cus_nameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameFocusLost
-         two_one_tf_cus_name.setBackground(white_c);
+        two_one_tf_cus_name.setBackground(white_c);
     }//GEN-LAST:event_two_one_tf_cus_nameFocusLost
 
     private void two_three_tf_cus_ph_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noFocusLost
-         two_three_tf_cus_ph_no.setBackground(white_c);
+        two_three_tf_cus_ph_no.setBackground(white_c);
     }//GEN-LAST:event_two_three_tf_cus_ph_noFocusLost
 
     private void two_three_bank_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnFocusLost
@@ -9690,11 +9747,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_bank_thai_cbFocusLost
 
     private void two_one_tf_cus_moneyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyFocusLost
-         two_one_tf_cus_money.setBackground(white_c);
+        two_one_tf_cus_money.setBackground(white_c);
     }//GEN-LAST:event_two_one_tf_cus_moneyFocusLost
 
     private void two_one_tf_service_moneyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyFocusLost
-         two_one_tf_service_money.setBackground(white_c);
+        two_one_tf_service_money.setBackground(white_c);
     }//GEN-LAST:event_two_one_tf_service_moneyFocusLost
 
     private void two_one_bn_finishFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_bn_finishFocusLost
@@ -9706,11 +9763,11 @@ public class UI_and_operation extends javax.swing.JFrame {
     }//GEN-LAST:event_two_three_print_bnFocusLost
 
     private void two_four_amFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_amFocusLost
-two_four_am.setForeground(black_c);
+        two_four_am.setForeground(black_c);
     }//GEN-LAST:event_two_four_amFocusLost
 
     private void two_four_pmFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_pmFocusLost
-two_four_pm.setForeground(black_c);
+        two_four_pm.setForeground(black_c);
     }//GEN-LAST:event_two_four_pmFocusLost
 
     private void two_four_reciever_ph_no_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnFocusLost
@@ -9718,15 +9775,15 @@ two_four_pm.setForeground(black_c);
     }//GEN-LAST:event_two_four_reciever_ph_no_his_bnFocusLost
 
     private void two_two_reveiver_ph_no_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfFocusLost
-         two_two_reveiver_ph_no_tf.setBackground(white_c);
+        two_two_reveiver_ph_no_tf.setBackground(white_c);
     }//GEN-LAST:event_two_two_reveiver_ph_no_tfFocusLost
 
     private void two_two_reveiver_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfFocusLost
-         two_two_reveiver_money_tf.setBackground(white_c);
+        two_two_reveiver_money_tf.setBackground(white_c);
     }//GEN-LAST:event_two_two_reveiver_money_tfFocusLost
 
     private void two_two_service_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_service_money_tfFocusLost
-         two_two_service_money_tf.setBackground(white_c);
+        two_two_service_money_tf.setBackground(white_c);
     }//GEN-LAST:event_two_two_service_money_tfFocusLost
 
     private void two_two_bn_finishFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finishFocusLost

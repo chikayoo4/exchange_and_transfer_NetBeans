@@ -248,6 +248,7 @@ public class invoice_man {
             pst.setString(3, pur);
             pst.executeUpdate();
         } catch (SQLException ex) {
+            System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }

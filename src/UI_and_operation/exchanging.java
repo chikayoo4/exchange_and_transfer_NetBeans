@@ -1001,10 +1001,10 @@ public class exchanging {
                             ? money_S_B_R_validate(type_of_money.Bart, inv_man_obj.getBart(), true) : "");
                     v3.add("");
                     if (!cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
-                        v3.add("លុយគេ: " + exc1 + " " + cus_money_type_one
-                                + "  |  លុយគេ: " + exc2 + " " + cus_money_type_two
-                                + "  |  លុយយើង: -" + own1 + " " + owner_money_type_one
-                                + "  |  លុយយើង: -" + own2 + " " + owner_money_type_two
+                        v3.add("លុយគេ: " + exc1 + " " + convert_to_short_money_type(cus_money_type_one)
+                                + "  |  លុយគេ: " + exc2 + " " + convert_to_short_money_type(cus_money_type_two)
+                                + "  |  លុយយើង: -" + own1 + " " + convert_to_short_money_type(owner_money_type_one)
+                                + "  |  លុយយើង: -" + own2 + " " + convert_to_short_money_type(owner_money_type_two)
                                 + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")"
                                 + "  |  អត្រា: " + rate2 + " (" + des_exc_type(money_type_from_sql_two) + ")");
                     } else if (cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
@@ -1023,7 +1023,7 @@ public class exchanging {
                                 + "  |  លុយយើង: -" + money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(own_d1 + own_d2), true) + " " + convert_to_short_money_type(owner_money_type_one)
                                 + "  |  អត្រា: " + rate1 + " (" + des_exc_type(money_type_from_sql_one) + ")"
                                 + "  |  អត្រា: " + rate2 + " (" + des_exc_type(money_type_from_sql_two) + ")");
-                    } else if (!cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
+                    } else if (cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
                         Double exc_d1 = Double.parseDouble(clear_cvot(exc1));
                         Double exc_d2 = Double.parseDouble(clear_cvot(exc2));
                         Double own_d1 = Double.parseDouble(clear_cvot(own1));

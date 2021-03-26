@@ -104,11 +104,10 @@ public class add_total_money {
                     getLocal_host_user_name(),
                     getLocal_host_password()
             );
-
             if (is_update_inv_man) {
                 String add_money = "";
                 String money_type = "";
-
+                Boolean low_than_0 = null;
                 //query to access
                 pst = con.prepareStatement("SELECT add_money, type_of_money "
                         + "FROM add_money_history_tb INNER JOIN money_type_tb ON add_money_history_tb.id_type_of_money = money_type_tb.id_type_of_money "
@@ -121,25 +120,32 @@ public class add_total_money {
                 rs = pst.executeQuery();
                 while (rs.next()) {
                     add_money = clear_cvot(rs.getString("add_money"));
+                    low_than_0 = (Double.parseDouble(add_money) < 0);
+                    if (low_than_0) {
+                        add_money = add_money.substring(1, add_money.length());
+                    }
                     money_type = rs.getString("type_of_money");
                 }
 
                 switch (money_type) {
                     case "Rial":
-                        update_inv_man_money("-" + add_money, "0", "0", "0", id, acc, pur);
+                        update_inv_man_money(((low_than_0) ? "+" : "-") + add_money, "0", "0", "0", id, acc, pur);
                         break;
                     case "Dollar":
-                        update_inv_man_money("0", "-" + add_money, "0", "0", id, acc, pur);
+                        update_inv_man_money("0",((low_than_0) ? "+" : "-") + add_money, "0", "0", id, acc, pur);
                         break;
                     case "Bart":
-                        update_inv_man_money("0", "0", "-" + add_money, "0", id, acc, pur);
+                        update_inv_man_money("0", "0", ((low_than_0) ? "+" : "-") + add_money, "0", id, acc, pur);
                         break;
                     default:
                         all_type_error_mes error_mes = new all_type_error_mes("error function add_total_money class: detele_add_total_to_db");
                 }
             }
             //update sql query to access
-            pst = con.prepareStatement("delete from add_money_history_tb where id_add = ? AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
+            pst = con.prepareStatement("delete from add_money_history_tb "
+                    + "where id_add = ? "
+                    + "AND id_acc = (select  id_acc FROM account_tb WHERE account_tb.user_name = ?) "
+                    + "AND id_pur = (select  id_pur FROM purpose_tb WHERE purpose_tb.pur_type = ?)");
 
             pst.setInt(1, id);
             pst.setString(2, acc);

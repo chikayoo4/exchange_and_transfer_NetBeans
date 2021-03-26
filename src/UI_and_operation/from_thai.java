@@ -13,6 +13,7 @@ import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
+import static UI_and_operation.invoice_man.delete_ind_man;
 import static UI_and_operation.invoice_man.delete_inv_man;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
 import static UI_and_operation.invoice_man.update_inv_man_money;
@@ -144,6 +145,7 @@ public class from_thai {
             pst.setString(3, pur);
             pst.executeUpdate();
 
+            delete_ind_man(id, acc, pur);
             delete_inv_man(id, acc, pur);
 
             //dialog when added to access is success
