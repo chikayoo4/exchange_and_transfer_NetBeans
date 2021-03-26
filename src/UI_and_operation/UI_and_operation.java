@@ -104,10 +104,10 @@ public class UI_and_operation extends javax.swing.JFrame {
         Edit, Add
     };
 
-    Color sky_c = new Color(153, 255, 255);
-    Color silivor_c = new Color(200, 200, 200);
-    Color white_c = new Color(255, 255, 255);
-    Color black_c = Color.BLACK;
+    public static Color sky_c = new Color(153, 255, 255);
+    public static Color silivor_c = new Color(200, 200, 200);
+    public static Color white_c = new Color(255, 255, 255);
+    public static Color black_c = Color.BLACK;
     private int next_show_his = 0;
     private final int num_show_his = 10;
     private int idx_transfer_pt = 0;
@@ -122,7 +122,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private static Boolean is_change_his = false;
 
     //-----------------------------------------------------class call--------------------------------------------------
-    exchange_rate_show exe_rate_show = new exchange_rate_show();
+//    exchange_rate_show exe_rate_show = new exchange_rate_show();
 
     //------------------------------------------------------my function------------------------------------------------------
     public static void set_is_change_true() {
@@ -1884,6 +1884,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_S_to_R.setText("$ → ៛");
         one_bn_S_to_R.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_S_to_R.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_S_to_R.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_S_to_RFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_S_to_RFocusLost(evt);
+            }
+        });
         one_bn_S_to_R.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_S_to_RMouseClicked(evt);
@@ -1904,6 +1912,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_S_to_B.setText("$ → ฿");
         one_bn_S_to_B.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_S_to_B.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_S_to_B.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_S_to_BFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_S_to_BFocusLost(evt);
+            }
+        });
         one_bn_S_to_B.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_S_to_BMouseClicked(evt);
@@ -1924,6 +1940,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_B_to_R.setText("฿ → ៛");
         one_bn_B_to_R.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_B_to_R.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_B_to_R.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_B_to_RFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_B_to_RFocusLost(evt);
+            }
+        });
         one_bn_B_to_R.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_B_to_RMouseClicked(evt);
@@ -1944,6 +1968,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_R_to_S.setText("៛ → $");
         one_bn_R_to_S.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_R_to_S.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_R_to_S.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_R_to_SFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_R_to_SFocusLost(evt);
+            }
+        });
         one_bn_R_to_S.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_R_to_SMouseClicked(evt);
@@ -1964,6 +1996,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_B_to_S.setText("฿ → $");
         one_bn_B_to_S.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_B_to_S.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_B_to_S.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_B_to_SFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_B_to_SFocusLost(evt);
+            }
+        });
         one_bn_B_to_S.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_B_to_SMouseClicked(evt);
@@ -1984,6 +2024,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_bn_R_to_B.setText("៛ → ฿");
         one_bn_R_to_B.setMaximumSize(new java.awt.Dimension(500, 200));
         one_bn_R_to_B.setMinimumSize(new java.awt.Dimension(300, 150));
+        one_bn_R_to_B.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_R_to_BFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_R_to_BFocusLost(evt);
+            }
+        });
         one_bn_R_to_B.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_R_to_BMouseClicked(evt);
@@ -2045,6 +2093,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
         one_bn_finished.setText("រួចរាល់");
+        one_bn_finished.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_finishedFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_finishedFocusLost(evt);
+            }
+        });
         one_bn_finished.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_finishedMouseClicked(evt);
@@ -2063,6 +2119,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_bn_print.setText("ព្រីនវិក្កិយបត្រ");
+        one_bn_print.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_bn_printFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_bn_printFocusLost(evt);
+            }
+        });
         one_bn_print.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_bn_printMouseClicked(evt);
@@ -2089,6 +2153,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_tf_customer_money.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 one_tf_customer_moneyCaretUpdate(evt);
+            }
+        });
+        one_tf_customer_money.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_tf_customer_moneyFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_tf_customer_moneyFocusLost(evt);
             }
         });
         one_tf_customer_money.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2219,6 +2291,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 one_tf_customer_money1CaretUpdate(evt);
             }
         });
+        one_tf_customer_money1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_tf_customer_money1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_tf_customer_money1FocusLost(evt);
+            }
+        });
         one_tf_customer_money1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_tf_customer_money1MouseClicked(evt);
@@ -2259,6 +2339,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_two_rate_bc1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         one_two_rate_bc1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "$ → ៛", "៛ → $", "$ → ฿", "฿ → $", "฿ → ៛", "៛ → ฿" }));
+        one_two_rate_bc1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_two_rate_bc1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_two_rate_bc1FocusLost(evt);
+            }
+        });
         one_two_rate_bc1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_two_rate_bc1MouseClicked(evt);
@@ -2282,6 +2370,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_two_bn_finished.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 48)); // NOI18N
         one_two_bn_finished.setText("រួចរាល់");
+        one_two_bn_finished.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_two_bn_finishedFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_two_bn_finishedFocusLost(evt);
+            }
+        });
         one_two_bn_finished.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_two_bn_finishedMouseClicked(evt);
@@ -2300,6 +2396,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_two_bn_print.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 36)); // NOI18N
         one_two_bn_print.setText("ព្រីនវិក្កិយបត្រ");
+        one_two_bn_print.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_two_bn_printFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_two_bn_printFocusLost(evt);
+            }
+        });
         one_two_bn_print.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_two_bn_printMouseClicked(evt);
@@ -2323,6 +2427,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         one_tf_customer_money2.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 one_tf_customer_money2CaretUpdate(evt);
+            }
+        });
+        one_tf_customer_money2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_tf_customer_money2FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_tf_customer_money2FocusLost(evt);
             }
         });
         one_tf_customer_money2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2393,6 +2505,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         one_two_rate_bc2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         one_two_rate_bc2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "$ → ៛", "៛ → $", "$ → ฿", "฿ → $", "฿ → ៛", "៛ → ฿" }));
+        one_two_rate_bc2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                one_two_rate_bc2FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                one_two_rate_bc2FocusLost(evt);
+            }
+        });
         one_two_rate_bc2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 one_two_rate_bc2MouseClicked(evt);
@@ -2597,6 +2717,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_three_sender_money_tfCaretUpdate(evt);
             }
         });
+        two_three_sender_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_sender_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_sender_money_tfFocusLost(evt);
+            }
+        });
         two_three_sender_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_sender_money_tfMouseClicked(evt);
@@ -2628,6 +2756,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_service_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 two_three_service_money_tfCaretUpdate(evt);
+            }
+        });
+        two_three_service_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_service_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_service_money_tfFocusLost(evt);
             }
         });
         two_three_service_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2683,6 +2819,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_three_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_three_bn_finish.setText("រួចរាល់");
+        two_three_bn_finish.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_bn_finishFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_bn_finishFocusLost(evt);
+            }
+        });
         two_three_bn_finish.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_bn_finishMouseClicked(evt);
@@ -2701,6 +2845,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_one_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_one_print_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_print_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_print_bnFocusLost(evt);
+            }
+        });
         two_one_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_print_bnMouseClicked(evt);
@@ -2720,6 +2872,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_to_pro.add(two_three_dollar_money_rb);
         two_three_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_dollar_money_rb.setText("$");
+        two_three_dollar_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_dollar_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_dollar_money_rbFocusLost(evt);
+            }
+        });
         two_three_dollar_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_dollar_money_rbMouseClicked(evt);
@@ -2740,6 +2900,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_rial_money_rb.setText("៛");
         two_three_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
+        two_three_rial_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_rial_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_rial_money_rbFocusLost(evt);
+            }
+        });
         two_three_rial_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_rial_money_rbMouseClicked(evt);
@@ -2759,6 +2927,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_to_pro.add(two_three_bart_money_rb);
         two_three_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_three_bart_money_rb.setText("฿");
+        two_three_bart_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_bart_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_bart_money_rbFocusLost(evt);
+            }
+        });
         two_three_bart_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_bart_money_rbMouseClicked(evt);
@@ -2785,6 +2961,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_three_sender_phone_no_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 two_three_sender_phone_no_tfCaretUpdate(evt);
+            }
+        });
+        two_three_sender_phone_no_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_sender_phone_no_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_sender_phone_no_tfFocusLost(evt);
             }
         });
         two_three_sender_phone_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2873,6 +3057,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel11.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
         two_three_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_receiver_phone_no_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_receiver_phone_no_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_receiver_phone_no_tfFocusLost(evt);
+            }
+        });
         two_three_receiver_phone_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_receiver_phone_no_tfMouseClicked(evt);
@@ -2902,6 +3094,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_pro_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_one_pro_his_bn.setText("view history");
+        two_one_pro_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_pro_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_pro_his_bnFocusLost(evt);
+            }
+        });
         two_one_pro_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_pro_his_bnMouseClicked(evt);
@@ -2921,6 +3121,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_sender_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_one_sender_his_bn.setText("view history");
+        two_one_sender_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_sender_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_sender_his_bnFocusLost(evt);
+            }
+        });
         two_one_sender_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_sender_his_bnMouseClicked(evt);
@@ -2940,6 +3148,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_one_reciever_his_bn.setText("view history");
+        two_one_reciever_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_reciever_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_reciever_his_bnFocusLost(evt);
+            }
+        });
         two_one_reciever_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_reciever_his_bnMouseClicked(evt);
@@ -2959,6 +3175,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_pro_name_cb.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         two_one_pro_name_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none" }));
+        two_one_pro_name_cb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_pro_name_cbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_pro_name_cbFocusLost(evt);
+            }
+        });
         two_one_pro_name_cb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_pro_name_cbMouseClicked(evt);
@@ -2978,6 +3202,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_edit_bn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         two_one_edit_bn.setText("auto fill");
+        two_one_edit_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_edit_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_edit_bnFocusLost(evt);
+            }
+        });
         two_one_edit_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_edit_bnMouseClicked(evt);
@@ -3081,6 +3313,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_two_reciece_money_tfCaretUpdate(evt);
             }
         });
+        two_two_reciece_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_reciece_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_reciece_money_tfFocusLost(evt);
+            }
+        });
         two_two_reciece_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_reciece_money_tfMouseClicked(evt);
@@ -3116,6 +3356,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_two_total_money_tfCaretUpdate(evt);
             }
         });
+        two_two_total_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_total_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_total_money_tfFocusLost(evt);
+            }
+        });
         two_two_total_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_total_money_tfMouseClicked(evt);
@@ -3143,6 +3391,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_bn_print_.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_two_bn_print_.setText("ព្រីនវិក្កិយបត្រ");
+        two_two_bn_print_.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_bn_print_FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_bn_print_FocusLost(evt);
+            }
+        });
         two_two_bn_print_.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_bn_print_MouseClicked(evt);
@@ -3161,6 +3417,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_bn_finish_.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_two_bn_finish_.setText("រួចរាល់");
+        two_two_bn_finish_.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_bn_finish_FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_bn_finish_FocusLost(evt);
+            }
+        });
         two_two_bn_finish_.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_bn_finish_MouseClicked(evt);
@@ -3181,6 +3445,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_two_rial_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_two_rial_money_rb.setText("៛");
         two_two_rial_money_rb.setPreferredSize(new java.awt.Dimension(60, 53));
+        two_two_rial_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_rial_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_rial_money_rbFocusLost(evt);
+            }
+        });
         two_two_rial_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_rial_money_rbMouseClicked(evt);
@@ -3200,6 +3472,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_from_pro.add(two_two_dollar_money_rb);
         two_two_dollar_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_two_dollar_money_rb.setText("$");
+        two_two_dollar_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_dollar_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_dollar_money_rbFocusLost(evt);
+            }
+        });
         two_two_dollar_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_dollar_money_rbMouseClicked(evt);
@@ -3219,6 +3499,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_from_pro.add(two_two_bart_money_rb);
         two_two_bart_money_rb.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_two_bart_money_rb.setText("฿");
+        two_two_bart_money_rb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_bart_money_rbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_bart_money_rbFocusLost(evt);
+            }
+        });
         two_two_bart_money_rb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_bart_money_rbMouseClicked(evt);
@@ -3242,6 +3530,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel12.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 317, 57));
 
         two_two_receiver_phone_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_receiver_phone_no_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_receiver_phone_no_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_receiver_phone_no_tfFocusLost(evt);
+            }
+        });
         two_two_receiver_phone_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_receiver_phone_no_tfMouseClicked(evt);
@@ -3271,6 +3567,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_pro_name_cb.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         two_two_pro_name_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none" }));
+        two_two_pro_name_cb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_pro_name_cbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_pro_name_cbFocusLost(evt);
+            }
+        });
         two_two_pro_name_cb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_pro_name_cbMouseClicked(evt);
@@ -3290,6 +3594,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_reciever_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_two_reciever_his_bn.setText("view history");
+        two_two_reciever_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_reciever_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_reciever_his_bnFocusLost(evt);
+            }
+        });
         two_two_reciever_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_reciever_his_bnMouseClicked(evt);
@@ -3309,6 +3621,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_pro_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_two_pro_his_bn.setText("view history");
+        two_two_pro_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_pro_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_pro_his_bnFocusLost(evt);
+            }
+        });
         two_two_pro_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_pro_his_bnMouseClicked(evt);
@@ -3435,6 +3755,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_tf_cus_moneyCaretUpdate(evt);
             }
         });
+        two_one_tf_cus_money.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_moneyFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_moneyFocusLost(evt);
+            }
+        });
         two_one_tf_cus_money.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_tf_cus_moneyMouseClicked(evt);
@@ -3466,6 +3794,14 @@ public class UI_and_operation extends javax.swing.JFrame {
                 two_one_tf_service_moneyCaretUpdate(evt);
             }
         });
+        two_one_tf_service_money.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_tf_service_moneyFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_tf_service_moneyFocusLost(evt);
+            }
+        });
         two_one_tf_service_money.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_tf_service_moneyMouseClicked(evt);
@@ -3488,6 +3824,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_three_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_three_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_three_print_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_print_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_print_bnFocusLost(evt);
+            }
+        });
         two_three_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_print_bnMouseClicked(evt);
@@ -3515,6 +3859,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_one_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_one_bn_finish.setText("រួចរាល់");
+        two_one_bn_finish.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_bn_finishFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_bn_finishFocusLost(evt);
+            }
+        });
         two_one_bn_finish.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_bn_finishMouseClicked(evt);
@@ -3538,6 +3890,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel13.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         two_one_tf_cus_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_cus_no.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_noFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_noFocusLost(evt);
+            }
+        });
         two_one_tf_cus_no.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_tf_cus_noMouseClicked(evt);
@@ -3560,6 +3920,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_three_bank_info_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_three_bank_info_his_bn.setText("view history");
+        two_three_bank_info_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_bank_info_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_bank_info_his_bnFocusLost(evt);
+            }
+        });
         two_three_bank_info_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_bank_info_his_bnMouseClicked(evt);
@@ -3644,6 +4012,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel13.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 150, -1));
 
         two_three_tf_cus_ph_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_three_tf_cus_ph_no.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_tf_cus_ph_noFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_tf_cus_ph_noFocusLost(evt);
+            }
+        });
         two_three_tf_cus_ph_no.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_tf_cus_ph_noMouseClicked(evt);
@@ -3693,6 +4069,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_three_bank_thai_cb.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
         two_three_bank_thai_cb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none" }));
+        two_three_bank_thai_cb.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_bank_thai_cbFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_bank_thai_cbFocusLost(evt);
+            }
+        });
         two_three_bank_thai_cb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_bank_thai_cbMouseClicked(evt);
@@ -3707,6 +4091,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_three_bank_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_three_bank_his_bn.setText("view history");
+        two_three_bank_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_three_bank_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_three_bank_his_bnFocusLost(evt);
+            }
+        });
         two_three_bank_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_three_bank_his_bnMouseClicked(evt);
@@ -3729,6 +4121,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jPanel13.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, -1, -1));
 
         two_one_tf_cus_name.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_one_tf_cus_name.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_nameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_one_tf_cus_nameFocusLost(evt);
+            }
+        });
         two_one_tf_cus_name.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_one_tf_cus_nameMouseClicked(evt);
@@ -3801,6 +4201,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_four_print_bn.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_four_print_bn.setText("ព្រីនវិក្កិយបត្រ");
+        two_four_print_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_four_print_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_four_print_bnFocusLost(evt);
+            }
+        });
         two_four_print_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_print_bnMouseClicked(evt);
@@ -3814,6 +4222,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_two_bn_finish.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 24)); // NOI18N
         two_two_bn_finish.setText("រួចរាល់");
+        two_two_bn_finish.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_bn_finishFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_bn_finishFocusLost(evt);
+            }
+        });
         two_two_bn_finish.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_bn_finishMouseClicked(evt);
@@ -3840,6 +4256,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_two_reveiver_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 two_two_reveiver_money_tfCaretUpdate(evt);
+            }
+        });
+        two_two_reveiver_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_reveiver_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_reveiver_money_tfFocusLost(evt);
             }
         });
         two_two_reveiver_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -3871,6 +4295,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_two_service_money_tf.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 two_two_service_money_tfCaretUpdate(evt);
+            }
+        });
+        two_two_service_money_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_service_money_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_service_money_tfFocusLost(evt);
             }
         });
         two_two_service_money_tf.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -3914,6 +4346,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         jLabel34.setText("លេខទូរស័ព្ទអ្នកទទួល");
 
         two_two_reveiver_ph_no_tf.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        two_two_reveiver_ph_no_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_two_reveiver_ph_no_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_two_reveiver_ph_no_tfFocusLost(evt);
+            }
+        });
         two_two_reveiver_ph_no_tf.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_two_reveiver_ph_no_tfMouseClicked(evt);
@@ -3947,6 +4387,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_from_thai.add(two_four_am);
         two_four_am.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         two_four_am.setText("AM");
+        two_four_am.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_four_amFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_four_amFocusLost(evt);
+            }
+        });
         two_four_am.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_amMouseClicked(evt);
@@ -3961,6 +4409,14 @@ public class UI_and_operation extends javax.swing.JFrame {
         bg_from_thai.add(two_four_pm);
         two_four_pm.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         two_four_pm.setText("PM");
+        two_four_pm.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_four_pmFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_four_pmFocusLost(evt);
+            }
+        });
         two_four_pm.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_pmMouseClicked(evt);
@@ -3985,6 +4441,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_four_sn_hour.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_sn_hour.setModel(new javax.swing.SpinnerNumberModel(0, 0, 12, 1));
+        two_four_sn_hour.setRequestFocusEnabled(false);
         two_four_sn_hour.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_sn_hourMouseClicked(evt);
@@ -3998,6 +4455,7 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_four_sn_minute.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         two_four_sn_minute.setModel(new javax.swing.SpinnerNumberModel(0, 0, 60, 1));
+        two_four_sn_minute.setRequestFocusEnabled(false);
         two_four_sn_minute.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_sn_minuteMouseClicked(evt);
@@ -4011,6 +4469,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
         two_four_reciever_ph_no_his_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 24)); // NOI18N
         two_four_reciever_ph_no_his_bn.setText("view history");
+        two_four_reciever_ph_no_his_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                two_four_reciever_ph_no_his_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                two_four_reciever_ph_no_his_bnFocusLost(evt);
+            }
+        });
         two_four_reciever_ph_no_his_bn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 two_four_reciever_ph_no_his_bnMouseClicked(evt);
@@ -4134,7 +4600,7 @@ public class UI_and_operation extends javax.swing.JFrame {
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(two_two_result_money_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
                         .addGroup(from_thai_pnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(two_four_print_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(two_two_bn_finish, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -8806,6 +9272,470 @@ public class UI_and_operation extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_two_two_service_money_tfKeyPressed
+
+    private void one_bn_S_to_BFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_S_to_BFocusGained
+        set_color_with_focus_exc(false, false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_one_bn_S_to_BFocusGained
+
+    private void one_bn_S_to_BFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_S_to_BFocusLost
+        one_bn_S_to_B.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_S_to_BFocusLost
+
+    private void one_bn_B_to_RFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_B_to_RFocusGained
+        set_color_with_focus_exc(false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_one_bn_B_to_RFocusGained
+
+    private void one_bn_S_to_RFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_S_to_RFocusGained
+        set_color_with_focus_exc(true, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_one_bn_S_to_RFocusGained
+
+    private void one_bn_R_to_SFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_R_to_SFocusGained
+        set_color_with_focus_exc(false, true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_one_bn_R_to_SFocusGained
+
+    private void one_bn_B_to_SFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_B_to_SFocusGained
+        set_color_with_focus_exc(false, false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_one_bn_B_to_SFocusGained
+
+    private void one_bn_R_to_BFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_R_to_BFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_one_bn_R_to_BFocusGained
+
+    private void one_tf_customer_moneyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_one_tf_customer_moneyFocusGained
+
+    private void one_bn_finishedFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_finishedFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_one_bn_finishedFocusGained
+
+    private void one_bn_printFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_printFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_one_bn_printFocusGained
+
+    private void one_tf_customer_money1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_money1FocusGained
+        set_color_with_focus_double_exc(true, false, false, false, false, false);
+    }//GEN-LAST:event_one_tf_customer_money1FocusGained
+
+    private void one_tf_customer_money2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_money2FocusGained
+        set_color_with_focus_double_exc(false, true, false, false, false, false);
+    }//GEN-LAST:event_one_tf_customer_money2FocusGained
+
+    private void one_two_rate_bc1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_rate_bc1FocusGained
+        set_color_with_focus_double_exc(false, false, true, false, false, false);
+    }//GEN-LAST:event_one_two_rate_bc1FocusGained
+
+    private void one_two_rate_bc2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_rate_bc2FocusGained
+        set_color_with_focus_double_exc(false, false, false, true, false, false);
+    }//GEN-LAST:event_one_two_rate_bc2FocusGained
+
+    private void one_two_bn_finishedFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_bn_finishedFocusGained
+        set_color_with_focus_double_exc(false, false, false, false, true, false);
+    }//GEN-LAST:event_one_two_bn_finishedFocusGained
+
+    private void one_two_bn_printFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_bn_printFocusGained
+        set_color_with_focus_double_exc(false, false, false, false, false, true);
+    }//GEN-LAST:event_one_two_bn_printFocusGained
+
+    private void two_one_sender_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_sender_his_bnFocusGained
+        set_color_with_focus_to_pro(true, false, false, false, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_sender_his_bnFocusGained
+
+    private void two_three_sender_phone_no_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfFocusGained
+        set_color_with_focus_to_pro(false, true, false, false, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_sender_phone_no_tfFocusGained
+
+    private void two_one_reciever_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_reciever_his_bnFocusGained
+        set_color_with_focus_to_pro(false, false, true, false, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_reciever_his_bnFocusGained
+
+    private void two_three_receiver_phone_no_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfFocusGained
+        set_color_with_focus_to_pro(false, false, false, true, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_receiver_phone_no_tfFocusGained
+
+    private void two_one_pro_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_pro_his_bnFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, true, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_pro_his_bnFocusGained
+
+    private void two_one_pro_name_cbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, true, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_pro_name_cbFocusGained
+
+    private void two_three_rial_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_rial_money_rbFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_rial_money_rbFocusGained
+
+    private void two_three_dollar_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_dollar_money_rbFocusGained
+
+    private void two_three_bart_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_bart_money_rbFocusGained
+
+    private void two_three_sender_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_two_three_sender_money_tfFocusGained
+
+    private void two_three_service_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_service_money_tfFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_three_service_money_tfFocusGained
+
+    private void two_one_edit_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_edit_bnFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_two_one_edit_bnFocusGained
+
+    private void two_three_bn_finishFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bn_finishFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_two_three_bn_finishFocusGained
+
+    private void two_one_print_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_print_bnFocusGained
+        set_color_with_focus_to_pro(false, false, false, false, false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_one_print_bnFocusGained
+
+    private void two_two_reciever_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnFocusGained
+        set_color_with_focus_from_pro(true, false, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_reciever_his_bnFocusGained
+
+    private void two_two_receiver_phone_no_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfFocusGained
+        set_color_with_focus_from_pro(false, true, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfFocusGained
+
+    private void two_two_pro_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_pro_his_bnFocusGained
+        set_color_with_focus_from_pro(false, false, true, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_pro_his_bnFocusGained
+
+    private void two_two_pro_name_cbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbFocusGained
+        set_color_with_focus_from_pro(false, false, false, true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_pro_name_cbFocusGained
+
+    private void two_two_rial_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbFocusGained
+        set_color_with_focus_from_pro(false, false, false, false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_rial_money_rbFocusGained
+
+    private void two_two_dollar_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbFocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_two_two_dollar_money_rbFocusGained
+
+    private void two_two_bart_money_rbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbFocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_two_two_bart_money_rbFocusGained
+
+    private void two_two_reciece_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfFocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_reciece_money_tfFocusGained
+
+    private void two_two_total_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_total_money_tfFocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_two_two_total_money_tfFocusGained
+
+    private void two_two_bn_finish_FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finish_FocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_two_two_bn_finish_FocusGained
+
+    private void two_two_bn_print_FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_print_FocusGained
+        set_color_with_focus_from_pro(false, false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_two_bn_print_FocusGained
+
+    private void two_three_bank_info_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnFocusGained
+        set_color_with_focus_to_thai(true, false, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_bank_info_his_bnFocusGained
+
+    private void two_one_tf_cus_noFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noFocusGained
+        set_color_with_focus_to_thai(false, true, false, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_tf_cus_noFocusGained
+
+    private void two_one_tf_cus_nameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameFocusGained
+        set_color_with_focus_to_thai(false, false, true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_one_tf_cus_nameFocusGained
+
+    private void two_three_tf_cus_ph_noFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noFocusGained
+        set_color_with_focus_to_thai(false, false, false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_tf_cus_ph_noFocusGained
+
+    private void two_three_bank_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_two_three_bank_his_bnFocusGained
+
+    private void two_three_bank_thai_cbFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_thai_cbFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_two_three_bank_thai_cbFocusGained
+
+    private void two_one_tf_cus_moneyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_one_tf_cus_moneyFocusGained
+
+    private void two_one_tf_service_moneyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_two_one_tf_service_moneyFocusGained
+
+    private void two_one_bn_finishFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_bn_finishFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_two_one_bn_finishFocusGained
+
+    private void two_three_print_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_print_bnFocusGained
+        set_color_with_focus_to_thai(false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_three_print_bnFocusGained
+
+    private void two_four_amFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_amFocusGained
+        set_color_with_focus_from_thai(false, false, false, true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_four_amFocusGained
+
+    private void two_four_pmFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_pmFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_two_four_pmFocusGained
+
+    private void two_four_reciever_ph_no_his_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_two_four_reciever_ph_no_his_bnFocusGained
+
+    private void two_two_reveiver_ph_no_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_two_two_reveiver_ph_no_tfFocusGained
+
+    private void two_two_reveiver_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_two_two_reveiver_money_tfFocusGained
+
+    private void two_two_service_money_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_service_money_tfFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_two_two_service_money_tfFocusGained
+
+    private void two_two_bn_finishFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finishFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_two_two_bn_finishFocusGained
+
+    private void two_four_print_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_print_bnFocusGained
+        set_color_with_focus_from_thai(false, false, false, false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_two_four_print_bnFocusGained
+
+    private void one_bn_S_to_RFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_S_to_RFocusLost
+        one_bn_S_to_R.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_S_to_RFocusLost
+
+    private void one_bn_B_to_RFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_B_to_RFocusLost
+        one_bn_B_to_R.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_B_to_RFocusLost
+
+    private void one_bn_R_to_SFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_R_to_SFocusLost
+        one_bn_R_to_S.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_R_to_SFocusLost
+
+    private void one_bn_B_to_SFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_B_to_SFocusLost
+        one_bn_B_to_S.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_B_to_SFocusLost
+
+    private void one_bn_R_to_BFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_R_to_BFocusLost
+        one_bn_R_to_B.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_R_to_BFocusLost
+
+    private void one_tf_customer_moneyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_moneyFocusLost
+        one_tf_customer_money.setBackground(white_c);
+    }//GEN-LAST:event_one_tf_customer_moneyFocusLost
+
+    private void one_bn_finishedFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_finishedFocusLost
+        one_bn_finished.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_finishedFocusLost
+
+    private void one_bn_printFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_bn_printFocusLost
+        one_bn_print.setBackground(silivor_c);
+    }//GEN-LAST:event_one_bn_printFocusLost
+
+    private void one_tf_customer_money1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_money1FocusLost
+        one_tf_customer_money1.setBackground(white_c);
+    }//GEN-LAST:event_one_tf_customer_money1FocusLost
+
+    private void one_tf_customer_money2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_tf_customer_money2FocusLost
+        one_tf_customer_money2.setBackground(white_c);
+    }//GEN-LAST:event_one_tf_customer_money2FocusLost
+
+    private void one_two_rate_bc1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_rate_bc1FocusLost
+        one_two_rate_bc1.setBackground(Color.GRAY);
+    }//GEN-LAST:event_one_two_rate_bc1FocusLost
+
+    private void one_two_rate_bc2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_rate_bc2FocusLost
+        one_two_rate_bc2.setBackground(Color.GRAY);
+    }//GEN-LAST:event_one_two_rate_bc2FocusLost
+
+    private void one_two_bn_finishedFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_bn_finishedFocusLost
+        one_two_bn_finished.setBackground(silivor_c);
+    }//GEN-LAST:event_one_two_bn_finishedFocusLost
+
+    private void one_two_bn_printFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_one_two_bn_printFocusLost
+        one_two_bn_print.setBackground(silivor_c);
+    }//GEN-LAST:event_one_two_bn_printFocusLost
+
+    private void two_one_sender_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_sender_his_bnFocusLost
+        two_one_sender_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_sender_his_bnFocusLost
+
+    private void two_three_sender_phone_no_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_sender_phone_no_tfFocusLost
+        two_three_sender_phone_no_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_three_sender_phone_no_tfFocusLost
+
+    private void two_one_reciever_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_reciever_his_bnFocusLost
+        two_one_reciever_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_reciever_his_bnFocusLost
+
+    private void two_three_receiver_phone_no_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_receiver_phone_no_tfFocusLost
+        two_three_receiver_phone_no_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_three_receiver_phone_no_tfFocusLost
+
+    private void two_one_pro_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_pro_his_bnFocusLost
+        two_one_pro_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_pro_his_bnFocusLost
+
+    private void two_one_pro_name_cbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_pro_name_cbFocusLost
+        two_one_pro_name_cb.setBackground(Color.GRAY);
+    }//GEN-LAST:event_two_one_pro_name_cbFocusLost
+
+    private void two_three_rial_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_rial_money_rbFocusLost
+        two_three_rial_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_three_rial_money_rbFocusLost
+
+    private void two_three_dollar_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_dollar_money_rbFocusLost
+        two_three_dollar_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_three_dollar_money_rbFocusLost
+
+    private void two_three_bart_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bart_money_rbFocusLost
+        two_three_bart_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_three_bart_money_rbFocusLost
+
+    private void two_three_sender_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_sender_money_tfFocusLost
+        two_three_sender_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_three_sender_money_tfFocusLost
+
+    private void two_three_service_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_service_money_tfFocusLost
+        two_three_service_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_three_service_money_tfFocusLost
+
+    private void two_one_edit_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_edit_bnFocusLost
+        two_one_edit_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_edit_bnFocusLost
+
+    private void two_three_bn_finishFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bn_finishFocusLost
+        two_three_bn_finish.setBackground(silivor_c);
+    }//GEN-LAST:event_two_three_bn_finishFocusLost
+
+    private void two_one_print_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_print_bnFocusLost
+        two_one_print_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_print_bnFocusLost
+
+    private void two_two_reciever_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reciever_his_bnFocusLost
+        two_two_reciever_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_two_reciever_his_bnFocusLost
+
+    private void two_two_receiver_phone_no_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_receiver_phone_no_tfFocusLost
+        two_two_receiver_phone_no_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_receiver_phone_no_tfFocusLost
+
+    private void two_two_pro_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_pro_his_bnFocusLost
+        two_two_pro_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_two_pro_his_bnFocusLost
+
+    private void two_two_pro_name_cbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_pro_name_cbFocusLost
+        two_two_pro_name_cb.setBackground(Color.GRAY);
+    }//GEN-LAST:event_two_two_pro_name_cbFocusLost
+
+    private void two_two_rial_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_rial_money_rbFocusLost
+        two_two_rial_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_two_rial_money_rbFocusLost
+
+    private void two_two_dollar_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_dollar_money_rbFocusLost
+        two_two_dollar_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_two_dollar_money_rbFocusLost
+
+    private void two_two_bart_money_rbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bart_money_rbFocusLost
+        two_two_bart_money_rb.setForeground(black_c);
+    }//GEN-LAST:event_two_two_bart_money_rbFocusLost
+
+    private void two_two_reciece_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reciece_money_tfFocusLost
+         two_two_reciece_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_reciece_money_tfFocusLost
+
+    private void two_two_total_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_total_money_tfFocusLost
+         two_two_total_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_total_money_tfFocusLost
+
+    private void two_two_bn_finish_FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finish_FocusLost
+        two_two_bn_finish_.setBackground(silivor_c);
+    }//GEN-LAST:event_two_two_bn_finish_FocusLost
+
+    private void two_two_bn_print_FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_print_FocusLost
+        two_two_bn_print_.setBackground(silivor_c);
+    }//GEN-LAST:event_two_two_bn_print_FocusLost
+
+    private void two_three_bank_info_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_info_his_bnFocusLost
+        two_three_bank_info_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_three_bank_info_his_bnFocusLost
+
+    private void two_one_tf_cus_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_noFocusLost
+         two_one_tf_cus_no.setBackground(white_c);
+    }//GEN-LAST:event_two_one_tf_cus_noFocusLost
+
+    private void two_one_tf_cus_nameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_nameFocusLost
+         two_one_tf_cus_name.setBackground(white_c);
+    }//GEN-LAST:event_two_one_tf_cus_nameFocusLost
+
+    private void two_three_tf_cus_ph_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_tf_cus_ph_noFocusLost
+         two_three_tf_cus_ph_no.setBackground(white_c);
+    }//GEN-LAST:event_two_three_tf_cus_ph_noFocusLost
+
+    private void two_three_bank_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_his_bnFocusLost
+        two_three_bank_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_three_bank_his_bnFocusLost
+
+    private void two_three_bank_thai_cbFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_bank_thai_cbFocusLost
+        two_three_bank_thai_cb.setBackground(Color.GRAY);
+    }//GEN-LAST:event_two_three_bank_thai_cbFocusLost
+
+    private void two_one_tf_cus_moneyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_cus_moneyFocusLost
+         two_one_tf_cus_money.setBackground(white_c);
+    }//GEN-LAST:event_two_one_tf_cus_moneyFocusLost
+
+    private void two_one_tf_service_moneyFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_tf_service_moneyFocusLost
+         two_one_tf_service_money.setBackground(white_c);
+    }//GEN-LAST:event_two_one_tf_service_moneyFocusLost
+
+    private void two_one_bn_finishFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_one_bn_finishFocusLost
+        two_one_bn_finish.setBackground(silivor_c);
+    }//GEN-LAST:event_two_one_bn_finishFocusLost
+
+    private void two_three_print_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_three_print_bnFocusLost
+        two_three_print_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_three_print_bnFocusLost
+
+    private void two_four_amFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_amFocusLost
+two_four_am.setForeground(black_c);
+    }//GEN-LAST:event_two_four_amFocusLost
+
+    private void two_four_pmFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_pmFocusLost
+two_four_pm.setForeground(black_c);
+    }//GEN-LAST:event_two_four_pmFocusLost
+
+    private void two_four_reciever_ph_no_his_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_reciever_ph_no_his_bnFocusLost
+        two_four_reciever_ph_no_his_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_four_reciever_ph_no_his_bnFocusLost
+
+    private void two_two_reveiver_ph_no_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_ph_no_tfFocusLost
+         two_two_reveiver_ph_no_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_reveiver_ph_no_tfFocusLost
+
+    private void two_two_reveiver_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_reveiver_money_tfFocusLost
+         two_two_reveiver_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_reveiver_money_tfFocusLost
+
+    private void two_two_service_money_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_service_money_tfFocusLost
+         two_two_service_money_tf.setBackground(white_c);
+    }//GEN-LAST:event_two_two_service_money_tfFocusLost
+
+    private void two_two_bn_finishFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_two_bn_finishFocusLost
+        two_two_bn_finish.setBackground(silivor_c);
+    }//GEN-LAST:event_two_two_bn_finishFocusLost
+
+    private void two_four_print_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_two_four_print_bnFocusLost
+        two_four_print_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_two_four_print_bnFocusLost
 
     /**
      * @param args the command line arguments

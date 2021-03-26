@@ -7,11 +7,15 @@ package UI_and_operation;
 
 import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.set_thai_history_db;
+import static UI_and_operation.UI_and_operation.silivor_c;
+import static UI_and_operation.UI_and_operation.sky_c;
 import static UI_and_operation.UI_and_operation.update_thai_history_db;
+import static UI_and_operation.UI_and_operation.white_c;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_user_name;
 import static UI_and_operation.validate_value.validate_keyTyped_ph_num;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
@@ -33,6 +37,47 @@ public class to_thai_info extends javax.swing.JFrame
     private dialog_type_for_db_e_a dialog_type;
     private view_history_thai view_his_thai_obj;
 
+    private void set_color_with_focus_exc(Boolean cus_no, Boolean cus_name,
+            Boolean cus_ph_no, Boolean bank, Boolean agree, Boolean cancel) {
+
+        if (cus_no) {
+            tf_cus_no.requestFocus();
+            tf_cus_no.setBackground(sky_c);
+        } else {
+            tf_cus_no.setBackground(white_c);
+        }
+        if (cus_name) {
+            tf_cus_name.requestFocus();
+            tf_cus_name.setBackground(sky_c);
+        } else {
+            tf_cus_name.setBackground(white_c);
+        }
+        if (cus_ph_no) {
+            tf_cus_ph_no.requestFocus();
+            tf_cus_ph_no.setBackground(sky_c);
+        } else {
+            tf_cus_ph_no.setBackground(white_c);
+        }
+        if (bank) {
+            tf_bank.requestFocus();
+            tf_bank.setBackground(sky_c);
+        } else {
+            tf_bank.setBackground(white_c);
+        }
+        if (agree) {
+            agree_bn.requestFocus();
+            agree_bn.setBackground(sky_c);
+        } else {
+            agree_bn.setBackground(silivor_c);
+        }
+        if (cancel) {
+            cancel_bn.requestFocus();
+            cancel_bn.setBackground(sky_c);
+        } else {
+            cancel_bn.setBackground(silivor_c);
+        }
+    }
+
     public void set_tf_from_sql(int id) {
         this.id = id;
         Connection con;
@@ -46,26 +91,26 @@ public class to_thai_info extends javax.swing.JFrame
             );
             pst = con.prepareStatement("SELECT bank, bank_id, name, phone_no "
                     + "FROM to_thai_history_tb "
-                    + "where id_to_thai = "+ id +";");
-            
+                    + "where id_to_thai = " + id + ";");
+
 //            pst.setInt(1, id);
             rs = pst.executeQuery();
-            
-                while (rs.next()) {
-                    //set to v2 all data only 1 row
-                    tf_cus_no.setText(rs.getString("bank_id"));
-                    tf_cus_name.setText(rs.getString("name"));
-                    tf_cus_ph_no.setText(rs.getString("phone_no"));
-                    tf_bank.setText(rs.getString("bank"));
 
-                }
+            while (rs.next()) {
+                //set to v2 all data only 1 row
+                tf_cus_no.setText(rs.getString("bank_id"));
+                tf_cus_name.setText(rs.getString("name"));
+                tf_cus_ph_no.setText(rs.getString("phone_no"));
+                tf_bank.setText(rs.getString("bank"));
+
+            }
 
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
         }
     }
-    
+
     /**
      * Creates new form to_thai_info
      */
@@ -77,6 +122,7 @@ public class to_thai_info extends javax.swing.JFrame
         agree_bn.setText(bn_name);
         setTitle("custumize thai bank information");
         addWindowListener(this);
+        set_color_with_focus_exc(true, false, false, false, false, false);
     }
 
     public to_thai_info() {
@@ -115,9 +161,27 @@ public class to_thai_info extends javax.swing.JFrame
         jLabel9.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         tf_bank.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        tf_bank.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_bankFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tf_bankFocusLost(evt);
+            }
+        });
+        tf_bank.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tf_bankMouseClicked(evt);
+            }
+        });
         tf_bank.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_bankActionPerformed(evt);
+            }
+        });
+        tf_bank.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_bankKeyPressed(evt);
             }
         });
 
@@ -126,9 +190,27 @@ public class to_thai_info extends javax.swing.JFrame
         jLabel8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         tf_cus_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        tf_cus_no.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_cus_noFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tf_cus_noFocusLost(evt);
+            }
+        });
+        tf_cus_no.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tf_cus_noMouseClicked(evt);
+            }
+        });
         tf_cus_no.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_cus_noActionPerformed(evt);
+            }
+        });
+        tf_cus_no.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_cus_noKeyPressed(evt);
             }
         });
 
@@ -137,13 +219,47 @@ public class to_thai_info extends javax.swing.JFrame
         jLabel7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         tf_cus_name.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        tf_cus_name.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_cus_nameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tf_cus_nameFocusLost(evt);
+            }
+        });
+        tf_cus_name.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tf_cus_nameMouseClicked(evt);
+            }
+        });
+        tf_cus_name.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_cus_nameKeyPressed(evt);
+            }
+        });
 
         jLabel33.setFont(new java.awt.Font("Khmer OS Siemreap", 0, 25)); // NOI18N
         jLabel33.setText("លេខអ្នកផ្ញើរ");
         jLabel33.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         tf_cus_ph_no.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        tf_cus_ph_no.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_cus_ph_noFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tf_cus_ph_noFocusLost(evt);
+            }
+        });
+        tf_cus_ph_no.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tf_cus_ph_noMouseClicked(evt);
+            }
+        });
         tf_cus_ph_no.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_cus_ph_noKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_cus_ph_noKeyReleased(evt);
             }
@@ -154,17 +270,48 @@ public class to_thai_info extends javax.swing.JFrame
 
         agree_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 18)); // NOI18N
         agree_bn.setText("x");
+        agree_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                agree_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                agree_bnFocusLost(evt);
+            }
+        });
+        agree_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agree_bnMouseClicked(evt);
+            }
+        });
         agree_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agree_bnActionPerformed(evt);
             }
         });
+        agree_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                agree_bnKeyPressed(evt);
+            }
+        });
 
         cancel_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 18)); // NOI18N
         cancel_bn.setText("cancel");
+        cancel_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cancel_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cancel_bnFocusLost(evt);
+            }
+        });
         cancel_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancel_bnActionPerformed(evt);
+            }
+        });
+        cancel_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cancel_bnKeyPressed(evt);
             }
         });
 
@@ -255,7 +402,7 @@ public class to_thai_info extends javax.swing.JFrame
                             "to_thai_history_tb");
                     break;
                 case Edit:
-                        update_thai_history_db("bank", tf_bank.getText().trim(),
+                    update_thai_history_db("bank", tf_bank.getText().trim(),
                             "bank_id", tf_cus_no.getText().trim(),
                             "name", tf_cus_name.getText().trim(),
                             "phone_no", tf_cus_ph_no.getText().trim(),
@@ -263,7 +410,7 @@ public class to_thai_info extends javax.swing.JFrame
                     break;
                 default:
 
-    JOptionPane.showMessageDialog(this,"error function to_thai_info class: agree_bnActionPerformed","Alert",JOptionPane.WARNING_MESSAGE);   
+                    JOptionPane.showMessageDialog(this, "error function to_thai_info class: agree_bnActionPerformed", "Alert", JOptionPane.WARNING_MESSAGE);
             }
 //                view_his_obj.set_history();
             view_his_thai_obj.set_history();
@@ -274,9 +421,9 @@ public class to_thai_info extends javax.swing.JFrame
     }//GEN-LAST:event_agree_bnActionPerformed
 
     private void cancel_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_bnActionPerformed
-//        view_his_obj.setEnabled(true);
-//        this.setVisible(false);
-//        this.dispose();
+        view_his_thai_obj.setEnabled(true);
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancel_bnActionPerformed
 
     private void tf_cus_ph_noKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cus_ph_noKeyReleased
@@ -286,6 +433,175 @@ public class to_thai_info extends javax.swing.JFrame
     private void tf_cus_ph_noKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cus_ph_noKeyTyped
         validate_keyTyped_ph_num(evt, tf_cus_ph_no);
     }//GEN-LAST:event_tf_cus_ph_noKeyTyped
+
+    private void tf_cus_noKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cus_noKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_tf_cus_noKeyPressed
+
+    private void tf_cus_noMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_cus_noMouseClicked
+        set_color_with_focus_exc(true, false, false, false, false, false);
+    }//GEN-LAST:event_tf_cus_noMouseClicked
+
+    private void tf_cus_nameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cus_nameKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_tf_cus_nameKeyPressed
+
+    private void tf_cus_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_cus_nameMouseClicked
+        set_color_with_focus_exc(false, true, false, false, false, false);
+    }//GEN-LAST:event_tf_cus_nameMouseClicked
+
+    private void tf_cus_ph_noKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cus_ph_noKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_tf_cus_ph_noKeyPressed
+
+    private void tf_cus_ph_noMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_cus_ph_noMouseClicked
+        set_color_with_focus_exc(false, false, true, false, false, false);
+    }//GEN-LAST:event_tf_cus_ph_noMouseClicked
+
+    private void tf_bankKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_bankKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_tf_bankKeyPressed
+
+    private void tf_bankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_bankMouseClicked
+        set_color_with_focus_exc(false, false, false, true, false, false);
+    }//GEN-LAST:event_tf_bankMouseClicked
+
+    private void agree_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_agree_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                agree_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_exc(false, false, false, false, false, true);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_agree_bnKeyPressed
+
+    private void agree_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agree_bnMouseClicked
+        set_color_with_focus_exc(false, false, false, false, true, false);
+    }//GEN-LAST:event_agree_bnMouseClicked
+
+    private void cancel_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cancel_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                cancel_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_exc(false, false, false, false, true, false);
+                break;
+        }
+    }//GEN-LAST:event_cancel_bnKeyPressed
+
+    private void tf_cus_noFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_noFocusGained
+        set_color_with_focus_exc(true, false, false, false, false, false);
+    }//GEN-LAST:event_tf_cus_noFocusGained
+
+    private void tf_cus_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_noFocusLost
+        tf_cus_no.setBackground(white_c);
+    }//GEN-LAST:event_tf_cus_noFocusLost
+
+    private void tf_cus_nameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_nameFocusGained
+        set_color_with_focus_exc(false, true, false, false, false, false);
+    }//GEN-LAST:event_tf_cus_nameFocusGained
+
+    private void tf_cus_ph_noFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_ph_noFocusGained
+        set_color_with_focus_exc(false, false, true, false, false, false);
+    }//GEN-LAST:event_tf_cus_ph_noFocusGained
+
+    private void tf_bankFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_bankFocusGained
+        set_color_with_focus_exc(false, false, false, true, false, false);
+    }//GEN-LAST:event_tf_bankFocusGained
+
+    private void agree_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agree_bnFocusGained
+        set_color_with_focus_exc(false, false, false, false, true, false);
+    }//GEN-LAST:event_agree_bnFocusGained
+
+    private void cancel_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cancel_bnFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, true);
+    }//GEN-LAST:event_cancel_bnFocusGained
+
+    private void tf_cus_nameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_nameFocusLost
+        tf_cus_name.setBackground(white_c);
+    }//GEN-LAST:event_tf_cus_nameFocusLost
+
+    private void tf_cus_ph_noFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cus_ph_noFocusLost
+         tf_cus_ph_no.setBackground(white_c);
+    }//GEN-LAST:event_tf_cus_ph_noFocusLost
+
+    private void tf_bankFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_bankFocusLost
+         tf_bank.setBackground(white_c);
+    }//GEN-LAST:event_tf_bankFocusLost
+
+    private void agree_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agree_bnFocusLost
+         agree_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_agree_bnFocusLost
+
+    private void cancel_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cancel_bnFocusLost
+         cancel_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_cancel_bnFocusLost
 
     /**
      * @param args the command line arguments

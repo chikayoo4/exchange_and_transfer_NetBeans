@@ -215,6 +215,7 @@ public class view_history_list extends javax.swing.JFrame
                 return types [columnIndex];
             }
         });
+        history_tb.setRequestFocusEnabled(false);
         history_tb.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 history_tbMouseClicked(evt);

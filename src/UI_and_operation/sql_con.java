@@ -5,7 +5,11 @@
  */
 package UI_and_operation;
 
+import static UI_and_operation.UI_and_operation.silivor_c;
+import static UI_and_operation.UI_and_operation.sky_c;
+import static UI_and_operation.UI_and_operation.white_c;
 import static UI_and_operation.login.get_from_sql_file_to_tf;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -28,6 +32,60 @@ public class sql_con extends javax.swing.JFrame
     private login login_obj;
     private UI_and_operation UI_ope_obj;
 
+    private void set_color_with_focus_exc(Boolean five_local_host_server_name, Boolean five_local_host_db_name,
+            Boolean five_local_host_user_name, Boolean five_local_host_password, Boolean five_wifi_host,
+            Boolean five_wifi_host_user_name, Boolean five_wifi_host_password, Boolean save) {
+
+        if (five_local_host_server_name) {
+            five_local_host_server_name_tf.requestFocus();
+            five_local_host_server_name_tf.setBackground(sky_c);
+        } else {
+            five_local_host_server_name_tf.setBackground(white_c);
+        }
+        if (five_local_host_db_name) {
+            five_local_host_db_name_tf.requestFocus();
+            five_local_host_db_name_tf.setBackground(sky_c);
+        } else {
+            five_local_host_db_name_tf.setBackground(white_c);
+        }
+        if (five_local_host_user_name) {
+            five_local_host_user_name_tf.requestFocus();
+            five_local_host_user_name_tf.setBackground(sky_c);
+        } else {
+            five_local_host_user_name_tf.setBackground(white_c);
+        }
+        if (five_local_host_password) {
+            five_local_host_password_tf.requestFocus();
+            five_local_host_password_tf.setBackground(sky_c);
+        } else {
+            five_local_host_password_tf.setBackground(white_c);
+        }
+        if (five_wifi_host) {
+            five_wifi_host_tf.requestFocus();
+            five_wifi_host_tf.setBackground(sky_c);
+        } else {
+            five_wifi_host_tf.setBackground(white_c);
+        }
+        if (five_wifi_host_user_name) {
+            five_wifi_host_user_name_tf.requestFocus();
+            five_wifi_host_user_name_tf.setBackground(sky_c);
+        } else {
+            five_wifi_host_user_name_tf.setBackground(white_c);
+        }
+        if (five_wifi_host_password) {
+            five_wifi_host_password_tf.requestFocus();
+            five_wifi_host_password_tf.setBackground(sky_c);
+        } else {
+            five_wifi_host_password_tf.setBackground(white_c);
+        }
+        if (save) {
+            save_bn.requestFocus();
+            save_bn.setBackground(sky_c);
+        } else {
+            save_bn.setBackground(silivor_c);
+        }
+    }
+
     private void init_component() {
 
         setResizable(false);
@@ -44,8 +102,9 @@ public class sql_con extends javax.swing.JFrame
             five_wifi_host_tf.setText(sc_file.nextLine());
             five_wifi_host_user_name_tf.setText(sc_file.nextLine());
             five_wifi_host_password_tf.setText(sc_file.nextLine());
+            set_color_with_focus_exc(true, false, false, false, false, false, false, false);
         } catch (FileNotFoundException e) {
-    JOptionPane.showMessageDialog(this,"error function sql_con class: init_component\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);   
+            JOptionPane.showMessageDialog(this, "error function sql_con class: init_component\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -111,15 +170,51 @@ public class sql_con extends javax.swing.JFrame
         five_local_host_server_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_local_host_server_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_server_name_tf.setText("kay");
+        five_local_host_server_name_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_local_host_server_name_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_local_host_server_name_tfFocusLost(evt);
+            }
+        });
+        five_local_host_server_name_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_local_host_server_name_tfMouseClicked(evt);
+            }
+        });
         five_local_host_server_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 five_local_host_server_name_tfActionPerformed(evt);
+            }
+        });
+        five_local_host_server_name_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_local_host_server_name_tfKeyPressed(evt);
             }
         });
 
         five_local_host_db_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_local_host_db_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_db_name_tf.setText("exchange_transfer_sm");
+        five_local_host_db_name_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_local_host_db_name_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_local_host_db_name_tfFocusLost(evt);
+            }
+        });
+        five_local_host_db_name_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_local_host_db_name_tfMouseClicked(evt);
+            }
+        });
+        five_local_host_db_name_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_local_host_db_name_tfKeyPressed(evt);
+            }
+        });
 
         jLabel51.setBackground(new java.awt.Color(255, 255, 255));
         jLabel51.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -129,9 +224,27 @@ public class sql_con extends javax.swing.JFrame
         five_local_host_user_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_local_host_user_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_user_name_tf.setText("admin");
+        five_local_host_user_name_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_local_host_user_name_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_local_host_user_name_tfFocusLost(evt);
+            }
+        });
+        five_local_host_user_name_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_local_host_user_name_tfMouseClicked(evt);
+            }
+        });
         five_local_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 five_local_host_user_name_tfActionPerformed(evt);
+            }
+        });
+        five_local_host_user_name_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_local_host_user_name_tfKeyPressed(evt);
             }
         });
 
@@ -148,6 +261,24 @@ public class sql_con extends javax.swing.JFrame
         five_wifi_host_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_wifi_host_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_wifi_host_tf.setText("1.1.1.1");
+        five_wifi_host_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_wifi_host_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_wifi_host_tfFocusLost(evt);
+            }
+        });
+        five_wifi_host_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_wifi_host_tfMouseClicked(evt);
+            }
+        });
+        five_wifi_host_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_wifi_host_tfKeyPressed(evt);
+            }
+        });
 
         jLabel54.setBackground(new java.awt.Color(255, 255, 255));
         jLabel54.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -157,9 +288,27 @@ public class sql_con extends javax.swing.JFrame
         five_wifi_host_user_name_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_wifi_host_user_name_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_wifi_host_user_name_tf.setText("admin");
+        five_wifi_host_user_name_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_wifi_host_user_name_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_wifi_host_user_name_tfFocusLost(evt);
+            }
+        });
+        five_wifi_host_user_name_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_wifi_host_user_name_tfMouseClicked(evt);
+            }
+        });
         five_wifi_host_user_name_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 five_wifi_host_user_name_tfActionPerformed(evt);
+            }
+        });
+        five_wifi_host_user_name_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_wifi_host_user_name_tfKeyPressed(evt);
             }
         });
 
@@ -178,24 +327,80 @@ public class sql_con extends javax.swing.JFrame
         save_bn.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         save_bn.setForeground(new java.awt.Color(255, 0, 0));
         save_bn.setText("save");
+        save_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                save_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                save_bnFocusLost(evt);
+            }
+        });
+        save_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                save_bnMouseClicked(evt);
+            }
+        });
         save_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 save_bnActionPerformed(evt);
             }
         });
+        save_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                save_bnKeyPressed(evt);
+            }
+        });
 
+        tp_error_message.setEditable(false);
         tp_error_message.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         tp_error_message.setForeground(new java.awt.Color(255, 0, 0));
         tp_error_message.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        tp_error_message.setFocusable(false);
         jScrollPane1.setViewportView(tp_error_message);
 
         five_local_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_local_host_password_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_local_host_password_tf.setText("1234");
+        five_local_host_password_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_local_host_password_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_local_host_password_tfFocusLost(evt);
+            }
+        });
+        five_local_host_password_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_local_host_password_tfMouseClicked(evt);
+            }
+        });
+        five_local_host_password_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_local_host_password_tfKeyPressed(evt);
+            }
+        });
 
         five_wifi_host_password_tf.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         five_wifi_host_password_tf.setForeground(new java.awt.Color(255, 51, 51));
         five_wifi_host_password_tf.setText("1234");
+        five_wifi_host_password_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                five_wifi_host_password_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                five_wifi_host_password_tfFocusLost(evt);
+            }
+        });
+        five_wifi_host_password_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                five_wifi_host_password_tfMouseClicked(evt);
+            }
+        });
+        five_wifi_host_password_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                five_wifi_host_password_tfKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -302,7 +507,7 @@ public class sql_con extends javax.swing.JFrame
             pw.println(five_wifi_host_password_tf.getText().trim());
             pw.close();
         } catch (IOException e) {
-    JOptionPane.showMessageDialog(this,"error function sql_con class: save_bnActionPerformed\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);   
+            JOptionPane.showMessageDialog(this, "error function sql_con class: save_bnActionPerformed\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
         }
         get_from_sql_file_to_tf();
         if (login_obj != null) {
@@ -313,6 +518,237 @@ public class sql_con extends javax.swing.JFrame
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_save_bnActionPerformed
+
+    private void five_local_host_server_name_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_local_host_server_name_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_exc(false, true, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, true, false, false, false, false, false);
+                break;
+        }
+    }//GEN-LAST:event_five_local_host_server_name_tfKeyPressed
+
+    private void five_local_host_server_name_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_local_host_server_name_tfMouseClicked
+        set_color_with_focus_exc(true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_server_name_tfMouseClicked
+
+    private void five_local_host_db_name_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_local_host_db_name_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_exc(true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_local_host_db_name_tfKeyPressed
+
+    private void five_local_host_db_name_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_local_host_db_name_tfMouseClicked
+        set_color_with_focus_exc(false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_db_name_tfMouseClicked
+
+    private void five_local_host_user_name_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(true, false, false, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_local_host_user_name_tfKeyPressed
+
+    private void five_local_host_user_name_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfMouseClicked
+        set_color_with_focus_exc(false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_user_name_tfMouseClicked
+
+    private void five_local_host_password_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_local_host_password_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, true, false, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_local_host_password_tfKeyPressed
+
+    private void five_local_host_password_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_local_host_password_tfMouseClicked
+        set_color_with_focus_exc(false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_password_tfMouseClicked
+
+    private void five_wifi_host_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_wifi_host_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, true, false, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_wifi_host_tfKeyPressed
+
+    private void five_wifi_host_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_wifi_host_tfMouseClicked
+        set_color_with_focus_exc(false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_five_wifi_host_tfMouseClicked
+
+    private void five_wifi_host_user_name_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, false, true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_wifi_host_user_name_tfKeyPressed
+
+    private void five_wifi_host_user_name_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfMouseClicked
+        set_color_with_focus_exc(false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_five_wifi_host_user_name_tfMouseClicked
+
+    private void five_wifi_host_password_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_five_wifi_host_password_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, false, false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, false, false, false, false, false, true);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_five_wifi_host_password_tfKeyPressed
+
+    private void five_wifi_host_password_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_five_wifi_host_password_tfMouseClicked
+        set_color_with_focus_exc(false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_five_wifi_host_password_tfMouseClicked
+
+    private void save_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_save_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, false, false, false, false, false, true, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                save_bn.doClick();
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+        }
+    }//GEN-LAST:event_save_bnKeyPressed
+
+    private void save_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_save_bnMouseClicked
+        set_color_with_focus_exc(false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_save_bnMouseClicked
+
+    private void five_local_host_server_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_server_name_tfFocusGained
+        set_color_with_focus_exc(true, false, false, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_server_name_tfFocusGained
+
+    private void five_local_host_db_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_db_name_tfFocusGained
+        set_color_with_focus_exc(false, true, false, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_db_name_tfFocusGained
+
+    private void five_local_host_user_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfFocusGained
+        set_color_with_focus_exc(false, false, true, false, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_user_name_tfFocusGained
+
+    private void five_local_host_password_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_password_tfFocusGained
+        set_color_with_focus_exc(false, false, false, true, false, false, false, false);
+    }//GEN-LAST:event_five_local_host_password_tfFocusGained
+
+    private void five_wifi_host_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_tfFocusGained
+        set_color_with_focus_exc(false, false, false, false, true, false, false, false);
+    }//GEN-LAST:event_five_wifi_host_tfFocusGained
+
+    private void five_wifi_host_user_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, true, false, false);
+    }//GEN-LAST:event_five_wifi_host_user_name_tfFocusGained
+
+    private void five_wifi_host_password_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_password_tfFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, false, true, false);
+    }//GEN-LAST:event_five_wifi_host_password_tfFocusGained
+
+    private void save_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_save_bnFocusGained
+        set_color_with_focus_exc(false, false, false, false, false, false, false, true);
+    }//GEN-LAST:event_save_bnFocusGained
+
+    private void five_local_host_server_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_server_name_tfFocusLost
+        five_local_host_server_name_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_local_host_server_name_tfFocusLost
+
+    private void five_local_host_db_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_db_name_tfFocusLost
+        five_local_host_db_name_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_local_host_db_name_tfFocusLost
+
+    private void five_local_host_user_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_user_name_tfFocusLost
+        five_local_host_user_name_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_local_host_user_name_tfFocusLost
+
+    private void five_local_host_password_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_local_host_password_tfFocusLost
+        five_local_host_password_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_local_host_password_tfFocusLost
+
+    private void five_wifi_host_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_tfFocusLost
+        five_wifi_host_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_wifi_host_tfFocusLost
+
+    private void five_wifi_host_user_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_user_name_tfFocusLost
+        five_wifi_host_user_name_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_wifi_host_user_name_tfFocusLost
+
+    private void five_wifi_host_password_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_five_wifi_host_password_tfFocusLost
+        five_wifi_host_password_tf.setBackground(white_c);
+    }//GEN-LAST:event_five_wifi_host_password_tfFocusLost
+
+    private void save_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_save_bnFocusLost
+        save_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_save_bnFocusLost
 
     /**
      * @param args the command line arguments

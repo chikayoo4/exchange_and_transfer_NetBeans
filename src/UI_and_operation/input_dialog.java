@@ -26,6 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static UI_and_operation.validate_value.validate_keyTyped_ph_num;
 import static UI_and_operation.UI_and_operation.set_cb;
+import static UI_and_operation.UI_and_operation.silivor_c;
+import static UI_and_operation.UI_and_operation.sky_c;
+import static UI_and_operation.UI_and_operation.white_c;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -41,6 +45,28 @@ public class input_dialog extends javax.swing.JFrame
     private Boolean is_validate_ph;
     private Boolean is_input_pass;
     private UI_and_operation ui_and_ope_obj;
+
+    private void set_color_with_focus_exc(Boolean input, Boolean agree, Boolean cancel) {
+
+        if (input) {
+            input_tf.requestFocus();
+            input_tf.setBackground(sky_c);
+        } else {
+            input_tf.setBackground(white_c);
+        }
+        if (agree) {
+            agree_bn.requestFocus();
+            agree_bn.setBackground(sky_c);
+        } else {
+            agree_bn.setBackground(silivor_c);
+        }
+        if (cancel) {
+            cancel_bn.requestFocus();
+            cancel_bn.setBackground(sky_c);
+        } else {
+            cancel_bn.setBackground(silivor_c);
+        }
+    }
 
     private Boolean input_pass_dia_for_to_pro() {
         Boolean is_correct_pass = true;
@@ -75,6 +101,7 @@ public class input_dialog extends javax.swing.JFrame
         title_lb.setText(dialog_title);
         agree_bn.setText(dialog_bn_name);
         setTitle(dia_app_bar);
+        set_color_with_focus_exc(true, false, false);
     }
 
     public input_dialog() {
@@ -98,12 +125,28 @@ public class input_dialog extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         input_tf.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        input_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                input_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                input_tfFocusLost(evt);
+            }
+        });
+        input_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                input_tfMouseClicked(evt);
+            }
+        });
         input_tf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 input_tfActionPerformed(evt);
             }
         });
         input_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                input_tfKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 input_tfKeyReleased(evt);
             }
@@ -114,9 +157,27 @@ public class input_dialog extends javax.swing.JFrame
 
         agree_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 18)); // NOI18N
         agree_bn.setText("x");
+        agree_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                agree_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                agree_bnFocusLost(evt);
+            }
+        });
+        agree_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agree_bnMouseClicked(evt);
+            }
+        });
         agree_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agree_bnActionPerformed(evt);
+            }
+        });
+        agree_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                agree_bnKeyPressed(evt);
             }
         });
 
@@ -126,9 +187,27 @@ public class input_dialog extends javax.swing.JFrame
 
         cancel_bn.setFont(new java.awt.Font("Khmer OS Battambang", 0, 18)); // NOI18N
         cancel_bn.setText("cancel");
+        cancel_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cancel_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cancel_bnFocusLost(evt);
+            }
+        });
+        cancel_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancel_bnMouseClicked(evt);
+            }
+        });
         cancel_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancel_bnActionPerformed(evt);
+            }
+        });
+        cancel_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cancel_bnKeyPressed(evt);
             }
         });
 
@@ -207,7 +286,7 @@ public class input_dialog extends javax.swing.JFrame
                     }
                     break;
                 default:
-    JOptionPane.showMessageDialog(this,"error function input_dialog class: agree_bn_fn","Alert",JOptionPane.WARNING_MESSAGE);   
+                    JOptionPane.showMessageDialog(this, "error function input_dialog class: agree_bn_fn", "Alert", JOptionPane.WARNING_MESSAGE);
             }
             if (ui_and_ope_obj.get_idx_transfer_pt() == 0) {
                 set_cb(ui_and_ope_obj.get_to_pro_cb_from_ui_oper(), "transfer_province", "province_name_history_tb");
@@ -256,6 +335,96 @@ public class input_dialog extends javax.swing.JFrame
     private void input_tfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_tfActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_input_tfActionPerformed
+
+    private void input_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_input_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_input_tfKeyPressed
+
+    private void input_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_input_tfMouseClicked
+        set_color_with_focus_exc(true, false, false);
+    }//GEN-LAST:event_input_tfMouseClicked
+
+    private void agree_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_agree_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                agree_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:        
+                set_color_with_focus_exc(false, false, true);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_DOWN:
+                break;
+        }
+    }//GEN-LAST:event_agree_bnKeyPressed
+
+    private void cancel_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cancel_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                cancel_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:        
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_exc(false, true, false);
+                break;
+            case KeyEvent.VK_DOWN:
+                break;
+        }
+    }//GEN-LAST:event_cancel_bnKeyPressed
+
+    private void agree_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agree_bnMouseClicked
+                set_color_with_focus_exc(false, true, false);
+    }//GEN-LAST:event_agree_bnMouseClicked
+
+    private void cancel_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancel_bnMouseClicked
+                set_color_with_focus_exc(false, false, true);
+    }//GEN-LAST:event_cancel_bnMouseClicked
+
+    private void input_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_input_tfFocusGained
+                set_color_with_focus_exc(true, false, false);
+    }//GEN-LAST:event_input_tfFocusGained
+
+    private void agree_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agree_bnFocusGained
+                set_color_with_focus_exc(false, true, false);
+    }//GEN-LAST:event_agree_bnFocusGained
+
+    private void cancel_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cancel_bnFocusGained
+                set_color_with_focus_exc(false, false, true);
+    }//GEN-LAST:event_cancel_bnFocusGained
+
+    private void input_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_input_tfFocusLost
+input_tf.setBackground(white_c);
+    }//GEN-LAST:event_input_tfFocusLost
+
+    private void agree_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_agree_bnFocusLost
+agree_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_agree_bnFocusLost
+
+    private void cancel_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cancel_bnFocusLost
+agree_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_cancel_bnFocusLost
 
     /**
      * @param args the command line arguments

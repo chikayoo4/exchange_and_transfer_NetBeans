@@ -6,6 +6,9 @@
 package UI_and_operation;
 
 import static UI_and_operation.UI_and_operation.field_admin_pass;
+import static UI_and_operation.UI_and_operation.silivor_c;
+import static UI_and_operation.UI_and_operation.sky_c;
+import static UI_and_operation.UI_and_operation.white_c;
 import static UI_and_operation.account.setAccount;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
@@ -18,6 +21,7 @@ import static UI_and_operation.connection_to_ms_sql.setWifi_host_user_name;
 import static UI_and_operation.path_file.set_main_proj_path_to_db;
 import static UI_and_operation.view_history_list.col_sql;
 import static UI_and_operation.view_history_list.tb_sql;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -47,6 +51,34 @@ public class login extends javax.swing.JFrame
     public static final String sql_con_file_name = "sql_con.txt";
     public static final String acc_user_file_name = "acc_user_name.txt";
 
+    private void set_color_with_focus_exc(Boolean user_name, Boolean password, Boolean login, Boolean create_acc) {
+
+        if (user_name) {
+            user_name_tf.requestFocus();
+            user_name_tf.setBackground(sky_c);
+        } else {
+            user_name_tf.setBackground(white_c);
+        }
+        if (password) {
+            password_tf.requestFocus();
+            password_tf.setBackground(sky_c);
+        } else {
+            password_tf.setBackground(white_c);
+        }
+        if (login) {
+            login_bn.requestFocus();
+            login_bn.setBackground(sky_c);
+        } else {
+            login_bn.setBackground(silivor_c);
+        }
+        if (create_acc) {
+            create_acc_bn.requestFocus();
+            create_acc_bn.setBackground(sky_c);
+        } else {
+            create_acc_bn.setBackground(silivor_c);
+        }
+    }
+
     private void set_default_for_sql_file() {
         try {
             File file = new File(sql_con_file_name);
@@ -64,7 +96,7 @@ public class login extends javax.swing.JFrame
                 pw.close();
             }
         } catch (IOException e) {
-    JOptionPane.showMessageDialog(this,"error function login class: set_default_for_sql_file\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "error function login class: set_default_for_sql_file\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -78,7 +110,7 @@ public class login extends javax.swing.JFrame
             setWifi_host_user_name(sc_file.nextLine());
             setWifi_host_user_name(sc_file.nextLine());
         } catch (FileNotFoundException e) {
-all_type_error_mes error_mes = new all_type_error_mes("error function login class: get_from_sql_file_to_tf\n" + e);
+            all_type_error_mes error_mes = new all_type_error_mes("error function login class: get_from_sql_file_to_tf\n" + e);
         }
     }
 
@@ -93,11 +125,11 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
             pw.println(acc_user_name);
             pw.close();
         } catch (IOException e) {
-    JOptionPane.showMessageDialog(this,"error function login class: set_acc_file\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "error function login class: set_acc_file\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
-    public void set_user_name_tf(String user_name){
+
+    public void set_user_name_tf(String user_name) {
         user_name_tf.setText(user_name);
     }
 
@@ -112,10 +144,12 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
             if (file.exists()) {
                 Scanner sc_file = new Scanner(file);
                 user_name_tf.setText(sc_file.nextLine());
-                password_tf.requestFocus();
+                set_color_with_focus_exc(false, true, false, false);
+            } else {
+                set_color_with_focus_exc(true, false, false, false);
             }
         } catch (FileNotFoundException e) {
-    JOptionPane.showMessageDialog(this,"error function login class: init_components\n" + e,"Alert",JOptionPane.WARNING_MESSAGE);  
+            JOptionPane.showMessageDialog(this, "error function login class: init_components\n" + e, "Alert", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -166,20 +200,74 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
         jLabel3.setText("password  :");
 
         password_tf.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        password_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                password_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                password_tfFocusLost(evt);
+            }
+        });
+        password_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                password_tfMouseClicked(evt);
+            }
+        });
+        password_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                password_tfKeyPressed(evt);
+            }
+        });
 
         login_bn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         login_bn.setText("Log in ");
+        login_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                login_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                login_bnFocusLost(evt);
+            }
+        });
+        login_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                login_bnMouseClicked(evt);
+            }
+        });
         login_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 login_bnActionPerformed(evt);
             }
         });
+        login_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                login_bnKeyPressed(evt);
+            }
+        });
 
         create_acc_bn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         create_acc_bn.setText("create new account");
+        create_acc_bn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                create_acc_bnFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                create_acc_bnFocusLost(evt);
+            }
+        });
+        create_acc_bn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                create_acc_bnMouseClicked(evt);
+            }
+        });
         create_acc_bn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 create_acc_bnActionPerformed(evt);
+            }
+        });
+        create_acc_bn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                create_acc_bnKeyPressed(evt);
             }
         });
 
@@ -193,6 +281,24 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
         });
 
         user_name_tf.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        user_name_tf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                user_name_tfFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                user_name_tfFocusLost(evt);
+            }
+        });
+        user_name_tf.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                user_name_tfMouseClicked(evt);
+            }
+        });
+        user_name_tf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                user_name_tfKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,14 +318,14 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
                             .addComponent(user_name_tf)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(sql_lb)))
+                        .addComponent(sql_lb))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(login_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(create_acc_bn)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(login_bn, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(create_acc_bn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,8 +390,8 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
                     JOptionPane.showMessageDialog(this, "Incorrect user name or password", "Alert", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (SQLException ex) {
-            sql_con sql_con_obj = new sql_con(ex);
-            sql_con_obj.setVisible(true);
+                sql_con sql_con_obj = new sql_con(ex);
+                sql_con_obj.setVisible(true);
             }
         }
     }//GEN-LAST:event_login_bnActionPerformed
@@ -301,6 +407,121 @@ all_type_error_mes error_mes = new all_type_error_mes("error function login clas
         create_acc_obj.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_create_acc_bnActionPerformed
+
+    private void user_name_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user_name_tfMouseClicked
+        set_color_with_focus_exc(true, false, false, false);
+    }//GEN-LAST:event_user_name_tfMouseClicked
+
+    private void user_name_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_user_name_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, true, false, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_user_name_tfKeyPressed
+
+    private void password_tfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_password_tfKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(true, false, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+            case KeyEvent.VK_DOWN:
+                set_color_with_focus_exc(false, false, true, false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_password_tfKeyPressed
+
+    private void login_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_bnMouseClicked
+        set_color_with_focus_exc(false, false, true, false);
+    }//GEN-LAST:event_login_bnMouseClicked
+
+    private void password_tfMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_password_tfMouseClicked
+        set_color_with_focus_exc(false, true, false, false);
+    }//GEN-LAST:event_password_tfMouseClicked
+
+    private void create_acc_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_create_acc_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                create_acc_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_LEFT:
+                set_color_with_focus_exc(false, false, true, false);
+                break;
+        }
+    }//GEN-LAST:event_create_acc_bnKeyPressed
+
+    private void login_bnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_login_bnKeyPressed
+        int code = evt.getKeyCode();
+        switch (code) {
+            case KeyEvent.VK_UP:
+                set_color_with_focus_exc(false, true, false, false);
+                break;
+            case KeyEvent.VK_ENTER:
+                login_bn.doClick();
+                break;
+            case KeyEvent.VK_RIGHT:
+                set_color_with_focus_exc(false, false, false, true);
+                break;
+            case KeyEvent.VK_LEFT:
+                break;
+        }
+    }//GEN-LAST:event_login_bnKeyPressed
+
+    private void create_acc_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_create_acc_bnMouseClicked
+        set_color_with_focus_exc(false, false, false, true);
+    }//GEN-LAST:event_create_acc_bnMouseClicked
+
+    private void user_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_user_name_tfFocusGained
+        set_color_with_focus_exc(true, false, false, false);
+    }//GEN-LAST:event_user_name_tfFocusGained
+
+    private void password_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_password_tfFocusGained
+        set_color_with_focus_exc(false, true, false, false);
+    }//GEN-LAST:event_password_tfFocusGained
+
+    private void login_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_login_bnFocusGained
+        set_color_with_focus_exc(false, false, true, false);
+    }//GEN-LAST:event_login_bnFocusGained
+
+    private void create_acc_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_create_acc_bnFocusGained
+        set_color_with_focus_exc(false, false, false, true);
+    }//GEN-LAST:event_create_acc_bnFocusGained
+
+    private void user_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_user_name_tfFocusLost
+        user_name_tf.setBackground(white_c);
+    }//GEN-LAST:event_user_name_tfFocusLost
+
+    private void password_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_password_tfFocusLost
+        password_tf.setBackground(white_c);
+    }//GEN-LAST:event_password_tfFocusLost
+
+    private void login_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_login_bnFocusLost
+        login_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_login_bnFocusLost
+
+    private void create_acc_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_create_acc_bnFocusLost
+        create_acc_bn.setBackground(silivor_c);
+    }//GEN-LAST:event_create_acc_bnFocusLost
 
     /**
      * @param args the command line arguments
