@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package UI_and_operation;
-
 import UI_and_operation.UI_and_operation.type_of_money;
 import com.sun.glass.events.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -17,6 +16,9 @@ import javax.swing.JTextField;
  */
 public class validate_value {
 
+    private static char point_at_3_str = ',';
+    private static String print_at_3_str = ",";
+    
     //500 / 1000 = 0.5 => 1
     //1000.6 / 1000 = 1.0006 => 2
     //1000 / 1000 = 1.0 => 1
@@ -108,7 +110,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function validate_v
             int scan = money.length() - 1;
             int point = money.length();
             while (scan >= 0) {
-                if (money.charAt(scan) == '\'') {
+                if (money.charAt(scan) == point_at_3_str) {
                     str = money.substring(scan + 1, point) + str;
                     point = scan;
                 }
@@ -157,10 +159,10 @@ all_type_error_mes error_mes = new all_type_error_mes("error function validate_v
             tail = head;
             head = head - 4;
             while (head >= 0) {
-                if (temp.charAt(head) != '\'') {
+                if (temp.charAt(head) != point_at_3_str) {
                     head++;
                     while (head > 0) {
-                        str = "'" + temp.substring(head, tail) + str;
+                        str = print_at_3_str + temp.substring(head, tail) + str;
                         tail = head;
                         head = head - 3;
                     }
