@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="226" pageHeight="566" columnWidth="210" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="e8ba0723-52e6-4219-b857-e87047bd1f13">
+	<property name="ireport.zoom" value="4.507888805409473"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1031"/>
+	<parameter name="invoice_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="res_m" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="type_exc_one" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="type_exc_two" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     account_tb."user_name" AS acc_user_name,
+     exc_invoice_two_operator_tb."exchanging_money_one" AS exc_money_one,
+     exc_invoice_two_operator_tb."result_exchanging_money_one" AS exc_result_money_one,
+     exc_invoice_two_operator_tb."exchanging_money_two" AS exc_money_two,
+     exc_invoice_two_operator_tb."result_exchanging_money_two" AS exc_result_money_two,
+     exc_invoice_two_operator_tb."one_rate" AS exc_one_rate,
+     exc_invoice_two_operator_tb."two_rate" AS exc_two_rate,
+     project_path."path_name" AS path,
+     invoice_management_tb."id_invoice_man" AS id_inv_man,
+     invoice_management_tb."invoice_man_date" AS inv_man_date,
+     exc_invoice_two_operator_tb."id_type_two" AS exc_id_type_two,
+     exc_invoice_two_operator_tb."id_type_one" AS exc_id_type_one
+FROM
+     "dbo"."account_tb" account_tb INNER JOIN "dbo"."exc_invoice_two_operator_tb" exc_invoice_two_operator_tb ON account_tb."id_acc" = exc_invoice_two_operator_tb."id_acc"
+     INNER JOIN "dbo"."invoice_management_tb" invoice_management_tb ON account_tb."id_acc" = invoice_management_tb."id_acc",
+     "dbo"."project_path" project_path
+WHERE exc_invoice_two_operator_tb."id_invoice" = (SELECT invoice_management_tb."id_invoice" FROM "dbo"."invoice_management_tb" WHERE invoice_management_tb."id_invoice_man" = $P{invoice_id})
+AND exc_invoice_two_operator_tb."id_acc" = (SELECT invoice_management_tb."id_acc" FROM "dbo"."invoice_management_tb" WHERE invoice_management_tb."id_invoice_man" = $P{invoice_id})
+AND exc_invoice_two_operator_tb."id_pur" = (SELECT invoice_management_tb."id_pur" FROM "dbo"."invoice_management_tb" WHERE invoice_management_tb."id_invoice_man" = $P{invoice_id})
+AND invoice_management_tb."id_invoice_man" = $P{invoice_id};]]>
+	</queryString>
+	<field name="acc_user_name" class="java.lang.String"/>
+	<field name="exc_money_one" class="java.lang.String"/>
+	<field name="exc_result_money_one" class="java.lang.String"/>
+	<field name="exc_money_two" class="java.lang.String"/>
+	<field name="exc_result_money_two" class="java.lang.String"/>
+	<field name="exc_one_rate" class="java.lang.String"/>
+	<field name="exc_two_rate" class="java.lang.String"/>
+	<field name="path" class="java.lang.String"/>
+	<field name="id_inv_man" class="java.lang.Integer"/>
+	<field name="inv_man_date" class="java.sql.Timestamp"/>
+	<field name="exc_id_type_two" class="java.lang.Integer"/>
+	<field name="exc_id_type_one" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="48" width="210" height="24" backcolor="#AFAFAF" uuid="cb7f567d-9b64-479f-a26d-6aa0edd66df3"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<image>
+				<reportElement x="69" y="48" width="73" height="27" uuid="4f20d5f7-61ff-4167-ab2d-c933e581d0be"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\exc_litle.JPG"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="47" width="210" height="1" uuid="b1adf0fd-b783-485b-b428-14f48f985bc3"/>
+			</line>
+			<line>
+				<reportElement x="0" y="72" width="210" height="1" uuid="932aa9f4-9eb4-4e9a-a65d-d720f04dd4ab"/>
+			</line>
+			<image>
+				<reportElement x="1" y="73" width="31" height="20" uuid="cd1fe519-fa0a-4ad6-854f-d03c16023fc2"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\exc_changing.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="32" y="0" width="150" height="47" uuid="68d7c6a1-1b5c-4305-9eea-2d13c550c03c"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\logo.JPG"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="225" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="210" height="1" uuid="0ee97b38-7af4-42ce-84e0-f1f303144634"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="210" height="56" backcolor="#AFAFAF" uuid="07f0c066-c7e3-495f-becd-6884cb846512"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="57" width="210" height="1" uuid="fdb8123d-c99a-496f-a3f8-3d47f5fc1991"/>
+			</line>
+			<image>
+				<reportElement x="2" y="61" width="67" height="19" uuid="33883f32-e46a-409f-ab29-fd36ef020392"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="2" y="105" width="77" height="16" uuid="a267615d-fca0-4013-901e-f86a5f4c2743"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\result.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="1" y="127" width="57" height="20" uuid="ab16d0b3-7bf1-46a9-8444-51033145612f"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="77" y="58" width="12" height="20" uuid="8bcf7df8-0ccd-4dfe-94b8-6b36ae81c66d"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="78" width="12" height="20" uuid="bfc8d857-9bde-4106-87e0-0aad1684ba05"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="78" y="124" width="12" height="20" uuid="b26b2bba-e09f-4368-b0ca-addaaf12f7e4"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="58" width="118" height="29" uuid="30141dc1-8d9c-468f-afec-622a1e4e917b"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_money_one} +
+(($F{exc_id_type_one} ==  2 || $F{exc_id_type_one} ==  3) ? " ដ្លលារ" : 
+($F{exc_id_type_one}  ==  1 || $F{exc_id_type_one}  ==  6) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="101" width="118" height="28" uuid="30506dc2-8029-4aeb-bffc-25e1016af58c"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{res_m} +
+(($F{exc_id_type_one} ==  1 || $F{exc_id_type_one} ==  4) ? " ដ្លលារ" : 
+($F{exc_id_type_one} ==  2 || $F{exc_id_type_one} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="124" width="118" height="23" uuid="d025a3cd-e520-4dbd-bbe7-25d15f87ff39"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_one_rate} + " (" + $P{type_exc_one} + ")"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="167" width="210" height="1" uuid="2d00fa22-1214-44f8-b0cd-59ad015b41b8"/>
+			</line>
+			<textField>
+				<reportElement x="92" y="168" width="118" height="17" uuid="6c50d20c-40c6-4996-8915-cd8a079f0ecd"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_inv_man}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="91" y="186" width="119" height="19" uuid="be32774b-4533-44fa-b6cc-acf2271b5986"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inv_man_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="205" width="118" height="19" uuid="8d00e95f-0604-4915-be1a-26a620728001"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acc_user_name}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="1" y="168" width="83" height="56" uuid="0b42657e-dc6a-4647-879a-57caf67a64ce"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\acc.JPG"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="2" y="146" width="57" height="20" uuid="755d6e87-7248-4351-9d34-1f4bc8f425c1"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\rate.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="78" y="145" width="12" height="20" uuid="4567f61c-34ea-4b44-83e9-df5252c815c7"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="144" width="118" height="22" uuid="0a41fc54-ccdd-464f-acf3-ea28928c9a43"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_two_rate}+ " (" + $P{type_exc_two} + ")"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="1" width="197" height="36" uuid="c550ab81-b2fd-4b00-935e-3a4bff0432d2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Khmer OS Siemreap" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_money_one} +
+(($F{exc_id_type_one} ==  2 ||$F{exc_id_type_one} ==  3) ? " ដ្លលារ" : 
+($F{exc_id_type_one} ==  1 || $F{exc_id_type_one} ==  6) ? " រៀល": " បាត") + 
+(($F{exc_id_type_one} == 2 || $F{exc_id_type_one} == 3 || $F{exc_id_type_one} == 5) ? "  x  " : "  /  ") +
+$F{exc_one_rate} + " = " + $F{exc_result_money_one} +
+(($F{exc_id_type_one} ==  1 || $F{exc_id_type_one} ==  4) ? " ដ្លលារ" : 
+($F{exc_id_type_one} ==  2 || $F{exc_id_type_one} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="13" width="9" height="13" uuid="981422c4-a820-4441-9302-d7157f80aab9"/>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="34" width="9" height="13" uuid="8de25990-49db-4c12-af98-cd66f15052fb"/>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="22" width="197" height="36" uuid="75143acd-d77b-4922-86d8-259f290ec81c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Khmer OS Siemreap" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_money_two} +
+(($F{exc_id_type_two} ==  2 ||$F{exc_id_type_two} ==  3) ? " ដ្លលារ" : 
+($F{exc_id_type_two} ==  1 || $F{exc_id_type_two} ==  6) ? " រៀល": " បាត") + 
+(($F{exc_id_type_two} == 2 || $F{exc_id_type_two} == 3 || $F{exc_id_type_two} == 5) ? "  x  " : "  /  ") +
+$F{exc_two_rate} + " = " + $F{exc_result_money_two} +
+(($F{exc_id_type_two} ==  1 || $F{exc_id_type_two} ==  4) ? " ដ្លលារ" : 
+($F{exc_id_type_two} ==  2 || $F{exc_id_type_two} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="2" y="80" width="67" height="19" uuid="fa251d37-0b44-4dc2-9270-b86c137e8203"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\exc\\cus_m.JPG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="77" y="104" width="12" height="20" uuid="c2587bee-0172-4468-8cf6-bd498a13ef15"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="78" width="118" height="29" uuid="e0074f87-d435-48d2-8e7e-3535ff71d90d"/>
+				<textElement>
+					<font fontName="Khmer OS Battambang" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exc_money_two} +
+(($F{exc_id_type_two} ==  2 || $F{exc_id_type_two} ==  3) ? " ដ្លលារ" : 
+($F{exc_id_type_two}  ==  1 || $F{exc_id_type_two}  ==  6) ? " រៀល": " បាត")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="100" width="210" height="1" uuid="067daf73-724f-4988-94d4-b87b8fee12de"/>
+				<graphicElement>
+					<pen lineStyle="Dashed" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="1" y="126" width="210" height="1" uuid="ea28092a-e610-4f95-af38-b9bde604ebaa"/>
+				<graphicElement>
+					<pen lineStyle="Dashed" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="68" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="41" width="210" height="27" backcolor="#AFAFAF" uuid="b0c0553e-95da-40b9-b56d-0da16905b7c9"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="23" width="210" height="18" backcolor="#AFAFAF" uuid="76f0ccc9-e162-4da8-8a38-adc288f81d2b"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="210" height="1" uuid="a4328260-5c65-4d73-9fd5-9ba1de28a654"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="210" height="22" backcolor="#AFAFAF" uuid="76e765c4-f63d-4b66-86a0-201f14d7f279"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="22" width="210" height="1" uuid="480c1824-1d6e-4856-b154-daa57d67e0cf"/>
+			</line>
+			<image>
+				<reportElement x="0" y="23" width="151" height="16" uuid="f7bd4248-ae3f-46cd-8f60-0b815f9e8a18"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\id_line.JPG"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="41" width="210" height="1" uuid="2586032f-5988-43c0-9f30-4f50a903528d"/>
+			</line>
+			<image>
+				<reportElement x="2" y="43" width="208" height="25" uuid="64a87984-75a6-413f-82c2-250ccd88cc18"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\fb.JPG"]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" isUsingCache="true" isLazy="true">
+				<reportElement x="2" y="4" width="182" height="13" uuid="9d9593e1-43a9-4089-a24e-2756de159962"/>
+				<imageExpression><![CDATA[$F{path}+ "\\logo_and_icon\\ph_no.JPG"]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>
