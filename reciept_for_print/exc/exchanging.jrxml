@@ -2,8 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="226" pageHeight="566" columnWidth="210" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="e8ba0723-52e6-4219-b857-e87047bd1f13">
 	<property name="ireport.zoom" value="4.098080732190428"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="255"/>
 	<parameter name="invoice_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="type_exc" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
@@ -120,7 +123,7 @@ $F{exc_invoice_tb_exchange_rate} + " = " + $F{exc_invoice_tb_result_exchanging_m
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="77" y="77" width="12" height="20" uuid="b26b2bba-e09f-4368-b0ca-addaaf12f7e4"/>
+				<reportElement x="77" y="78" width="12" height="20" uuid="b26b2bba-e09f-4368-b0ca-addaaf12f7e4"/>
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -145,11 +148,12 @@ $F{exc_invoice_tb_exchange_rate} + " = " + $F{exc_invoice_tb_result_exchanging_m
 ($F{exc_invoice_tb_id_type} ==  2 || $F{exc_invoice_tb_id_type} ==  5) ? " រៀល": " បាត")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="91" y="80" width="118" height="20" uuid="d025a3cd-e520-4dbd-bbe7-25d15f87ff39"/>
+				<reportElement x="91" y="79" width="118" height="24" uuid="d025a3cd-e520-4dbd-bbe7-25d15f87ff39"/>
 				<textElement>
-					<font size="12"/>
+					<font fontName="Khmer OS Battambang" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{exc_invoice_tb_exchange_rate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{exc_invoice_tb_exchange_rate} + " ("
++ $P{type_exc} + ")"]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="100" width="210" height="1" uuid="2d00fa22-1214-44f8-b0cd-59ad015b41b8"/>

@@ -27,11 +27,11 @@ import static UI_and_operation.invoice_man.get_id_invoice;
 import static UI_and_operation.invoice_man.is_null_acc_id_invoice_man;
 import static UI_and_operation.invoice_man.set_ind_man_db;
 import static UI_and_operation.invoice_man.set_invoice_man_db;
-import static UI_and_operation.path_file.double_exc_reciept_path;
 import static UI_and_operation.path_file.exc_reciept_path;
 import static UI_and_operation.path_file.get_path;
 import static UI_and_operation.purpose.*;
 import static UI_and_operation.reciept.print_reciept;
+import static UI_and_operation.reciept.print_reciept_exc;
 import static UI_and_operation.to_province.two_one_cal;
 import static UI_and_operation.validate_value.*;
 import com.sun.glass.events.KeyEvent;
@@ -6669,14 +6669,14 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                         //get id from to store inside variable id here
                         int id = Integer.parseInt(model.getValueAt(selectedIndex, 1).toString());
-                        String pur = model.getValueAt(selectedIndex, 3).toString();
+                        String pur = convert_kh_to_pur(model.getValueAt(selectedIndex, 3).toString());
                         switch (pur) {
                             case "exchanging":
-                                id = get_id_inv_by_id_inv_man_from_db(id);
-                                print_reciept(get_path() + exc_reciept_path, id);
+//                                id = get_id_inv_by_id_inv_man_from_db(id);
+                                print_reciept_exc(get_path() + exc_reciept_path, get_id_inv_by_id_inv_man_from_db(id), get_type_exc(id));
                                 break;
                             case "double_exchanging":
-                                print_reciept(get_path() + double_exc_reciept_path, id);
+                                print_2_exc(id);
                                 break;
                             default:
                                 JOptionPane.showMessageDialog(this, "error function main class: three_tb_historyMouseClicked", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -8257,7 +8257,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         int code = evt.getKeyCode();
         switch (code) {
             case KeyEvent.VK_UP:
-                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);        
+                set_color_with_focus_from_thai(false, false, false, false, false, true, false, false, false, false, false);
                 remove_all_in_list(two_four_ph_recieve_list);
                 break;
             case KeyEvent.VK_ENTER:

@@ -22,11 +22,16 @@ import static UI_and_operation.invoice_man.set_ind_man_db;
 import static UI_and_operation.invoice_man.set_invoice_man_db;
 import static UI_and_operation.invoice_man.update_ind_man_money;
 import static UI_and_operation.invoice_man.update_inv_man_money;
-import static UI_and_operation.path_file.double_exc_reciept_path;
+import static UI_and_operation.path_file.double_exc_U_to_X_and_U_to_X_reciept_path;
+import static UI_and_operation.path_file.double_exc_U_to_X_and_U_to_Z_reciept_path;
+import static UI_and_operation.path_file.double_exc_U_to_X_and_Y_to_X_reciept_path;
+import static UI_and_operation.path_file.double_exc_U_to_X_and_Y_to_Z_reciept_path;
 import static UI_and_operation.path_file.exc_reciept_path;
 import static UI_and_operation.path_file.get_path;
 import static UI_and_operation.purpose.get_id_pur_from_db;
 import static UI_and_operation.reciept.print_reciept;
+import static UI_and_operation.reciept.print_reciept_double_exc;
+import static UI_and_operation.reciept.print_reciept_exc;
 import static UI_and_operation.validate_value.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static UI_and_operation.reciept.print_reciept_same_double_exc;
+import static UI_and_operation.reciept.print_reciept_same_same_double_exc;
 
 /**
  *
@@ -882,8 +889,8 @@ public class exchanging {
                     selected_exchange_rate
             );
             if (is_print) {
-                print_reciept(get_path() + exc_reciept_path,
-                        exchanging_obj.insert_to_db());
+                print_reciept_exc(get_path() + exc_reciept_path,
+                        exchanging_obj.insert_to_db(), des_exc_type(selected_exchange_rate.toString()));
             } else {
                 exchanging_obj.insert_to_db();
             }
@@ -911,10 +918,10 @@ public class exchanging {
         if (is_print) {
             if (!one_tf_customer_money1.getText().isEmpty() && !one_tf_customer_money2.getText().isEmpty()
                     && !one_two_rate_bc1.getSelectedItem().equals("none") && !one_two_rate_bc2.getSelectedItem().equals("none")) {
-                print_reciept(get_path() + double_exc_reciept_path,
-                        insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
-                                one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
-                                one_tf_exchange_rate2, one_tf_customer_result2, ui_ope));
+                int id_inv_man = insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
+                        one_two_rate_bc2, one_tf_exchange_rate1, one_tf_customer_result1,
+                        one_tf_exchange_rate2, one_tf_customer_result2, ui_ope);
+                print_2_exc(id_inv_man);
             }
         } else {
             insert_double_exc_to_db(one_tf_customer_money1, one_tf_customer_money2, one_two_rate_bc1,
@@ -1107,7 +1114,7 @@ public class exchanging {
         return v3;
     }
 
-    private static String des_exc_type(String exe_type) {
+    public static String des_exc_type(String exe_type) {
         String des = "";
         switch (exe_type) {
             case "S_to_R":
@@ -1133,4 +1140,116 @@ public class exchanging {
         }
         return des;
     }
+
+    public static void print_2_exc(int id_inv_man) {
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            if (!is_null_acc_id_invoice_man(get_acc_id())) {
+
+                invoice_man inv_man_obj = new invoice_man();
+                inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
+                        get_id_pur_from_db(purpose_type.double_exchanging),
+                        id_inv_man);
+
+                pst = con.prepareStatement("SELECT id_invoice, exchanging_money_one, result_exchanging_money_one, "
+                        + "exchanging_money_two, result_exchanging_money_two, one_rate, two_rate, "
+                        + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_one) AS exchange_type_one, "
+                        + "(select  type_of_exchanging FROM exc_type_tb WHERE exc_type_tb.id_type = exc_invoice_two_operator_tb.id_type_two) AS exchange_type_two "
+                        + "FROM exc_invoice_two_operator_tb "
+                        + "WHERE id_invoice = (SELECT invoice_management_tb.id_invoice "
+                        + "FROM invoice_management_tb "
+                        + "WHERE id_invoice_man = " + id_inv_man + " "
+                        + "AND id_acc = " + get_acc_id() + " "
+                        + "AND id_pur = " + get_id_pur_from_db(purpose_type.double_exchanging) + ") "
+                        + "AND id_acc = " + get_acc_id() + " "
+                        + "AND id_pur = " + get_id_pur_from_db(purpose_type.double_exchanging) + ";");
+                rs = pst.executeQuery();
+
+                while (rs.next()) {
+
+                    String exc1 = rs.getString("exchanging_money_one");
+                    String own1 = rs.getString("result_exchanging_money_one");
+                    String money_type_from_sql_one = rs.getString("exchange_type_one");
+                    String cus_money_type_one = money_type_from_sql_one.substring(0, 1);
+                    String owner_money_type_one = money_type_from_sql_one.substring(5, 6);
+
+                    String exc2 = rs.getString("exchanging_money_two");
+                    String own2 = rs.getString("result_exchanging_money_two");
+                    String money_type_from_sql_two = rs.getString("exchange_type_two");
+                    String cus_money_type_two = money_type_from_sql_two.substring(0, 1);
+                    String owner_money_type_two = money_type_from_sql_two.substring(5, 6);
+
+                    if (!cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
+                        print_reciept_double_exc(get_path() + double_exc_U_to_X_and_Y_to_Z_reciept_path, id_inv_man,
+                                des_exc_type(money_type_from_sql_one), des_exc_type(money_type_from_sql_two));
+                    } else if (cus_money_type_one.equals(cus_money_type_two) && !owner_money_type_one.equals(owner_money_type_two)) {
+                        Double exc_d1 = Double.parseDouble(clear_cvot(exc1));
+                        Double exc_d2 = Double.parseDouble(clear_cvot(exc2));
+                        print_reciept_same_double_exc(get_path() + double_exc_U_to_X_and_U_to_Z_reciept_path, id_inv_man, "exc_m",
+                                money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(exc_d1 + exc_d2), true),
+                                des_exc_type(money_type_from_sql_one), des_exc_type(money_type_from_sql_two));
+                    } else if (!cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
+                        Double own_d1 = Double.parseDouble(clear_cvot(own1));
+                        Double own_d2 = Double.parseDouble(clear_cvot(own2));
+                        print_reciept_same_double_exc(get_path() + double_exc_U_to_X_and_Y_to_X_reciept_path, id_inv_man, "res_m",
+                                money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(own_d1 + own_d2), true),
+                                des_exc_type(money_type_from_sql_one), des_exc_type(money_type_from_sql_two));
+                    } else if (cus_money_type_one.equals(cus_money_type_two) && owner_money_type_one.equals(owner_money_type_two)) {
+                        Double exc_d1 = Double.parseDouble(clear_cvot(exc1));
+                        Double exc_d2 = Double.parseDouble(clear_cvot(exc2));
+                        Double own_d1 = Double.parseDouble(clear_cvot(own1));
+                        Double own_d2 = Double.parseDouble(clear_cvot(own2));
+                        print_reciept_same_same_double_exc(get_path() + double_exc_U_to_X_and_U_to_X_reciept_path, id_inv_man,
+                                money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(exc_d1 + exc_d2), true),
+                                money_S_B_R_validate(convert_to_type_of_m(cus_money_type_one), String.valueOf(own_d1 + own_d2), true),
+                                des_exc_type(money_type_from_sql_one));
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+    }
+
+    public static String get_type_exc(int id_inv_man) {
+
+        String type_exc = "";
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+
+            pst = con.prepareStatement("SELECT (SELECT type_of_exchanging "
+                    + "FROM exc_type_tb "
+                    + "WHERE exc_type_tb.id_type = exc_invoice_tb.id_type) AS exchange_type "
+                    + "FROM exc_invoice_tb "
+                    + "WHERE id_invoice = (SELECT invoice_management_tb.id_invoice "
+                    + "FROM invoice_management_tb "
+                    + "WHERE id_invoice_man = " + id_inv_man + " AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.exchanging) + ") "
+                    + "AND id_acc = " + get_acc_id() + "  AND id_pur =  " + get_id_pur_from_db(purpose_type.exchanging) + ";");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                type_exc = des_exc_type(rs.getString("exchange_type"));
+            }
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+        return type_exc;
+    }
+
 }

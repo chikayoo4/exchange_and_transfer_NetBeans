@@ -22,8 +22,11 @@ import java.sql.SQLException;
  */
 public class path_file {
 
-    public static String exc_reciept_path = "\\reciept_for_print\\exchanging.jrxml";
-    public static String double_exc_reciept_path = "\\reciept_for_print\\double_exchanging.jrxml";
+    public static String exc_reciept_path = "\\reciept_for_print\\exc\\exchanging.jrxml";
+    public static String double_exc_U_to_X_and_U_to_Z_reciept_path = "\\reciept_for_print\\double_exc\\U_to_X_and_U_to_Z\\double_exchanging.jrxml";
+    public static String double_exc_U_to_X_and_Y_to_Z_reciept_path = "\\reciept_for_print\\double_exc\\U_to_X_and_Y_to_Z\\double_exchanging.jrxml";
+    public static String double_exc_U_to_X_and_Y_to_X_reciept_path = "\\reciept_for_print\\double_exc\\U_to_X_and_Y_to_X\\double_exchanging.jrxml";
+    public static String double_exc_U_to_X_and_U_to_X_reciept_path = "\\reciept_for_print\\double_exc\\U_to_X_and_U_to_X\\double_exchanging.jrxml";
 
     public static String get_path() {
         String path = "";
@@ -35,7 +38,7 @@ public class path_file {
             path = file.getAbsolutePath();
             path = path.substring(0, path.length() - 6);
         } catch (IOException e) {
-all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: get_path\n" + e);
+            all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: get_path\n" + e);
         }
         return path;
     }
@@ -61,7 +64,7 @@ all_type_error_mes error_mes = new all_type_error_mes("error function path_file 
                 path = file.getAbsolutePath();
                 path = path.substring(0, path.length() - 6);
             } catch (IOException e) {
-all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: set_main_proj_path_to_db\n" + e);
+                all_type_error_mes error_mes = new all_type_error_mes("error function path_file class: set_main_proj_path_to_db\n" + e);
             }
 
             pst = con.prepareStatement("UPDATE project_path SET path_name = '" + path + "';");
