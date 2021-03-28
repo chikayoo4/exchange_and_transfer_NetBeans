@@ -66,6 +66,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -425,11 +427,11 @@ public class UI_and_operation extends javax.swing.JFrame {
 
     }
 
-    private void get_from_db_set_total_in_tb() {
+    private void get_from_db_set_total_in_tb(Boolean is_ind) {
 
         Connection con;
         PreparedStatement pst;
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             con = DriverManager.getConnection(
                     getLocal_host(),
@@ -437,9 +439,21 @@ public class UI_and_operation extends javax.swing.JFrame {
                     getLocal_host_password()
             );
             //query to access
-            pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart, bank_bart "
-                    + "FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
-            rs = pst.executeQuery();
+            if (is_ind) {
+                pst = con.prepareStatement("SELECT TOP 1 rial, dollar, bart, bank_bart "
+                        + "FROM invoice_management_tb ORDER BY invoice_man_date DESC;");
+                rs = pst.executeQuery();
+            } else {
+                pst = con.prepareStatement("SELECT TOP 1 individual_total_money_management_tb.rial, "
+                        + "individual_total_money_management_tb.dollar, "
+                        + "individual_total_money_management_tb.bart, "
+                        + "individual_total_money_management_tb.bank_bart "
+                        + "FROM individual_total_money_management_tb INNER JOIN invoice_management_tb "
+                        + "ON individual_total_money_management_tb.id_invoice_man = invoice_management_tb.id_invoice_man "
+                        + "WHERE id_acc = " + get_acc_id() + " "
+                        + "ORDER BY invoice_man_date DESC;");
+                rs = pst.executeQuery();
+            }
             while (rs.next()) {
                 String Dollar = rs.getString("dollar");
                 String Bart = rs.getString("bart");
@@ -546,7 +560,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
 
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
-                get_from_db_set_total_in_tb();
+                get_from_db_set_total_in_tb(false);
                 Connection con;
                 PreparedStatement pst;
                 ResultSet rs;
@@ -577,25 +591,25 @@ public class UI_and_operation extends javax.swing.JFrame {
                         int id_inv = rs.getInt("id_invoice");
                         switch (rs.getString("pur_type")) {
                             case "exchanging":
-                                v3 = get_exe_db_set_to_tb(id_inv);
+                                v3 = get_exe_db_set_to_tb(id_inv, false);
                                 break;
                             case "add_total_money":
-                                v3 = get_add_total_db_set_to_tb(id_inv);
+                                v3 = get_add_total_db_set_to_tb(id_inv, false);
                                 break;
                             case "to_province":
-                                v3 = get_to_pro_db_set_to_tb(id_inv);
+                                v3 = get_to_pro_db_set_to_tb(id_inv, false);
                                 break;
                             case "from_province":
-                                v3 = get_from_pro_db_set_to_tb(id_inv);
+                                v3 = get_from_pro_db_set_to_tb(id_inv, false);
                                 break;
                             case "double_exchanging":
-                                v3 = get_from_pro_db_set_to_tb_double_exc(id_inv);
+                                v3 = get_from_pro_db_set_to_tb_double_exc(id_inv, false);
                                 break;
                             case "to_thai":
-                                v3 = get_to_thai_db_set_to_tb(id_inv);
+                                v3 = get_to_thai_db_set_to_tb(id_inv, false);
                                 break;
                             case "from_thai":
-                                v3 = get_from_thai_db_set_to_tb(id_inv);
+                                v3 = get_from_thai_db_set_to_tb(id_inv, false);
                                 break;
                             default:
                                 JOptionPane.showMessageDialog(this, "error : set_history", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -1408,7 +1422,7 @@ public class UI_and_operation extends javax.swing.JFrame {
             rs = pst.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id_invoice");
-                String acc = get_acc_by_id(rs.getInt("id_acc"));
+                String acc = get_user_n_by_id(rs.getInt("id_acc"));
                 String pur = get_pur_by_id_from_db(rs.getInt("id_pur"));
                 switch (pur) {
                     case "exchanging":
@@ -1904,6 +1918,7 @@ public class UI_and_operation extends javax.swing.JFrame {
         five_switch_acc_tf = new javax.swing.JButton();
         five_user_name_lb = new javax.swing.JLabel();
         sql_lb = new javax.swing.JLabel();
+        five_switch_acc_tf1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -5586,6 +5601,14 @@ public class UI_and_operation extends javax.swing.JFrame {
             }
         });
 
+        five_switch_acc_tf1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        five_switch_acc_tf1.setText("edit account");
+        five_switch_acc_tf1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                five_switch_acc_tf1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout db_con_ptLayout = new javax.swing.GroupLayout(db_con_pt);
         db_con_pt.setLayout(db_con_ptLayout);
         db_con_ptLayout.setHorizontalGroup(
@@ -5593,12 +5616,13 @@ public class UI_and_operation extends javax.swing.JFrame {
             .addGroup(db_con_ptLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(five_user_name_lb, javax.swing.GroupLayout.DEFAULT_SIZE, 1507, Short.MAX_VALUE)
                     .addGroup(db_con_ptLayout.createSequentialGroup()
-                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(db_con_ptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(sql_lb)
-                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 1290, Short.MAX_VALUE)))
+                            .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(five_switch_acc_tf1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         db_con_ptLayout.setVerticalGroup(
@@ -5609,8 +5633,10 @@ public class UI_and_operation extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(five_switch_acc_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(five_switch_acc_tf1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sql_lb)
-                .addGap(702, 702, 702))
+                .addGap(651, 651, 651))
         );
 
         zero_tp.addTab("គណនេយ្យ", db_con_pt);
@@ -6086,54 +6112,37 @@ public class UI_and_operation extends javax.swing.JFrame {
 
                     invoice_man in_man = new invoice_man();
                     in_man.get_R_D_B_B_top_1_from_db();
+                    in_man.get_ind_R_D_B_B_top_1_from_db();
 
+                    String db_rial = in_man.getRial();
+                    String db_dollar = in_man.getDollar();
+                    String db_bart = in_man.getBart();
+                    String db_bart_bank = in_man.getBank_Bart();
+
+                    String db_ind_rial = in_man.getInd_Rial();
+                    String db_ind_dollar = in_man.getInd_Dollar();
+                    String db_ind_bart = in_man.getInd_Bart();
+                    String db_ind_bart_bank = in_man.getInd_Bank_Bart();
                     switch (money_type) {
                         case "Rial":
-                            //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-                            pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) + Double.parseDouble(clear_cvot(add_money))));
-                            pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar()))));
-                            pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(in_man.getBart()))));
-                            pst.setString(4, bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart()))));
-                            pst.setInt(5, lastinsert_id_add);
-                            pst.setInt(6, get_acc_id());
-                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(8, cur_date);
-                            pst.executeUpdate();
+                            db_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getRial())) + Double.parseDouble(clear_cvot(add_money)));
+                            db_ind_rial = rial_validation(Double.parseDouble(clear_cvot(in_man.getInd_Rial())) + Double.parseDouble(clear_cvot(add_money)));
                             break;
                         case "Dollar":
-                            //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-                            pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(in_man.getRial()))));
-                            pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) + Double.parseDouble(clear_cvot(add_money))));
-                            pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(in_man.getBart()))));
-                            pst.setString(4, bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart()))));
-                            pst.setInt(5, lastinsert_id_add);
-                            pst.setInt(6, get_acc_id());
-                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(8, cur_date);
-                            pst.executeUpdate();
+                            db_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar())) + Double.parseDouble(clear_cvot(add_money)));
+                            db_ind_dollar = dollar_validation(Double.parseDouble(clear_cvot(in_man.getInd_Dollar())) + Double.parseDouble(clear_cvot(add_money)));
                             break;
                         case "Bart":
-                            //write sql query to access
-                            pst = con.prepareStatement("INSERT INTO invoice_management_tb (rial, dollar, bart, bank_bart, id_invoice, id_acc, id_pur, invoice_man_date) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-                            pst.setString(1, rial_validation(Double.parseDouble(clear_cvot(in_man.getRial()))));
-                            pst.setString(2, dollar_validation(Double.parseDouble(clear_cvot(in_man.getDollar()))));
-                            pst.setString(3, bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) + Double.parseDouble(clear_cvot(add_money))));
-                            pst.setString(4, bart_validation(Double.parseDouble(clear_cvot(in_man.getBank_Bart()))));
-                            pst.setInt(5, lastinsert_id_add);
-                            pst.setInt(6, get_acc_id());
-                            pst.setInt(7, get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money));
-                            pst.setTimestamp(8, cur_date);
-                            pst.executeUpdate();
+                            db_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getBart())) + Double.parseDouble(clear_cvot(add_money)));
+                            db_ind_bart = bart_validation(Double.parseDouble(clear_cvot(in_man.getInd_Bart())) + Double.parseDouble(clear_cvot(add_money)));
                             break;
                         default:
                             JOptionPane.showMessageDialog(this, "error function main class: three_add_bnActionPerformed", "Alert", JOptionPane.WARNING_MESSAGE);
 
                     }
+                    int id_ind_man = set_invoice_man_db(db_rial, db_dollar, db_bart, db_bart_bank, lastinsert_id_add, get_acc_id(), purpose_type.add_total_money, current_date());
+                    set_ind_man_db(db_ind_rial, db_ind_dollar, db_ind_bart, db_ind_bart_bank, id_ind_man);
+
                     three_up.setEnabled(false);
                     next_show_his = 0;
                     if (count_db_to_list_pur_and_id() <= num_show_his) {
@@ -9794,6 +9803,12 @@ public class UI_and_operation extends javax.swing.JFrame {
         two_four_print_bn.setBackground(silivor_c);
     }//GEN-LAST:event_two_four_print_bnFocusLost
 
+    private void five_switch_acc_tf1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_five_switch_acc_tf1ActionPerformed
+        create_or_edit_acc create_acc_obj = new create_or_edit_acc(this, "Edit account", "save change", dialog_type_for_db_e_a.Edit);
+        create_acc_obj.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_five_switch_acc_tf1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -9851,6 +9866,7 @@ public class UI_and_operation extends javax.swing.JFrame {
     private javax.swing.JPanel exc_pt;
     private javax.swing.Box.Filler filler3;
     private javax.swing.JButton five_switch_acc_tf;
+    private javax.swing.JButton five_switch_acc_tf1;
     private javax.swing.JLabel five_user_name_lb;
     private javax.swing.JTextField four_B_to_R_four_tf;
     private javax.swing.JTextField four_B_to_R_one_tf;

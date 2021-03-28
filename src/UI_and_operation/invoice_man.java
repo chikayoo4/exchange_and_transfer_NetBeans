@@ -151,7 +151,44 @@ public class invoice_man {
                         + "FROM invoice_management_tb "
                         + "WHERE id_acc = ? "
                         + "AND id_pur = ? "
-                        + "AND id_invoice = ? ORDER BY invoice_man_date DESC;");
+                        + "AND id_invoice = ?;");
+                pst.setInt(1, id_acc);
+                pst.setInt(2, id_pur);
+                pst.setInt(3, id_invoice);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    Rial = rs.getString("rial");
+                    Dollar = rs.getString("dollar");
+                    Bart = rs.getString("bart");
+                    Bank_Bart = rs.getString("bank_bart");
+                }
+            }
+
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+    }
+    void get_R_D_B_B_ind_directly_from_db(int id_acc, int id_pur, int id_invoice) {
+
+        Connection con;
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            if (!is_null_acc_id_invoice_man(id_acc)) {
+                pst = con.prepareStatement("SELECT rial, dollar, bart, bank_bart "
+                        + "FROM individual_total_money_management_tb "
+                        + "WHERE id_invoice_man = "
+                        + "(SELECT invoice_management_tb.id_invoice_man "
+                        + "FROM invoice_management_tb "
+                        + "WHERE id_acc = ? "
+                        + "AND id_pur = ? "
+                        + "AND id_invoice = ?);");
                 pst.setInt(1, id_acc);
                 pst.setInt(2, id_pur);
                 pst.setInt(3, id_invoice);

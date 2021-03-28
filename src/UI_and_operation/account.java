@@ -44,7 +44,7 @@ public class account {
         account.password = password;
     }
 
-    public static String get_acc_by_id(int id_acc) {
+    public static String get_user_n_by_id(int id_acc) {
         String user_n = "";
         try {
             Connection con;
@@ -61,6 +61,31 @@ public class account {
 
             while (rs.next()) {
                 user_n = rs.getString("user_name");
+            }
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+        return user_n;
+    }
+
+    public static String get_pass_by_id(int id_acc) {
+        String user_n = "";
+        try {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            //query to access
+            pst = con.prepareStatement("SELECT password FROM account_tb WHERE id_acc = " + id_acc + ";");
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                user_n = rs.getString("password");
             }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
@@ -92,6 +117,34 @@ public class account {
             sql_con_obj.setVisible(true);
         }
         return id;
+    }
+
+    public static Boolean is_has_user_name_except(String user_name, String except_user_n) {
+        Boolean is_has = false;
+        try {
+            Connection con;
+            PreparedStatement pst;
+            ResultSet rs;
+            con = DriverManager.getConnection(
+                    getLocal_host(),
+                    getLocal_host_user_name(),
+                    getLocal_host_password()
+            );
+            if (!user_name.equals(except_user_n)) {
+                pst = con.prepareStatement("SELECT user_name "
+                        + "FROM account_tb "
+                        + "WHERE user_name = ?;");
+                pst.setString(1, user_name);
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    is_has = true;
+                }
+            }
+        } catch (SQLException ex) {
+            sql_con sql_con_obj = new sql_con(ex);
+            sql_con_obj.setVisible(true);
+        }
+        return is_has;
     }
 
     public static Boolean is_has_user_name(String user_name) {

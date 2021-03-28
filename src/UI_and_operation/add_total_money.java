@@ -7,6 +7,7 @@ package UI_and_operation;
 
 import static UI_and_operation.UI_and_operation.convert_pur_to_kh;
 import static UI_and_operation.UI_and_operation.convert_to_short_money_type;
+import UI_and_operation.UI_and_operation.purpose_type;
 import UI_and_operation.UI_and_operation.type_of_money;
 import static UI_and_operation.account.get_acc_id;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
@@ -36,7 +37,7 @@ import javax.swing.JOptionPane;
  */
 public class add_total_money {
 
-    public static Vector get_add_total_db_set_to_tb(int id_invoice) {
+    public static Vector get_add_total_db_set_to_tb(int id_invoice, Boolean is_ind) {
 
         Vector v3 = new Vector();
         Connection con;
@@ -49,10 +50,16 @@ public class add_total_money {
                     getLocal_host_password()
             );
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
-                invoice_man inv_man_obj = new invoice_man();
-                inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
-                        get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money),
-                        id_invoice);
+                invoice_man inv_man_obj = new invoice_man(); 
+                if (is_ind) {
+                    inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.add_total_money),
+                            id_invoice);
+                } else {
+                    inv_man_obj.get_R_D_B_B_ind_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.add_total_money),
+                            id_invoice);
+                }
 
                 pst = con.prepareStatement("SELECT  id_add, "
                         + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(UI_and_operation.purpose_type.add_total_money) + ") AS id_invoice_man, "

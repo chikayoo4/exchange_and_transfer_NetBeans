@@ -30,6 +30,8 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class reciept {
 
+    private static Boolean is_print = true;
+
     public static void print_reciept(String dir, int lastinsertid) {
 
         HashMap m = new HashMap();
@@ -46,11 +48,13 @@ public class reciept {
             JasperReport ireport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
-            //view report
-            JasperViewer.viewReport(jprint);
-
-            //print report 
-//                JasperPrintManager.printReport(jprint, false);
+            if (!is_print) {
+                //view report
+                JasperViewer.viewReport(jprint);
+            } else {
+                //print report 
+                JasperPrintManager.printReport(jprint, false);
+            }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
@@ -58,7 +62,7 @@ public class reciept {
             all_type_error_mes error_mes = new all_type_error_mes("error function reciept class: print_reciept\n" + ex);
         }
     }
-    
+
     public static void print_reciept_exc(String dir, int lastinsertid, String type_exc) {
 
         HashMap m = new HashMap();
@@ -77,11 +81,13 @@ public class reciept {
             JasperReport ireport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
-            //view report
-            JasperViewer.viewReport(jprint);
-
-            //print report 
-//                JasperPrintManager.printReport(jprint, false);
+            if (!is_print) {
+                //view report
+                JasperViewer.viewReport(jprint);
+            } else {
+                //print report 
+                JasperPrintManager.printReport(jprint, false);
+            }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
@@ -89,7 +95,7 @@ public class reciept {
             all_type_error_mes error_mes = new all_type_error_mes("error function reciept class: print_reciept\n" + ex);
         }
     }
-    
+
     public static void print_reciept_double_exc(String dir, int lastinsertid, String type_exc_one, String type_exc_two) {
 
         HashMap m = new HashMap();
@@ -109,11 +115,13 @@ public class reciept {
             JasperReport ireport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
-            //view report
-            JasperViewer.viewReport(jprint);
-
-            //print report 
-//                JasperPrintManager.printReport(jprint, false);
+            if (!is_print) {
+                //view report
+                JasperViewer.viewReport(jprint);
+            } else {
+                //print report 
+                JasperPrintManager.printReport(jprint, false);
+            }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
@@ -121,7 +129,7 @@ public class reciept {
             all_type_error_mes error_mes = new all_type_error_mes("error function reciept class: print_reciept\n" + ex);
         }
     }
-    
+
     public static void print_reciept_same_double_exc(String dir, int lastinsertid, String var, String money, String type_exc_one, String type_exc_two) {
 
         HashMap m = new HashMap();
@@ -142,11 +150,13 @@ public class reciept {
             JasperReport ireport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
-            //view report
-            JasperViewer.viewReport(jprint);
-
-            //print report 
-//                JasperPrintManager.printReport(jprint, false);
+            if (!is_print) {
+                //view report
+                JasperViewer.viewReport(jprint);
+            } else {
+                //print report 
+                JasperPrintManager.printReport(jprint, false);
+            }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
@@ -175,11 +185,13 @@ public class reciept {
             JasperReport ireport = JasperCompileManager.compileReport(jdesign);
             JasperPrint jprint = JasperFillManager.fillReport(ireport, m, con);
 
-            //view report
-            JasperViewer.viewReport(jprint);
-
-            //print report 
-//                JasperPrintManager.printReport(jprint, false);
+            if (!is_print) {
+                //view report
+                JasperViewer.viewReport(jprint);
+            } else {
+                //print report 
+                JasperPrintManager.printReport(jprint, false);
+            }
         } catch (SQLException ex) {
             sql_con sql_con_obj = new sql_con(ex);
             sql_con_obj.setVisible(true);
@@ -187,5 +199,5 @@ public class reciept {
             all_type_error_mes error_mes = new all_type_error_mes("error function reciept class: print_reciept\n" + ex);
         }
     }
-    
+
 }

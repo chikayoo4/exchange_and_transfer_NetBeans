@@ -931,7 +931,7 @@ public class exchanging {
 
     }
 
-    public static Vector get_from_pro_db_set_to_tb_double_exc(int id_invoice) {
+    public static Vector get_from_pro_db_set_to_tb_double_exc(int id_invoice, Boolean is_ind) {
 
         Vector v3 = new Vector();
         Connection con;
@@ -946,10 +946,15 @@ public class exchanging {
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
 
                 invoice_man inv_man_obj = new invoice_man();
-                inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
-                        get_id_pur_from_db(purpose_type.double_exchanging),
-                        id_invoice);
-
+                if (is_ind) {
+                    inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.double_exchanging),
+                            id_invoice);
+                } else {
+                    inv_man_obj.get_R_D_B_B_ind_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.double_exchanging),
+                            id_invoice);
+                }
                 pst = con.prepareStatement("SELECT id_invoice, "
                         + "(SELECT invoice_man_date FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.double_exchanging) + ") AS invoice_man_date,"
                         + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.double_exchanging) + ") AS id_invoice_man, "
@@ -1048,7 +1053,7 @@ public class exchanging {
         return v3;
     }
 
-    public static Vector get_exe_db_set_to_tb(int id_invoice) {
+    public static Vector get_exe_db_set_to_tb(int id_invoice, Boolean is_ind) {
 
         Vector v3 = new Vector();
         Connection con;
@@ -1063,9 +1068,15 @@ public class exchanging {
             if (!is_null_acc_id_invoice_man(get_acc_id())) {
 
                 invoice_man inv_man_obj = new invoice_man();
-                inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
-                        get_id_pur_from_db(purpose_type.exchanging),
-                        id_invoice);
+                if (is_ind) {
+                    inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.exchanging),
+                            id_invoice);
+                } else {
+                    inv_man_obj.get_R_D_B_B_ind_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.exchanging),
+                            id_invoice);
+                }
 
                 pst = con.prepareStatement("SELECT id_invoice, "
                         + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.exchanging) + ") AS id_invoice_man, "

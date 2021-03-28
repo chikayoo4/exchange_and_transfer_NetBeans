@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  */
 public class from_thai {
 
-    public static Vector get_from_thai_db_set_to_tb(int id_invoice) {
+    public static Vector get_from_thai_db_set_to_tb(int id_invoice, Boolean is_ind) {
 
         Vector v3 = new Vector();
         Connection con;
@@ -57,6 +57,15 @@ public class from_thai {
                         get_id_pur_from_db(purpose_type.from_thai),
                         id_invoice);
 
+                if (is_ind) {
+                    inv_man_obj.get_R_D_B_B_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.from_thai),
+                            id_invoice);
+                } else {
+                    inv_man_obj.get_R_D_B_B_ind_directly_from_db(get_acc_id(),
+                            get_id_pur_from_db(purpose_type.from_thai),
+                            id_invoice);
+                }
                 pst = con.prepareStatement("SELECT  "
                         + "(SELECT id_invoice_man FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.from_thai) + ") AS id_invoice_man, "
                         + "(SELECT invoice_man_date FROM invoice_management_tb WHERE id_invoice = ? AND id_acc = " + get_acc_id() + " AND id_pur = " + get_id_pur_from_db(purpose_type.from_thai) + ") AS invoice_man_date,"

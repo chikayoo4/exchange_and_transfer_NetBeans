@@ -5,9 +5,14 @@
  */
 package UI_and_operation;
 
+import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
+import static UI_and_operation.UI_and_operation.set_is_change_true;
 import static UI_and_operation.UI_and_operation.silivor_c;
 import static UI_and_operation.UI_and_operation.sky_c;
 import static UI_and_operation.UI_and_operation.white_c;
+import static UI_and_operation.account.get_acc_id;
+import static UI_and_operation.account.get_pass_by_id;
+import static UI_and_operation.account.get_user_n_by_id;
 import static UI_and_operation.account.is_has_user_name;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host;
 import static UI_and_operation.connection_to_ms_sql.getLocal_host_password;
@@ -22,15 +27,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static UI_and_operation.account.is_has_user_name_except;
+import static UI_and_operation.account.setAccount;
 
 /**
  *
  * @author Chhann_chikay
  */
-public class create_acc extends javax.swing.JFrame
+public class create_or_edit_acc extends javax.swing.JFrame
         implements WindowListener {
 
     login login_obj;
+    UI_and_operation UI_ope_obj;
+    dialog_type_for_db_e_a choose;
 
     private void set_color_with_focus_exc(Boolean user_name, Boolean password, Boolean re_password, Boolean login) {
         if (user_name) {
@@ -59,20 +68,35 @@ public class create_acc extends javax.swing.JFrame
         }
     }
 
-    /**
-     * Creates new form create_acc
-     */
-    public create_acc(login login_obj) {
-        this.login_obj = login_obj;
+    private void init_C(String title, String bn_agree, dialog_type_for_db_e_a choose) {
+        this.choose = choose;
         setResizable(false);
         initComponents();
         setTitle("SQL");
         addWindowListener(this);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         set_color_with_focus_exc(true, false, false, false);
+        tile_lb.setText(title);
+        login_bn.setText(bn_agree);
     }
 
-    public create_acc() {
+    /**
+     * Creates new form create_acc
+     */
+    public create_or_edit_acc(login login_obj, String title, String bn_agree, dialog_type_for_db_e_a choose) {
+        this.login_obj = login_obj;
+        init_C(title, bn_agree, choose);
+    }
+
+    public create_or_edit_acc(UI_and_operation UI_ope_obj, String title, String bn_agree, dialog_type_for_db_e_a choose) {
+        this.UI_ope_obj = UI_ope_obj;
+        init_C(title, bn_agree, choose);
+        user_name_tf.setText(get_user_n_by_id(get_acc_id()));
+        password_tf.setText(get_pass_by_id(get_acc_id()));
+        re_password_tf.setText(get_pass_by_id(get_acc_id()));
+    }
+
+    public create_or_edit_acc() {
         initComponents();
     }
 
@@ -85,7 +109,7 @@ public class create_acc extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        tile_lb = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         user_name_tf = new javax.swing.JTextField();
         password_tf = new javax.swing.JPasswordField();
@@ -96,9 +120,9 @@ public class create_acc extends javax.swing.JFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Create account");
+        tile_lb.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        tile_lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tile_lb.setText("Create account");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("user name     :");
@@ -203,7 +227,7 @@ public class create_acc extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(login_bn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+                    .addComponent(tile_lb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -225,7 +249,7 @@ public class create_acc extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tile_lb, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -262,17 +286,42 @@ public class create_acc extends javax.swing.JFrame
                 );
                 if (password.equals(re_password)) {
                     //query to access
-                    if (!is_has_user_name(user_name)) {
-                        pst = con.prepareStatement("insert into account_tb(user_name, password) values(?, ?);");
-                        pst.setString(1, user_name);
-                        pst.setString(2, password);
-                        pst.executeUpdate();
-                        login_obj.setEnabled(true);
-                        login_obj.set_user_name_tf(user_name);
-                        this.setVisible(false);
-                        this.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "user name already exsist", "Alert", JOptionPane.WARNING_MESSAGE);
+                    switch (choose) {
+                        case Edit:
+                            if (!is_has_user_name_except(user_name, get_user_n_by_id(get_acc_id()))) {
+                                pst = con.prepareStatement("UPDATE account_tb "
+                                        + "SET user_name = ?, password = ? "
+                                        + "WHERE id_acc = ?;");
+                                pst.setString(1, user_name);
+                                pst.setString(2, password);
+                                pst.setInt(3, get_acc_id());
+                                pst.executeUpdate();
+                                UI_ope_obj.setEnabled(true);
+                                UI_ope_obj.set_is_change_true();
+                                UI_ope_obj.set_lb_user_name(user_name);
+                                setAccount(user_name, password);
+                                this.setVisible(false);
+                                this.dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(this, "user name already exsist", "Alert", JOptionPane.WARNING_MESSAGE);
+                            }
+                            break;
+                        case Add:
+                            if (!is_has_user_name(user_name)) {
+                                pst = con.prepareStatement("insert into account_tb(user_name, password) values(?, ?);");
+                                pst.setString(1, user_name);
+                                pst.setString(2, password);
+                                pst.executeUpdate();
+                                login_obj.setEnabled(true);
+                                login_obj.set_user_name_tf(user_name);
+                                this.setVisible(false);
+                                this.dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(this, "user name already exsist", "Alert", JOptionPane.WARNING_MESSAGE);
+                            }
+                            break;
+                        default:
+                            throw new AssertionError();
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "password not match!!!!!", "Alert", JOptionPane.WARNING_MESSAGE);
@@ -364,39 +413,39 @@ public class create_acc extends javax.swing.JFrame
     }//GEN-LAST:event_login_bnKeyPressed
 
     private void login_bnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_bnMouseClicked
-set_color_with_focus_exc(false, false, false, true);
+        set_color_with_focus_exc(false, false, false, true);
     }//GEN-LAST:event_login_bnMouseClicked
 
     private void user_name_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_user_name_tfFocusGained
-                set_color_with_focus_exc(true, false, false, false);
+        set_color_with_focus_exc(true, false, false, false);
     }//GEN-LAST:event_user_name_tfFocusGained
 
     private void password_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_password_tfFocusGained
-                set_color_with_focus_exc(false, true, false, false);
+        set_color_with_focus_exc(false, true, false, false);
     }//GEN-LAST:event_password_tfFocusGained
 
     private void re_password_tfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_re_password_tfFocusGained
-                set_color_with_focus_exc(false, false, true, false);
+        set_color_with_focus_exc(false, false, true, false);
     }//GEN-LAST:event_re_password_tfFocusGained
 
     private void login_bnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_login_bnFocusGained
-                set_color_with_focus_exc(false, false, false, true);
+        set_color_with_focus_exc(false, false, false, true);
     }//GEN-LAST:event_login_bnFocusGained
 
     private void user_name_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_user_name_tfFocusLost
-            user_name_tf.setBackground(white_c);
+        user_name_tf.setBackground(white_c);
     }//GEN-LAST:event_user_name_tfFocusLost
 
     private void password_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_password_tfFocusLost
-            password_tf.setBackground(white_c);
+        password_tf.setBackground(white_c);
     }//GEN-LAST:event_password_tfFocusLost
 
     private void re_password_tfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_re_password_tfFocusLost
-            re_password_tf.setBackground(white_c);
+        re_password_tf.setBackground(white_c);
     }//GEN-LAST:event_re_password_tfFocusLost
 
     private void login_bnFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_login_bnFocusLost
-            login_bn.setBackground(silivor_c);
+        login_bn.setBackground(silivor_c);
     }//GEN-LAST:event_login_bnFocusLost
 
     /**
@@ -416,32 +465,33 @@ set_color_with_focus_exc(false, false, false, true);
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(create_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(create_or_edit_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(create_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(create_or_edit_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(create_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(create_or_edit_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(create_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(create_or_edit_acc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new create_acc().setVisible(true);
+                new create_or_edit_acc().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JButton login_bn;
     private javax.swing.JPasswordField password_tf;
     private javax.swing.JPasswordField re_password_tf;
+    private javax.swing.JLabel tile_lb;
     private javax.swing.JTextField user_name_tf;
     // End of variables declaration//GEN-END:variables
 
@@ -451,7 +501,12 @@ set_color_with_focus_exc(false, false, false, true);
 
     @Override
     public void windowClosing(WindowEvent e) {
-        login_obj.setEnabled(true);
+        if (login_obj != null) {
+            login_obj.setEnabled(true);
+        }
+        if (UI_ope_obj != null) {
+            UI_ope_obj.setEnabled(true);
+        }
     }
 
     @Override

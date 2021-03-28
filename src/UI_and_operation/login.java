@@ -5,6 +5,7 @@
  */
 package UI_and_operation;
 
+import UI_and_operation.UI_and_operation.dialog_type_for_db_e_a;
 import static UI_and_operation.UI_and_operation.field_admin_pass;
 import static UI_and_operation.UI_and_operation.silivor_c;
 import static UI_and_operation.UI_and_operation.sky_c;
@@ -403,7 +404,7 @@ public class login extends javax.swing.JFrame
     }//GEN-LAST:event_sql_lbMouseClicked
 
     private void create_acc_bnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_acc_bnActionPerformed
-        create_acc create_acc_obj = new create_acc(this);
+        create_or_edit_acc create_acc_obj = new create_or_edit_acc(this, "Create account", "Create new", dialog_type_for_db_e_a.Add);
         create_acc_obj.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_create_acc_bnActionPerformed
